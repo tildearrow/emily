@@ -2,23 +2,15 @@
 #define _TOOLKIT_H
 #include <vector>
 
-int prepBack(int backend);
-
-class eWindow {
-  public:
-    void* backWin;
-    void* backInst;
-    int point(double x, double y);
-    int rect(double x, double y, double w, double h);
-    int line(double x1, double y1, double x2, double y2);
-};
+#define eBackSDL2 0
 
 class eEngine {
-  std::vector<eWindow*> wins;
+  void* backWin;
+  void* backInst;
   public:
-    eEngine();
+    eEngine(int backend);
     ~eEngine();
-    int newWindow();
+    int show();
 };
 
 #endif

@@ -10,4 +10,6 @@ src/funcs.cpp
 # SDL
 src/sdl/funcs.cpp
 )
+add_executable(hello examples/hello/hello.cpp)
 target_link_libraries(taToolkit SDL2)
+target_link_libraries(hello taToolkit)
