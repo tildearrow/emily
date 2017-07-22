@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <unistd.h>
 #include "toolkit.h"
 
 eEngine* gui;
@@ -5,5 +7,5 @@ eEngine* gui;
 int main(int argc, char** argv) {
   gui=new eEngine(eBackSDL2);
   gui->show();
-  return 0;
+  return gui->run();
 }
