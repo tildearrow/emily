@@ -25,21 +25,21 @@ class eFrame {
 };
 
 enum eEventSystem {
-  eEventQuit=0x0001,
-  eEventBackend=0x00fe,
+  eEventQuit=0x01,
+  eEventBackend=0xfe,
 };
 
 enum eEventInput {
-  eEventMouseMove=0x0101,
-  eEventMouseButton=0x0102,
-  eEventTouch=0x0201,
-  eEventKey=0x0301,
-  eEventType=0x0401,
-  eEventFile=0x0501,
+  eEventMouseMove=0x11,
+  eEventMouseButton=0x12,
+  eEventTouch=0x21,
+  eEventKey=0x31,
+  eEventType=0x41,
+  eEventFile=0x51,
 };
 
 struct eEvent {
-  unsigned short type;
+  unsigned char type;
   struct {
     double x, y, z;
   } coord;
@@ -53,6 +53,8 @@ class eEngine {
   void* backInst;
   void* (*createWin)(void**,const char*,int,int,int,int,bool);
   int (*eNextEvent)(eEvent&);
+  void ((*preEvCallback[256])(const eEvent*));
+  void ((*postEvCallback[256])(const eEvent*));
   void (*ePreRender)(void*);
   void (*ePostRender)(void*);
   bool visible;

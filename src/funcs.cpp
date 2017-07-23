@@ -32,6 +32,9 @@ void eMainLoop(eEngine* eng) {
   while (1) {
     /* event processing */
     while (eng->eNextEvent(ev)) {
+      if (eng->preEvCallback[ev.type]!=NULL) {
+        eng->preEvCallback[ev.type](&ev);
+      }
       switch (ev.type) {
         case eEventQuit:
           return;
@@ -39,6 +42,9 @@ void eMainLoop(eEngine* eng) {
         default:
           eLogD("got event %d\n",ev.type);
           break;
+      }
+      if (eng->postEvCallback[ev.type]!=NULL) {
+        eng->postEvCallback[ev.type](&ev);
       }
     }
     eng->ePreRender(eng->backInst);
