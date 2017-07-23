@@ -23,6 +23,8 @@ eEngine::eEngine(int backend) {
   }
   visible=false;
   title="Application";
+  width=1280;
+  height=800;
 }
 
 void eMainLoop(eEngine* eng) {
@@ -57,7 +59,7 @@ int eEngine::runDetached() {
 
 int eEngine::show() {
   if (!visible) {
-    backWin=createWin(&backInst,title.c_str(),0,0,800,600,false);
+    backWin=createWin(&backInst,title.c_str(),0,0,width,height,false);
     visible=true;
   }
 }

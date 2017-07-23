@@ -22,6 +22,25 @@ int sdlNextEvent(eEvent& ev) {
     case SDL_QUIT:
       ev.type=eEventQuit;
       break;
+    case SDL_MOUSEMOTION:
+      ev.type=eEventMouseMove;
+      ev.coord.x=temp.motion.x;
+      ev.coord.y=temp.motion.y;
+      break;
+    case SDL_MOUSEBUTTONDOWN:
+      ev.type=eEventMouseButton;
+      ev.coord.x=temp.motion.x;
+      ev.coord.y=temp.motion.y;
+      ev.input=temp.button.button;
+      ev.state=1;
+      break;
+    case SDL_MOUSEBUTTONUP:
+      ev.type=eEventMouseButton;
+      ev.coord.x=temp.motion.x;
+      ev.coord.y=temp.motion.y;
+      ev.input=temp.button.button;
+      ev.state=0;
+      break;
     default:
       ev.type=eEventBackend;
       break;

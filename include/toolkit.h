@@ -18,7 +18,6 @@ typedef std::string string;
 #define eLogE printf
 
 class eWidget {
-  
 };
 
 class eFrame {
@@ -31,7 +30,8 @@ enum eEventSystem {
 };
 
 enum eEventInput {
-  eEventMouse=0x0101,
+  eEventMouseMove=0x0101,
+  eEventMouseButton=0x0102,
   eEventTouch=0x0201,
   eEventKey=0x0301,
   eEventType=0x0401,
