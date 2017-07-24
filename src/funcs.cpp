@@ -14,6 +14,7 @@ eEngine::eEngine(int backend) {
       ePreRender=sdlPreRender;
       ePostRender=sdlPostRender;
       eNextEvent=sdlNextEvent;
+      eWait=sdlWait;
       break;
 #endif
     default:
@@ -23,6 +24,7 @@ eEngine::eEngine(int backend) {
   }
   visible=false;
   title="Application";
+  estWaitTime=10;
   width=1280;
   height=800;
 }
@@ -30,6 +32,7 @@ eEngine::eEngine(int backend) {
 void eMainLoop(eEngine* eng) {
   eEvent ev;
   while (1) {
+    eng->eWait(eng->estWaitTime);
     /* event processing */
     while (eng->eNextEvent(ev)) {
       if (eng->preEvCallback[ev.type]!=NULL) {

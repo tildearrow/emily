@@ -47,6 +47,10 @@ int sdlNextEvent(eEvent& ev) {
   }
 }
 
+void sdlWait(int time) {
+  SDL_Delay(time);
+}
+
 void sdlPreRender(void* instance) {
   int start, end;
   start=SDL_GetPerformanceCounter();

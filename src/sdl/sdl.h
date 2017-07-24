@@ -5,5 +5,6 @@ void* sdlCreateWin(void** instance, const char* title, int x, int y, int w, int 
 
 int sdlNextEvent(eEvent& ev);
 
+void sdlWait(int time);
 void sdlPreRender(void* instance);
 void sdlPostRender(void* instance);

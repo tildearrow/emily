@@ -55,11 +55,13 @@ class eEngine {
   int (*eNextEvent)(eEvent&);
   void ((*preEvCallback[256])(const eEvent*));
   void ((*postEvCallback[256])(const eEvent*));
+  void (*eWait)(int);
   void (*ePreRender)(void*);
   void (*ePostRender)(void*);
   bool visible;
   string title;
   int width, height;
+  float estWaitTime;
   friend void eMainLoop(eEngine* eng);
   public:
     eEngine(int backend);
