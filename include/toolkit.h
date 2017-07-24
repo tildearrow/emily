@@ -4,6 +4,8 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 typedef std::string string;
 
@@ -48,6 +50,11 @@ struct eEvent {
   int mod;
 };
 
+class eFont {
+  FT_Library lib;
+  FT_Face face;
+};
+
 class eEngine {
   void* backWin;
   void* backInst;
@@ -62,6 +69,7 @@ class eEngine {
   string title;
   int width, height;
   float estWaitTime;
+  FT_Library ftlib;
   friend void eMainLoop(eEngine* eng);
   public:
     eEngine(int backend);

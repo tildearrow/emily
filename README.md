@@ -12,6 +12,12 @@ the complexity of major UI toolkits like GTK or Qt, especially when going cross-
 
 and the desire to get a competitive, yet lightweight UI toolkit.
 
+# dependencies
+
+- FreeType
+
+- SDL2 (optional but required for display, which is what you want)
+
 # warning
 
 this is not to be confused with [razer's codename for synapse](https://insider.razerzone.com/index.php?threads/razer-synapse-crash.16528/) which has the exact same name 🙁

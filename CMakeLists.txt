@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.1)
 project(emily)
 set(CMAKE_CXX_STANDARD 11)
-include_directories(include)
+include_directories(include /usr/include/freetype2)
 find_library(HAVE_SDL2 SDL2)
 set(SOURCES src/funcs.cpp
             src/dummy/funcs.cpp)
