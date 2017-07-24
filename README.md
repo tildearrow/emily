@@ -4,7 +4,7 @@ this is tildearrow's own UI toolkit, which will be used in taebron and future ap
 
 this toolkit uses SDL2 (in a future will use Vulkan) for display.
 
-this toolkit isn't even here, but don't worry, it will get worked on soon.
+this toolkit isn't production ready, but don't worry, it will be soon.
 
 # why though?
 
