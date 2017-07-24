@@ -63,6 +63,14 @@ int eEngine::runDetached() {
   return 0;
 }
 
+int eEngine::setPreEventCallback(unsigned char event, void ((*callback)(const eEvent *))) {
+  preEvCallback[event]=callback;
+}
+
+int eEngine::setPostEventCallback(unsigned char event, void ((*callback)(const eEvent *))) {
+  postEvCallback[event]=callback;
+}
+
 int eEngine::show() {
   if (!visible) {
     backWin=createWin(&backInst,title.c_str(),0,0,width,height,false);

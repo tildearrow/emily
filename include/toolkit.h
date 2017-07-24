@@ -64,6 +64,8 @@ class eEngine {
   public:
     eEngine(int backend);
     ~eEngine();
+    int setPreEventCallback(unsigned char event, void ((*callback)(const eEvent*)));
+    int setPostEventCallback(unsigned char event, void ((*callback)(const eEvent*)));
     int setTitle(string t);
     int setSize(int w, int h);
     int show();
