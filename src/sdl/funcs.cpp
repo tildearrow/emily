@@ -48,9 +48,18 @@ int sdlNextEvent(eEvent& ev) {
 }
 
 void sdlPreRender(void* instance) {
+  int start, end;
+  start=SDL_GetPerformanceCounter();
   SDL_RenderClear((SDL_Renderer*)instance);
+  end=SDL_GetPerformanceCounter();
+  eLogD("pre delta: %d\n",end-start);
 }
 
 void sdlPostRender(void* instance) {
+  int start, end;
+  start=SDL_GetPerformanceCounter();
   SDL_RenderPresent((SDL_Renderer*)instance);
+  SDL_RenderClear((SDL_Renderer*)instance);
+  end=SDL_GetPerformanceCounter();
+  eLogD("post delta: %d\n",end-start);
 }
