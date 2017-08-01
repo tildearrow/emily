@@ -54,6 +54,7 @@ void sdlWait(int time) {
 void sdlPreRender(void* instance) {
   int start, end;
   start=SDL_GetPerformanceCounter();
+  SDL_SetRenderDrawColor((SDL_Renderer*)instance,0,0,0,255);
   SDL_RenderClear((SDL_Renderer*)instance);
   end=SDL_GetPerformanceCounter();
   eLogD("pre delta: %d\n",end-start);

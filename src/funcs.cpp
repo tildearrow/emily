@@ -56,8 +56,7 @@ void eMainLoop(eEngine* eng) {
 }
 
 int eEngine::run() {
-  std::thread runThread(eMainLoop,this);
-  runThread.join();
+  eMainLoop(this);
   return 0;
 }
 
