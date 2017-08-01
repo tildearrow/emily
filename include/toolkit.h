@@ -19,13 +19,6 @@ typedef std::string string;
 // error
 #define eLogE printf
 
-class eWidget {
-};
-
-class eFrame {
-  std::vector<eWidget> widgets;
-};
-
 enum eEventSystem {
   eEventQuit=0x01,
   eEventBackend=0xfe,
@@ -64,6 +57,17 @@ class eFont {
     void size(float size);
     int loaddef(int variant);
     eFont(FT_Library l);
+};
+
+class eWidget {
+  void* engine;
+  double x, y;
+  public:
+    virtual int draw();
+};
+
+class eFrame {
+  std::vector<eWidget> widgets;
 };
 
 class eEngine {
