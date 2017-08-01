@@ -6,6 +6,12 @@
 
 #include "dummy/dummy.h"
 
+eFont* eEngine::newFont() {
+  eFont* ret;
+  ret=new eFont(ftlib);
+  return ret;
+}
+
 eEngine::eEngine(int backend) {
   switch (backend) {
 #ifdef HAVE_SDL2
@@ -27,6 +33,15 @@ eEngine::eEngine(int backend) {
   estWaitTime=10;
   width=1280;
   height=800;
+  if (FT_Init_FreeType(&ftlib)) {
+    eLogE("Error while initializing the font system.\n");
+  } else {
+    defFont=newFont();
+    if (defFont->loaddef(eFontDefault)==0) {
+      eLogE("Error while loading default font.\n");
+    }
+    defFont->size(12);
+  }
 }
 
 void eMainLoop(eEngine* eng) {

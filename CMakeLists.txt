@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD 11)
 include_directories(include /usr/include/freetype2)
 find_library(HAVE_SDL2 SDL2)
 set(SOURCES src/funcs.cpp
+            src/font.cpp
             src/dummy/funcs.cpp)
 if (HAVE_SDL2)
   list(APPEND SOURCES src/sdl/funcs.cpp)
@@ -20,4 +21,5 @@ endif (HAVE_SDL2)
 if (UNIX)
   target_link_libraries(taToolkit pthread)
 endif (UNIX)
+target_link_libraries(taToolkit freetype)
 target_link_libraries(hello taToolkit)

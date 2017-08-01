@@ -40,6 +40,11 @@ enum eEventInput {
   eEventFile=0x51,
 };
 
+enum eFontVariant {
+  eFontDefault=0,
+  eFontLarge
+};
+
 struct eEvent {
   unsigned char type;
   struct {
@@ -53,6 +58,12 @@ struct eEvent {
 class eFont {
   FT_Library lib;
   FT_Face face;
+  public:
+    int loadfn(const char* filename);
+    int loadfam(const char* name);
+    void size(float size);
+    int loaddef(int variant);
+    eFont(FT_Library l);
 };
 
 class eEngine {
@@ -70,10 +81,12 @@ class eEngine {
   int width, height;
   float estWaitTime;
   FT_Library ftlib;
+  eFont* defFont;
   friend void eMainLoop(eEngine* eng);
   public:
     eEngine(int backend);
     ~eEngine();
+    eFont* newFont();
     int setPreEventCallback(unsigned char event, void ((*callback)(const eEvent*)));
     int setPostEventCallback(unsigned char event, void ((*callback)(const eEvent*)));
     int setTitle(string t);
