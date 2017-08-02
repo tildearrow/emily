@@ -21,6 +21,8 @@ eEngine::eEngine(int backend) {
       ePostRender=sdlPostRender;
       eNextEvent=sdlNextEvent;
       eWait=sdlWait;
+      eDrawColor=sdlDrawColor;
+      eLine=sdlLine;
       break;
 #endif
     default:
@@ -46,6 +48,7 @@ eEngine::eEngine(int backend) {
 
 void eMainLoop(eEngine* eng) {
   eEvent ev;
+  eFrame* curFrame;
   while (1) {
     eng->eWait(eng->estWaitTime);
     /* event processing */
@@ -66,6 +69,15 @@ void eMainLoop(eEngine* eng) {
       }
     }
     eng->ePreRender(eng->backInst);
+    if (eng->frameStack.size()) {
+      curFrame=eng->frameStack.top();
+      printf("my drawing\n");
+      for (int i=0; i<curFrame->widgets.size(); i++) {
+        printf("a widget\n");
+      }
+    }
+    eng->drawColor(255,255,255,255);
+    eng->line(0,0,eng->width,eng->height);
     eng->ePostRender(eng->backInst);
   }
 }
@@ -86,6 +98,22 @@ int eEngine::setPreEventCallback(unsigned char event, void ((*callback)(const eE
 
 int eEngine::setPostEventCallback(unsigned char event, void ((*callback)(const eEvent *))) {
   postEvCallback[event]=callback;
+}
+
+int eEngine::pushFrame(eFrame* f) {
+  frameStack.push(f);
+}
+
+int eEngine::popFrame() {
+  frameStack.pop();
+}
+
+void eEngine::drawColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
+  eDrawColor(backInst,r,g,b,a);
+}
+
+void eEngine::line(double x1, double y1, double x2, double y2) {
+  eLine(backInst,x1,y1,x2,y2);
 }
 
 int eEngine::show() {

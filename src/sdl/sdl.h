@@ -8,3 +8,6 @@ int sdlNextEvent(eEvent& ev);
 void sdlWait(int time);
 void sdlPreRender(void* instance);
 void sdlPostRender(void* instance);
+
+void sdlDrawColor(void* instance, unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+void sdlLine(void* instance, double x1, double y1, double x2, double y2);

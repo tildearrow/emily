@@ -68,3 +68,11 @@ void sdlPostRender(void* instance) {
   end=SDL_GetPerformanceCounter();
   eLogD("post delta: %d\n",end-start);
 }
+
+void sdlDrawColor(void* instance, unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
+  SDL_SetRenderDrawColor((SDL_Renderer*)instance,r,g,b,a);
+}
+
+void sdlLine(void* instance, double x1, double y1, double x2, double y2) {
+  SDL_RenderDrawLine((SDL_Renderer*)instance,x1,y1,x2,y2);
+}

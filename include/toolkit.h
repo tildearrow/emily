@@ -1,6 +1,7 @@
 #ifndef _TOOLKIT_H
 #define _TOOLKIT_H
 #include <stdio.h>
+#include <stack>
 #include <string>
 #include <thread>
 #include <vector>
@@ -61,13 +62,14 @@ class eFont {
 
 class eWidget {
   void* engine;
-  double x, y;
+  double x, y, w, h;
   public:
     virtual int draw();
 };
 
 class eFrame {
-  std::vector<eWidget> widgets;
+  public:
+    std::vector<eWidget> widgets;
 };
 
 class eEngine {
@@ -80,6 +82,9 @@ class eEngine {
   void (*eWait)(int);
   void (*ePreRender)(void*);
   void (*ePostRender)(void*);
+  void (*eDrawColor)(void*,unsigned char,unsigned char,unsigned char,unsigned char);
+  void (*eLine)(void*,double,double,double,double);
+  std::stack<eFrame*> frameStack;
   bool visible;
   string title;
   int width, height;
@@ -98,6 +103,12 @@ class eEngine {
     int show();
     int run();
     int runDetached();
+    
+    int pushFrame(eFrame* f);
+    int popFrame();
+    
+    void drawColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+    void line(double x1, double y1, double x2, double y2);
 };
 
 void eMainLoop(eEngine* eng);
