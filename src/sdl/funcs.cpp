@@ -57,7 +57,7 @@ void sdlPreRender(void* instance) {
   SDL_SetRenderDrawColor((SDL_Renderer*)instance,0,0,0,255);
   SDL_RenderClear((SDL_Renderer*)instance);
   end=SDL_GetPerformanceCounter();
-  eLogD("pre delta: %d\n",end-start);
+  //eLogD("pre delta: %d\n",end-start);
 }
 
 void sdlPostRender(void* instance) {
@@ -66,7 +66,7 @@ void sdlPostRender(void* instance) {
   SDL_RenderPresent((SDL_Renderer*)instance);
   SDL_RenderClear((SDL_Renderer*)instance);
   end=SDL_GetPerformanceCounter();
-  eLogD("post delta: %d\n",end-start);
+  //eLogD("post delta: %d\n",end-start);
 }
 
 void sdlDrawColor(void* instance, unsigned char r, unsigned char g, unsigned char b, unsigned char a) {

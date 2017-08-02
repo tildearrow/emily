@@ -60,16 +60,30 @@ class eFont {
     eFont(FT_Library l);
 };
 
+class eEngine;
+
 class eWidget {
-  void* engine;
-  double x, y, w, h;
+  eEngine* engine;
+  double w, h;
+  friend class eFrame;
   public:
+    double x, y;
+    virtual int setSize(double w, double h);
     virtual int draw();
 };
 
 class eFrame {
+  eEngine* engine;
+  std::vector<eWidget*> widgets;
+  friend void eMainLoop(eEngine* eng);
+  friend class eEngine;
   public:
-    std::vector<eWidget> widgets;
+    template<typename t> eWidget* newWidget() {
+      t* push=new t;
+      push->engine=engine;
+      widgets.push_back(push);
+      return push;
+    }
 };
 
 class eEngine {
@@ -79,6 +93,10 @@ class eEngine {
   int (*eNextEvent)(eEvent&);
   void ((*preEvCallback[256])(const eEvent*));
   void ((*postEvCallback[256])(const eEvent*));
+  void (*preDrawCallback)();
+  void (*drawStartCallback)();
+  void (*drawEndCallback)();
+  void (*postDrawCallback)();
   void (*eWait)(int);
   void (*ePreRender)(void*);
   void (*ePostRender)(void*);
@@ -98,12 +116,17 @@ class eEngine {
     eFont* newFont();
     int setPreEventCallback(unsigned char event, void ((*callback)(const eEvent*)));
     int setPostEventCallback(unsigned char event, void ((*callback)(const eEvent*)));
+    int setPreDrawCallback(void ((*callback)()));
+    int setDrawStartCallback(void ((*callback)()));
+    int setDrawEndCallback(void ((*callback)()));
+    int setPostDrawCallback(void ((*callback)()));
     int setTitle(string t);
     int setSize(int w, int h);
     int show();
     int run();
     int runDetached();
-    
+
+    eFrame* newFrame();
     int pushFrame(eFrame* f);
     int popFrame();
     

@@ -68,17 +68,28 @@ void eMainLoop(eEngine* eng) {
         eng->postEvCallback[ev.type](&ev);
       }
     }
+    if (eng->preDrawCallback!=NULL) {
+      eng->preDrawCallback();
+    }
     eng->ePreRender(eng->backInst);
+    if (eng->drawStartCallback!=NULL) {
+      eng->drawStartCallback();
+    }
     if (eng->frameStack.size()) {
       curFrame=eng->frameStack.top();
-      printf("my drawing\n");
       for (int i=0; i<curFrame->widgets.size(); i++) {
-        printf("a widget\n");
+        curFrame->widgets[i]->draw();
       }
     }
     eng->drawColor(255,255,255,255);
     eng->line(0,0,eng->width,eng->height);
+    if (eng->drawEndCallback!=NULL) {
+      eng->drawEndCallback();
+    }
     eng->ePostRender(eng->backInst);
+    if (eng->postDrawCallback!=NULL) {
+      eng->postDrawCallback();
+    }
   }
 }
 
@@ -98,6 +109,29 @@ int eEngine::setPreEventCallback(unsigned char event, void ((*callback)(const eE
 
 int eEngine::setPostEventCallback(unsigned char event, void ((*callback)(const eEvent *))) {
   postEvCallback[event]=callback;
+}
+
+int eEngine::setPreDrawCallback(void ((*callback)())) {
+  preDrawCallback=callback;
+}
+
+int eEngine::setDrawStartCallback(void ((*callback)())) {
+  drawStartCallback=callback;
+}
+
+int eEngine::setDrawEndCallback(void ((*callback)())) {
+  drawEndCallback=callback;
+}
+
+int eEngine::setPostDrawCallback(void ((*callback)())) {
+  postDrawCallback=callback;
+}
+
+eFrame* eEngine::newFrame() {
+  eFrame* ret;
+  ret=new eFrame;
+  ret->engine=this;
+  return ret;
 }
 
 int eEngine::pushFrame(eFrame* f) {
