@@ -8,10 +8,8 @@ eWidget* hello;
 
 void myCallback(const eEvent* ev) {
   printf("callback! %d\n",ev->state);
-}
-
-void myDrawCallback() {
-  hello->x++;
+  hello->x=ev->coord.x;
+  hello->y=ev->coord.y;
 }
 
 int main(int argc, char** argv) {
@@ -21,8 +19,7 @@ int main(int argc, char** argv) {
   hello->setSize(32,32);
   hello->x=64;
   hello->y=200;
-  gui->setPostEventCallback(eEventMouseButton,myCallback);
-  gui->setDrawStartCallback(myDrawCallback);
+  gui->setPostEventCallback(eEventMouseMove,myCallback);
   gui->pushFrame(frame);
   gui->show();
   return gui->run();
