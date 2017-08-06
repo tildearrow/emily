@@ -4,7 +4,7 @@
 
 eEngine* gui;
 eFrame* frame;
-eWidget* hello;
+eLabel* hello;
 
 void myCallback(const eEvent* ev) {
   printf("callback! %d\n",ev->state);
@@ -15,8 +15,9 @@ void myCallback(const eEvent* ev) {
 int main(int argc, char** argv) {
   gui=new eEngine(eBackSDL2);
   frame=gui->newFrame();
-  hello=frame->newWidget<eWidget>();
+  hello=(eLabel*)frame->newWidget<eLabel>();
   hello->setSize(32,32);
+  hello->setString("hello world!");
   hello->x=64;
   hello->y=200;
   gui->setPostEventCallback(eEventMouseMove,myCallback);

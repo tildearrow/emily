@@ -63,9 +63,10 @@ class eFont {
 class eEngine;
 
 class eWidget {
-  eEngine* engine;
-  double w, h;
   friend class eFrame;
+  protected:
+    eEngine* engine;
+    double w, h;
   public:
     double x, y;
     virtual int setSize(double w, double h);
@@ -78,13 +79,15 @@ class eFrame {
   friend void eMainLoop(eEngine* eng);
   friend class eEngine;
   public:
-    template<typename t> eWidget* newWidget() {
+    template<typename t> void* newWidget() {
       t* push=new t;
       push->engine=engine;
       widgets.push_back(push);
       return push;
     }
 };
+
+#include "widgets/widgets.h"
 
 class eEngine {
   void* backWin;

@@ -10,6 +10,7 @@ set(SOURCES src/funcs.cpp
             src/font.cpp
             
             src/widget/base.cpp
+            src/widget/label.cpp
             
             src/dummy/funcs.cpp)
 if (HAVE_SDL2)
