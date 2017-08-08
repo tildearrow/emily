@@ -64,21 +64,9 @@ struct eRect {
   double x, y, w, h;
 };
 
-class eTexture {
-  friend class eEngine;
-  protected:
-    eEngine* engine;
-    void* backTexture;
-  public:
-    int width, height, pitch;
-    eRect srcRect, destRect;
-    unsigned char* lock();
-    int unlock();
-    int draw();
-    int drawExt(int centerX, int centerY, double angle);
-    eTexture(int w, int h);
-    eTexture(eBitmap* bitmap);
-    ~eTexture();
+struct eTexture {
+  unsigned int id[4];
+  void* actual;
 };
 
 class eFont {
@@ -168,7 +156,11 @@ class eEngine {
     
     void drawColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
     void line(double x1, double y1, double x2, double y2);
-    int drawTexture(eTexture* tex);
+
+    eTexture* getTexture(int width, int height, int prop0, int prop1, int prop2, int prop3);
+    void* lockTexture(eTexture* tex);
+    int unlockTexture(eTexture* tex);
+    int drawTexture(eTexture* tex, eRect& src, eRect& dest);
 };
 
 void eMainLoop(eEngine* eng);

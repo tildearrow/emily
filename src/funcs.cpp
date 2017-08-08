@@ -158,10 +158,6 @@ int eEngine::show() {
   }
 }
 
-int eEngine::drawTexture(eTexture* tex) {
-  return eDrawTexture(backInst,tex->backTexture,tex->srcRect,tex->destRect);
-}
-
-int eTexture::draw() {
-  return engine->drawTexture(this);
+int eEngine::drawTexture(eTexture* tex, eRect& src, eRect& dest) {
+  return eDrawTexture(backInst,tex->actual,src,dest);
 }
