@@ -49,18 +49,49 @@ struct eEvent {
   int mod;
 };
 
+class eEngine;
+
+class eBitmap {
+  public:
+    int width, height, depth;
+    unsigned char* data;
+    int pitch();
+    eBitmap(int inWidth, int inHeight, int inDepth);
+    ~eBitmap();
+};
+
+struct eRect {
+  double x, y, w, h;
+};
+
+class eTexture {
+  friend class eEngine;
+  protected:
+    eEngine* engine;
+    void* backTexture;
+  public:
+    int width, height, pitch;
+    eRect srcRect, destRect;
+    unsigned char* lock();
+    int unlock();
+    int draw();
+    int drawExt(int centerX, int centerY, double angle);
+    eTexture(int w, int h);
+    eTexture(eBitmap* bitmap);
+    ~eTexture();
+};
+
 class eFont {
   FT_Library lib;
   FT_Face face;
   public:
+    eBitmap* render(string text);
     int loadfn(const char* filename);
     int loadfam(const char* name);
     void size(float size);
     int loaddef(int variant);
     eFont(FT_Library l);
 };
-
-class eEngine;
 
 class eWidget {
   friend class eFrame;
@@ -105,7 +136,9 @@ class eEngine {
   void (*ePostRender)(void*);
   void (*eDrawColor)(void*,unsigned char,unsigned char,unsigned char,unsigned char);
   void (*eLine)(void*,double,double,double,double);
+  int (*eDrawTexture)(void*,void*,eRect&,eRect&);
   std::stack<eFrame*> frameStack;
+  std::vector<eTexture*> regTextures;
   bool visible;
   string title;
   int width, height;
@@ -135,6 +168,7 @@ class eEngine {
     
     void drawColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
     void line(double x1, double y1, double x2, double y2);
+    int drawTexture(eTexture* tex);
 };
 
 void eMainLoop(eEngine* eng);

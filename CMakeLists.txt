@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD 11)
 include_directories(include /usr/include/freetype2)
 find_library(HAVE_SDL2 SDL2)
 set(SOURCES src/funcs.cpp
+            src/bitmap.cpp
             src/font.cpp
             
             src/widget/base.cpp

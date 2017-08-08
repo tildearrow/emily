@@ -23,6 +23,7 @@ eEngine::eEngine(int backend) {
       eWait=sdlWait;
       eDrawColor=sdlDrawColor;
       eLine=sdlLine;
+      eDrawTexture=sdlDrawTexture;
       break;
 #endif
     default:
@@ -155,4 +156,12 @@ int eEngine::show() {
     backWin=createWin(&backInst,title.c_str(),0,0,width,height,false);
     visible=true;
   }
+}
+
+int eEngine::drawTexture(eTexture* tex) {
+  return eDrawTexture(backInst,tex->backTexture,tex->srcRect,tex->destRect);
+}
+
+int eTexture::draw() {
+  return engine->drawTexture(this);
 }

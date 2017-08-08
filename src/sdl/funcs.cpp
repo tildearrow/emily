@@ -76,3 +76,16 @@ void sdlDrawColor(void* instance, unsigned char r, unsigned char g, unsigned cha
 void sdlLine(void* instance, double x1, double y1, double x2, double y2) {
   SDL_RenderDrawLine((SDL_Renderer*)instance,x1,y1,x2,y2);
 }
+
+int sdlDrawTexture(void* instance, void* tex, eRect& sr, eRect& dr) {
+  SDL_Rect convSR, convDR;
+  convSR.x=sr.x;
+  convSR.y=sr.y;
+  convSR.w=sr.w;
+  convSR.h=sr.h;
+  convDR.x=dr.x;
+  convDR.y=dr.y;
+  convDR.w=dr.w;
+  convDR.h=dr.h;
+  return SDL_RenderCopy((SDL_Renderer*)instance,(SDL_Texture*)tex,&convSR,&convDR);
+}

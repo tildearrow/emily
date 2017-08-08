@@ -12,6 +12,6 @@ int eLabel::setSize(double wi, double he) {
 
 int eLabel::draw() {
   engine->drawColor(255,255,255,255);
-  engine->line(x,y,x+w,y+h);
+  tex->draw();
   return 0;
 }
