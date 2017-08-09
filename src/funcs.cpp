@@ -23,6 +23,7 @@ eEngine::eEngine(int backend) {
       eWait=sdlWait;
       eDrawColor=sdlDrawColor;
       eLine=sdlLine;
+      eCreateTexture=sdlCreateTexture;
       eDrawTexture=sdlDrawTexture;
       break;
 #endif
@@ -156,6 +157,41 @@ int eEngine::show() {
     backWin=createWin(&backInst,title.c_str(),0,0,width,height,false);
     visible=true;
   }
+}
+
+eTexture* eEngine::getUnmanagedTexture(int width, int height, int type) {
+  eTexture* ret;
+  void* tex;
+  tex=eCreateTexture(backInst,width,height,type);
+  printf("RETURN VAL %x\n",tex);
+  if (tex==NULL) {
+    return NULL;
+  }
+  ret=new eTexture;
+  ret->actual=tex;
+  ret->width=width;
+  ret->height=height;
+  ret->type=type;
+  return ret;
+}
+
+eTexture* eEngine::getTexture(int width, int height, int type, int prop0, int prop1, int prop2, int prop3) {
+  eTexture* ret;
+  void* tex;
+  tex=eCreateTexture(backInst,width,height,type);
+  if (tex==NULL) {
+    return NULL;
+  }
+  ret=new eTexture;
+  ret->actual=tex;
+  ret->width=width;
+  ret->height=height;
+  ret->type=type;
+  ret->id[0]=prop0;
+  ret->id[1]=prop1;
+  ret->id[2]=prop2;
+  ret->id[3]=prop3;
+  return ret;
 }
 
 int eEngine::drawTexture(eTexture* tex, eRect& src, eRect& dest) {

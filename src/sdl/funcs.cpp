@@ -77,6 +77,10 @@ void sdlLine(void* instance, double x1, double y1, double x2, double y2) {
   SDL_RenderDrawLine((SDL_Renderer*)instance,x1,y1,x2,y2);
 }
 
+void* sdlCreateTexture(void* instance, int width, int height, int type) {
+  return (void*)SDL_CreateTexture((SDL_Renderer*)instance,SDL_PIXELFORMAT_ARGB8888,type,width,height);
+};
+
 int sdlDrawTexture(void* instance, void* tex, eRect& sr, eRect& dr) {
   SDL_Rect convSR, convDR;
   convSR.x=sr.x;

@@ -1,5 +1,9 @@
 #include "toolkit.h"
 
+int eWidget::init() {
+  return 1;
+}
+
 int eWidget::setSize(double wi, double he) {
   w=wi;
   h=he;

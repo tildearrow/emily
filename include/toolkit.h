@@ -39,6 +39,12 @@ enum eFontVariant {
   eFontLarge
 };
 
+enum eTextureTypes {
+  eStatic=0,
+  eStream,
+  eTarget
+};
+
 struct eEvent {
   unsigned char type;
   struct {
@@ -66,6 +72,7 @@ struct eRect {
 
 struct eTexture {
   unsigned int id[4];
+  int width, height, type;
   void* actual;
 };
 
@@ -88,6 +95,7 @@ class eWidget {
     double w, h;
   public:
     double x, y;
+    virtual int init();
     virtual int setSize(double w, double h);
     virtual int draw();
 };
@@ -101,6 +109,7 @@ class eFrame {
     template<typename t> void* newWidget() {
       t* push=new t;
       push->engine=engine;
+      push->init();
       widgets.push_back(push);
       return push;
     }
@@ -124,6 +133,7 @@ class eEngine {
   void (*ePostRender)(void*);
   void (*eDrawColor)(void*,unsigned char,unsigned char,unsigned char,unsigned char);
   void (*eLine)(void*,double,double,double,double);
+  void* (*eCreateTexture)(void*,int,int,int);
   int (*eDrawTexture)(void*,void*,eRect&,eRect&);
   std::stack<eFrame*> frameStack;
   std::vector<eTexture*> regTextures;
@@ -157,7 +167,8 @@ class eEngine {
     void drawColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
     void line(double x1, double y1, double x2, double y2);
 
-    eTexture* getTexture(int width, int height, int prop0, int prop1, int prop2, int prop3);
+    eTexture* getTexture(int width, int height, int type, int prop0, int prop1, int prop2, int prop3);
+    eTexture* getUnmanagedTexture(int width, int height, int type);
     void* lockTexture(eTexture* tex);
     int unlockTexture(eTexture* tex);
     int drawTexture(eTexture* tex, eRect& src, eRect& dest);

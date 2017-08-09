@@ -14,6 +14,7 @@ void myCallback(const eEvent* ev) {
 
 int main(int argc, char** argv) {
   gui=new eEngine(eBackSDL2);
+  gui->show();
   frame=gui->newFrame();
   hello=(eLabel*)frame->newWidget<eLabel>();
   hello->setSize(32,32);
@@ -22,6 +23,5 @@ int main(int argc, char** argv) {
   hello->y=200;
   gui->setPostEventCallback(eEventMouseMove,myCallback);
   gui->pushFrame(frame);
-  gui->show();
   return gui->run();
 }
