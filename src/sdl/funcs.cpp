@@ -93,3 +93,7 @@ int sdlDrawTexture(void* instance, void* tex, eRect& sr, eRect& dr) {
   convDR.h=dr.h;
   return SDL_RenderCopy((SDL_Renderer*)instance,(SDL_Texture*)tex,&convSR,&convDR);
 }
+
+int sdlUpdateTexture(void* tex, void* data, int pitch) {
+  return SDL_UpdateTexture((SDL_Texture*)tex,NULL,data,pitch);
+}

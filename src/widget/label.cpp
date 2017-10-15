@@ -21,8 +21,8 @@ int eLabel::draw() {
   engine->drawColor(255,255,255,255);
   src.x=0;
   src.y=0;
-  src.w=32;
-  src.h=32;
+  src.w=w;
+  src.h=h;
   dest=src;
   dest.x=x;
   dest.y=y;

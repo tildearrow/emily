@@ -25,6 +25,7 @@ eEngine::eEngine(int backend) {
       eLine=sdlLine;
       eCreateTexture=sdlCreateTexture;
       eDrawTexture=sdlDrawTexture;
+      eUpdateTexture=sdlUpdateTexture;
       break;
 #endif
     default:
@@ -51,6 +52,8 @@ eEngine::eEngine(int backend) {
 void eMainLoop(eEngine* eng) {
   eEvent ev;
   eFrame* curFrame;
+  eBitmap* ssss;
+  eTexture* tttt;
   while (1) {
     eng->eWait(eng->estWaitTime);
     /* event processing */
@@ -85,6 +88,10 @@ void eMainLoop(eEngine* eng) {
     }
     eng->drawColor(255,255,255,255);
     eng->line(0,0,eng->width,eng->height);
+    ssss=eng->defFont->render("hello");
+    tttt=eng->getTextureFromBitmap(ssss,eStatic);
+    //eng->drawTexture(tttt,NULL,NULL);
+    delete ssss;
     if (eng->drawEndCallback!=NULL) {
       eng->drawEndCallback();
     }
@@ -191,6 +198,23 @@ eTexture* eEngine::getTexture(int width, int height, int type, int prop0, int pr
   ret->id[1]=prop1;
   ret->id[2]=prop2;
   ret->id[3]=prop3;
+  return ret;
+}
+
+eTexture* eEngine::getTextureFromBitmap(eBitmap* bitmap, int type) {
+  eTexture* ret;
+  void* tex;
+  tex=eCreateTexture(backInst,bitmap->width,bitmap->height,type);
+  eUpdateTexture(tex,bitmap->data,bitmap->pitch());
+  printf("RETURN VAL %x\n",tex);
+  if (tex==NULL) {
+    return NULL;
+  }
+  ret=new eTexture;
+  ret->actual=tex;
+  ret->width=width;
+  ret->height=height;
+  ret->type=type;
   return ret;
 }
 

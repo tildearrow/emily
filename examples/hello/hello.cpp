@@ -17,7 +17,7 @@ int main(int argc, char** argv) {
   gui->show();
   frame=gui->newFrame();
   hello=(eLabel*)frame->newWidget<eLabel>();
-  hello->setSize(32,32);
+  hello->setSize(64,64);
   hello->setString("hello world!");
   hello->x=64;
   hello->y=200;

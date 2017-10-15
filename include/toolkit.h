@@ -62,6 +62,7 @@ class eBitmap {
     int width, height, depth;
     unsigned char* data;
     int pitch();
+    int blitFromFTBitmap(FT_Bitmap* data, int x, int y);
     eBitmap(int inWidth, int inHeight, int inDepth);
     ~eBitmap();
 };
@@ -134,6 +135,7 @@ class eEngine {
   void (*eDrawColor)(void*,unsigned char,unsigned char,unsigned char,unsigned char);
   void (*eLine)(void*,double,double,double,double);
   void* (*eCreateTexture)(void*,int,int,int);
+  int (*eUpdateTexture)(void*,void*,int);
   int (*eDrawTexture)(void*,void*,eRect&,eRect&);
   std::stack<eFrame*> frameStack;
   std::vector<eTexture*> regTextures;
@@ -169,6 +171,7 @@ class eEngine {
 
     eTexture* getTexture(int width, int height, int type, int prop0, int prop1, int prop2, int prop3);
     eTexture* getUnmanagedTexture(int width, int height, int type);
+    eTexture* getTextureFromBitmap(eBitmap* bitmap, int type);
     void* lockTexture(eTexture* tex);
     int unlockTexture(eTexture* tex);
     int drawTexture(eTexture* tex, eRect& src, eRect& dest);
