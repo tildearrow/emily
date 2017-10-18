@@ -3,7 +3,7 @@
 
 void* sdlCreateWin(void** instance, const char* title, int x, int y, int w, int h, bool resizable);
 
-int sdlNextEvent(eEvent& ev);
+int sdlNextEvent(void* instance, eEvent& ev);
 
 void sdlWait(int time);
 void sdlPreRender(void* instance);
@@ -13,5 +13,5 @@ void sdlDrawColor(void* instance, unsigned char r, unsigned char g, unsigned cha
 void sdlLine(void* instance, double x1, double y1, double x2, double y2);
 
 void* sdlCreateTexture(void* instance, int width, int height, int type);
-int sdlDrawTexture(void* instance, void* tex, eRect& sr, eRect& dr);
+int sdlDrawTexture(void* instance, eTexture* tex, double x, double y);
 int sdlUpdateTexture(void* tex, void* data, int pitch);

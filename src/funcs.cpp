@@ -3,6 +3,9 @@
 #ifdef HAVE_SDL2
 #include "sdl/sdl.h"
 #endif
+#ifdef HAVE_SFML
+#include "sfml/sfml.h"
+#endif
 
 #include "dummy/dummy.h"
 
@@ -26,6 +29,20 @@ eEngine::eEngine(int backend) {
       eCreateTexture=sdlCreateTexture;
       eDrawTexture=sdlDrawTexture;
       eUpdateTexture=sdlUpdateTexture;
+      break;
+#endif
+#ifdef HAVE_SFML
+    case eBackSFML:
+      createWin=sfmlCreateWin;
+      ePreRender=sfmlPreRender;
+      ePostRender=sfmlPostRender;
+      eNextEvent=sfmlNextEvent;
+      eWait=sfmlWait;
+      eDrawColor=sfmlDrawColor;
+      eLine=sfmlLine;
+      eCreateTexture=sfmlCreateTexture;
+      eDrawTexture=sfmlDrawTexture;
+      eUpdateTexture=sfmlUpdateTexture;
       break;
 #endif
     default:
@@ -57,7 +74,7 @@ void eMainLoop(eEngine* eng) {
   while (1) {
     eng->eWait(eng->estWaitTime);
     /* event processing */
-    while (eng->eNextEvent(ev)) {
+    while (eng->eNextEvent(eng->backInst,ev)) {
       if (eng->preEvCallback[ev.type]!=NULL) {
         eng->preEvCallback[ev.type](&ev);
       }
@@ -218,6 +235,6 @@ eTexture* eEngine::getTextureFromBitmap(eBitmap* bitmap, int type) {
   return ret;
 }
 
-int eEngine::drawTexture(eTexture* tex, eRect& src, eRect& dest) {
-  return eDrawTexture(backInst,tex->actual,src,dest);
+int eEngine::drawTexture(eTexture* tex, double x, double y) {
+  return eDrawTexture(backInst,tex,x,y);
 }

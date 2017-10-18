@@ -26,6 +26,6 @@ int eLabel::draw() {
   dest=src;
   dest.x=x;
   dest.y=y;
-  engine->drawTexture(tex,src,dest);
+  engine->drawTexture(tex,x,y);
   return 0;
 }

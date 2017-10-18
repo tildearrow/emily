@@ -11,6 +11,7 @@
 typedef std::string string;
 
 #define eBackSDL2 0
+#define eBackSFML 1
 
 // for now
 // debug
@@ -122,7 +123,7 @@ class eEngine {
   void* backWin;
   void* backInst;
   void* (*createWin)(void**,const char*,int,int,int,int,bool);
-  int (*eNextEvent)(eEvent&);
+  int (*eNextEvent)(void*,eEvent&);
   void ((*preEvCallback[256])(const eEvent*));
   void ((*postEvCallback[256])(const eEvent*));
   void (*preDrawCallback)();
@@ -136,7 +137,7 @@ class eEngine {
   void (*eLine)(void*,double,double,double,double);
   void* (*eCreateTexture)(void*,int,int,int);
   int (*eUpdateTexture)(void*,void*,int);
-  int (*eDrawTexture)(void*,void*,eRect&,eRect&);
+  int (*eDrawTexture)(void*,eTexture*,double,double);
   std::stack<eFrame*> frameStack;
   std::vector<eTexture*> regTextures;
   bool visible;
@@ -174,7 +175,7 @@ class eEngine {
     eTexture* getTextureFromBitmap(eBitmap* bitmap, int type);
     void* lockTexture(eTexture* tex);
     int unlockTexture(eTexture* tex);
-    int drawTexture(eTexture* tex, eRect& src, eRect& dest);
+    int drawTexture(eTexture* tex, double x, double y);
 };
 
 void eMainLoop(eEngine* eng);

@@ -13,7 +13,7 @@ void* sdlCreateWin(void** instance, const char* title, int x, int y, int w, int 
   return ret;
 }
 
-int sdlNextEvent(eEvent& ev) {
+int sdlNextEvent(void* instance, eEvent& ev) {
   SDL_Event temp;
   if (SDL_PollEvent(&temp)==0) {
     return 0;
@@ -81,17 +81,10 @@ void* sdlCreateTexture(void* instance, int width, int height, int type) {
   return (void*)SDL_CreateTexture((SDL_Renderer*)instance,SDL_PIXELFORMAT_ARGB8888,type,width,height);
 };
 
-int sdlDrawTexture(void* instance, void* tex, eRect& sr, eRect& dr) {
+int sdlDrawTexture(void* instance, eTexture* tex, double x, double y) {
   SDL_Rect convSR, convDR;
-  convSR.x=sr.x;
-  convSR.y=sr.y;
-  convSR.w=sr.w;
-  convSR.h=sr.h;
-  convDR.x=dr.x;
-  convDR.y=dr.y;
-  convDR.w=dr.w;
-  convDR.h=dr.h;
-  return SDL_RenderCopy((SDL_Renderer*)instance,(SDL_Texture*)tex,&convSR,&convDR);
+  /* SDL backend to be dropped */
+  return 1; //return SDL_RenderCopy((SDL_Renderer*)instance,(SDL_Texture*)tex,&convSR,&convDR);
 }
 
 int sdlUpdateTexture(void* tex, void* data, int pitch) {
