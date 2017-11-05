@@ -1,69 +1,29 @@
 #include "toolkit.h"
 
-#ifdef HAVE_SDL2
-#include "sdl/sdl.h"
-#endif
-#ifdef HAVE_SFML
 #include "sfml/sfml.h"
-#endif
-
-#include "dummy/dummy.h"
 
 eFont* eEngine::newFont() {
   eFont* ret;
-  ret=new eFont(ftlib);
+  ret=new eFont();
   return ret;
 }
 
 eEngine::eEngine(int backend) {
-  switch (backend) {
-#ifdef HAVE_SDL2
-    case eBackSDL2:
-      createWin=sdlCreateWin;
-      ePreRender=sdlPreRender;
-      ePostRender=sdlPostRender;
-      eNextEvent=sdlNextEvent;
-      eWait=sdlWait;
-      eDrawColor=sdlDrawColor;
-      eLine=sdlLine;
-      eCreateTexture=sdlCreateTexture;
-      eDrawTexture=sdlDrawTexture;
-      eUpdateTexture=sdlUpdateTexture;
-      break;
-#endif
-#ifdef HAVE_SFML
-    case eBackSFML:
-      createWin=sfmlCreateWin;
-      ePreRender=sfmlPreRender;
-      ePostRender=sfmlPostRender;
-      eNextEvent=sfmlNextEvent;
-      eWait=sfmlWait;
-      eDrawColor=sfmlDrawColor;
-      eLine=sfmlLine;
-      eCreateTexture=sfmlCreateTexture;
-      eDrawTexture=sfmlDrawTexture;
-      eUpdateTexture=sfmlUpdateTexture;
-      break;
-#endif
-    default:
-      eLogE("Backend does not exist, or not available. Loading dummy backend.\n");
-      createWin=dummyCreateWin;
-      break;
-  }
+  createWin=sfmlCreateWin;
+  ePreRender=sfmlPreRender;
+  ePostRender=sfmlPostRender;
+  eNextEvent=sfmlNextEvent;
+  eWait=sfmlWait;
+  eDrawColor=sfmlDrawColor;
+  eLine=sfmlLine;
+  eCreateTexture=sfmlCreateTexture;
+  eDrawTexture=sfmlDrawTexture;
+  eUpdateTexture=sfmlUpdateTexture;
   visible=false;
   title="Application";
   estWaitTime=10;
   width=1280;
   height=800;
-  if (FT_Init_FreeType(&ftlib)) {
-    eLogE("Error while initializing the font system.\n");
-  } else {
-    defFont=newFont();
-    if (defFont->loaddef(eFontDefault)==0) {
-      eLogE("Error while loading default font.\n");
-    }
-    defFont->size(12);
-  }
 }
 
 void eMainLoop(eEngine* eng) {

@@ -5,13 +5,10 @@
 #include <string>
 #include <thread>
 #include <vector>
-#include <ft2build.h>
-#include FT_FREETYPE_H
 
 typedef std::string string;
 
-#define eBackSDL2 0
-#define eBackSFML 1
+#define eBackSFML 0
 
 // for now
 // debug
@@ -63,7 +60,6 @@ class eBitmap {
     int width, height, depth;
     unsigned char* data;
     int pitch();
-    int blitFromFTBitmap(FT_Bitmap* data, int x, int y);
     eBitmap(int inWidth, int inHeight, int inDepth);
     ~eBitmap();
 };
@@ -79,15 +75,13 @@ struct eTexture {
 };
 
 class eFont {
-  FT_Library lib;
-  FT_Face face;
   public:
     eBitmap* render(string text);
     int loadfn(const char* filename);
     int loadfam(const char* name);
     void size(float size);
     int loaddef(int variant);
-    eFont(FT_Library l);
+    eFont();
 };
 
 class eWidget {
@@ -144,7 +138,6 @@ class eEngine {
   string title;
   int width, height;
   float estWaitTime;
-  FT_Library ftlib;
   eFont* defFont;
   friend void eMainLoop(eEngine* eng);
   public:

@@ -1,8 +1,6 @@
 # emily
 
-this is tildearrow's own UI toolkit, which will be used in taebron and future applications.
-
-this toolkit uses SFML for display.
+this is tildearrow's own SFML-based UI toolkit, which will be used in taebron and future applications.
 
 this toolkit isn't production ready, but don't worry, it will be soon.
 
@@ -14,9 +12,7 @@ and the desire to get a competitive, yet lightweight UI toolkit.
 
 # dependencies
 
-- FreeType
-
-- SDL2 (optional but required for display, which is what you want)
+- SFML
 
 # warning
 
