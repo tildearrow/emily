@@ -2,7 +2,7 @@
 
 this is tildearrow's own UI toolkit, which will be used in taebron and future applications.
 
-this toolkit uses SDL2 (in a future will use Vulkan) for display.
+this toolkit uses SFML for display.
 
 this toolkit isn't production ready, but don't worry, it will be soon.
 
