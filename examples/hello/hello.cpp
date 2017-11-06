@@ -13,11 +13,10 @@ void myCallback(const eEvent* ev) {
 }
 
 int main(int argc, char** argv) {
-  gui=new eEngine;
+  gui=new eEngine(1280,800);
   gui->show();
   frame=gui->newFrame();
   hello=(eLabel*)frame->newWidget<eLabel>();
-  hello->setSize(64,64);
   hello->setString("hello world!");
   hello->x=64;
   hello->y=200;

@@ -1,40 +1,59 @@
 #include "toolkit.h"
 
-#include "sfml/sfml.h"
-
-eFont* eEngine::newFont() {
-  eFont* ret;
-  ret=new eFont();
-  return ret;
-}
-
-eEngine::eEngine() {
-  createWin=sfmlCreateWin;
-  ePreRender=sfmlPreRender;
-  ePostRender=sfmlPostRender;
-  eNextEvent=sfmlNextEvent;
-  eWait=sfmlWait;
-  eDrawColor=sfmlDrawColor;
-  eLine=sfmlLine;
-  eCreateTexture=sfmlCreateTexture;
-  eDrawTexture=sfmlDrawTexture;
-  eUpdateTexture=sfmlUpdateTexture;
+eEngine::eEngine(double w, double h) {
+  scale=2;
   visible=false;
   title="Application";
   estWaitTime=10;
-  width=1280;
-  height=800;
+  width=w;
+  height=h;
+  defFont=new eFont;
+  if (defFont->loaddef(eFontDefault)==0) {
+    eLogE("Error while loading default font.\n");
+  }
+}
+
+int eEngine::nextEvent(eEvent& ev) {
+  sf::Event temp;
+  if (win->pollEvent(temp)==0) {
+    return 0;
+  }
+  switch (temp.type) {
+    case sf::Event::Closed:
+      ev.type=eEventQuit;
+      break;
+    case sf::Event::MouseMoved:
+      ev.type=eEventMouseMove;
+      ev.coord.x=temp.mouseMove.x;
+      ev.coord.y=temp.mouseMove.y;
+      break;
+    case sf::Event::MouseButtonPressed:
+      ev.type=eEventMouseButton;
+      ev.coord.x=temp.mouseButton.x;
+      ev.coord.y=temp.mouseButton.y;
+      ev.input=temp.mouseButton.button;
+      ev.state=1;
+      break;
+    case sf::Event::MouseButtonReleased:
+      ev.type=eEventMouseButton;
+      ev.coord.x=temp.mouseButton.x;
+      ev.coord.y=temp.mouseButton.y;
+      ev.input=temp.mouseButton.button;
+      ev.state=0;
+      break;
+    default:
+      ev.type=eEventBackend;
+      break;
+  }
 }
 
 void eMainLoop(eEngine* eng) {
   eEvent ev;
   eFrame* curFrame;
-  eBitmap* ssss;
-  eTexture* tttt;
   while (1) {
-    eng->eWait(eng->estWaitTime);
+    eng->pause(eng->estWaitTime);
     /* event processing */
-    while (eng->eNextEvent(eng->backInst,ev)) {
+    while (eng->nextEvent(ev)) {
       if (eng->preEvCallback[ev.type]!=NULL) {
         eng->preEvCallback[ev.type](&ev);
       }
@@ -53,7 +72,7 @@ void eMainLoop(eEngine* eng) {
     if (eng->preDrawCallback!=NULL) {
       eng->preDrawCallback();
     }
-    eng->ePreRender(eng->backInst);
+    eng->preRender();
     if (eng->drawStartCallback!=NULL) {
       eng->drawStartCallback();
     }
@@ -65,14 +84,10 @@ void eMainLoop(eEngine* eng) {
     }
     eng->drawColor(255,255,255,255);
     eng->line(0,0,eng->width,eng->height);
-    ssss=eng->defFont->render("hello");
-    tttt=eng->getTextureFromBitmap(ssss,eStatic);
-    //eng->drawTexture(tttt,NULL,NULL);
-    delete ssss;
     if (eng->drawEndCallback!=NULL) {
       eng->drawEndCallback();
     }
-    eng->ePostRender(eng->backInst);
+    eng->postRender();
     if (eng->postDrawCallback!=NULL) {
       eng->postDrawCallback();
     }
@@ -129,21 +144,29 @@ int eEngine::popFrame() {
 }
 
 void eEngine::drawColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
+  /*
   eDrawColor(backInst,r,g,b,a);
+  */
 }
 
 void eEngine::line(double x1, double y1, double x2, double y2) {
-  eLine(backInst,x1,y1,x2,y2);
+  sf::VertexArray temp(sf::Lines,2);
+  temp[0].position=sf::Vector2f(x1*scale,y1*scale);
+  temp[1].position=sf::Vector2f(x2*scale,y2*scale);
+  win->draw(temp);
 }
 
 int eEngine::show() {
   if (!visible) {
-    backWin=createWin(&backInst,title.c_str(),0,0,width,height,false);
+    win=new sf::RenderWindow(sf::VideoMode(width*scale,height*scale),title,sf::Style::Titlebar|sf::Style::Close);
+    win->setVerticalSyncEnabled(true);
     visible=true;
   }
 }
 
 eTexture* eEngine::getUnmanagedTexture(int width, int height, int type) {
+  return NULL;
+  /*
   eTexture* ret;
   void* tex;
   tex=eCreateTexture(backInst,width,height,type);
@@ -157,9 +180,12 @@ eTexture* eEngine::getUnmanagedTexture(int width, int height, int type) {
   ret->height=height;
   ret->type=type;
   return ret;
+  */
 }
 
 eTexture* eEngine::getTexture(int width, int height, int type, int prop0, int prop1, int prop2, int prop3) {
+  return NULL;
+  /*
   eTexture* ret;
   void* tex;
   tex=eCreateTexture(backInst,width,height,type);
@@ -176,9 +202,12 @@ eTexture* eEngine::getTexture(int width, int height, int type, int prop0, int pr
   ret->id[2]=prop2;
   ret->id[3]=prop3;
   return ret;
+  */
 }
 
 eTexture* eEngine::getTextureFromBitmap(eBitmap* bitmap, int type) {
+  return NULL;
+  /*
   eTexture* ret;
   void* tex;
   tex=eCreateTexture(backInst,bitmap->width,bitmap->height,type);
@@ -193,8 +222,24 @@ eTexture* eEngine::getTextureFromBitmap(eBitmap* bitmap, int type) {
   ret->height=height;
   ret->type=type;
   return ret;
+  */
 }
 
 int eEngine::drawTexture(eTexture* tex, double x, double y) {
+  return 0;
+  /*
   return eDrawTexture(backInst,tex,x,y);
+  */
+}
+
+int eEngine::pause(double timeAsMicro) {
+  sf::sleep(sf::microseconds(timeAsMicro));
+}
+
+void eEngine::preRender() {
+  win->clear();
+}
+
+void eEngine::postRender() {
+  win->display();
 }

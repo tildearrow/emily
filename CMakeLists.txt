@@ -24,9 +24,7 @@ set(SOURCES src/funcs.cpp
             src/font.cpp
             
             src/widget/base.cpp
-            src/widget/label.cpp
-            
-            src/sfml/funcs.cpp)
+            src/widget/label.cpp)
 if (BUILD_STATIC)
   add_library(emily STATIC ${SOURCES})
 else (BUILD_STATIC)

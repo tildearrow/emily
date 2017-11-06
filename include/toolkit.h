@@ -5,6 +5,7 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include <SFML/Graphics.hpp>
 
 typedef std::string string;
 
@@ -76,12 +77,10 @@ struct eTexture {
 
 class eFont {
   public:
-    eBitmap* render(string text);
+    sf::Font inst;
     int loadfn(const char* filename);
     int loadfam(const char* name);
-    void size(float size);
     int loaddef(int variant);
-    eFont();
 };
 
 class eWidget {
@@ -114,16 +113,15 @@ class eFrame {
 #include "widgets/widgets.h"
 
 class eEngine {
-  void* backWin;
-  void* backInst;
-  void* (*createWin)(void**,const char*,int,int,int,int,bool);
-  int (*eNextEvent)(void*,eEvent&);
+  /*void* (*createWin)(void**,const char*,int,int,int,int,bool);
+  int (*eNextEvent)(void*,eEvent&);*/
   void ((*preEvCallback[256])(const eEvent*));
   void ((*postEvCallback[256])(const eEvent*));
   void (*preDrawCallback)();
   void (*drawStartCallback)();
   void (*drawEndCallback)();
   void (*postDrawCallback)();
+  /*
   void (*eWait)(int);
   void (*ePreRender)(void*);
   void (*ePostRender)(void*);
@@ -132,16 +130,24 @@ class eEngine {
   void* (*eCreateTexture)(void*,int,int,int);
   int (*eUpdateTexture)(void*,void*,int);
   int (*eDrawTexture)(void*,eTexture*,double,double);
+  */
+  void preRender();
+  void postRender();
   std::stack<eFrame*> frameStack;
   std::vector<eTexture*> regTextures;
   bool visible;
   string title;
   int width, height;
+  double scale;
   float estWaitTime;
   eFont* defFont;
   friend void eMainLoop(eEngine* eng);
+  friend class eLabel;
+  int nextEvent(eEvent& ev);
+  protected:
+    sf::RenderWindow* win;
   public:
-    eEngine();
+    eEngine(double w, double h);
     ~eEngine();
     eFont* newFont();
     int setPreEventCallback(unsigned char event, void ((*callback)(const eEvent*)));
@@ -155,6 +161,7 @@ class eEngine {
     int show();
     int run();
     int runDetached();
+    int pause(double timeAsMicro);
 
     eFrame* newFrame();
     int pushFrame(eFrame* f);

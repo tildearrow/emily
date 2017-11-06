@@ -1,19 +1,19 @@
 #include "toolkit.h"
 
 int eLabel::init() {
-  printf("THIS SHALL PRINT!\n");
-  tex=engine->getUnmanagedTexture(32,32,eStream);
-  printf("%x\n",tex);
+  inst=new sf::Text();
+  inst->setFont(engine->defFont->inst);
+  inst->setCharacterSize(12*engine->scale);
 }
 
 int eLabel::setString(string data) {
   text=data;
+  inst->setString(data);
   return 0;
 }
 
-int eLabel::setSize(double wi, double he) {
-  w=wi;
-  h=he;
+int eLabel::setSize(double size) {
+  inst->setCharacterSize(size*engine->scale);
 }
 
 int eLabel::draw() {
@@ -26,6 +26,6 @@ int eLabel::draw() {
   dest=src;
   dest.x=x;
   dest.y=y;
-  engine->drawTexture(tex,x,y);
+  engine->win->draw(*inst);
   return 0;
 }
