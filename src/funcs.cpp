@@ -8,7 +8,7 @@ eFont* eEngine::newFont() {
   return ret;
 }
 
-eEngine::eEngine(int backend) {
+eEngine::eEngine() {
   createWin=sfmlCreateWin;
   ePreRender=sfmlPreRender;
   ePostRender=sfmlPostRender;

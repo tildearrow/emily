@@ -13,7 +13,7 @@ void myCallback(const eEvent* ev) {
 }
 
 int main(int argc, char** argv) {
-  gui=new eEngine(eBackSFML);
+  gui=new eEngine;
   gui->show();
   frame=gui->newFrame();
   hello=(eLabel*)frame->newWidget<eLabel>();

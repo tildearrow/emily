@@ -12,7 +12,9 @@ and the desire to get a competitive, yet lightweight UI toolkit.
 
 # dependencies
 
-- SFML
+- CMake (build)
+
+- SFML dependencies
 
 # warning
 

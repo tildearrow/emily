@@ -141,7 +141,7 @@ class eEngine {
   eFont* defFont;
   friend void eMainLoop(eEngine* eng);
   public:
-    eEngine(int backend);
+    eEngine();
     ~eEngine();
     eFont* newFont();
     int setPreEventCallback(unsigned char event, void ((*callback)(const eEvent*)));
