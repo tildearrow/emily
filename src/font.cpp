@@ -13,7 +13,7 @@ int eFont::loaddef(int variant) {
     default:
       return 0;
   }
-  if (inst.loadFromFile(path)) {
+  if (!inst.loadFromFile(path)) {
     return 0;
   }
   return 1;

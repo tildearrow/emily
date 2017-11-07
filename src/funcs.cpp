@@ -4,7 +4,7 @@ eEngine::eEngine(double w, double h) {
   scale=2;
   visible=false;
   title="Application";
-  estWaitTime=10;
+  estWaitTime=13000;
   width=w;
   height=h;
   defFont=new eFont;
@@ -24,20 +24,20 @@ int eEngine::nextEvent(eEvent& ev) {
       break;
     case sf::Event::MouseMoved:
       ev.type=eEventMouseMove;
-      ev.coord.x=temp.mouseMove.x;
-      ev.coord.y=temp.mouseMove.y;
+      ev.coord.x=temp.mouseMove.x/scale;
+      ev.coord.y=temp.mouseMove.y/scale;
       break;
     case sf::Event::MouseButtonPressed:
       ev.type=eEventMouseButton;
-      ev.coord.x=temp.mouseButton.x;
-      ev.coord.y=temp.mouseButton.y;
+      ev.coord.x=temp.mouseButton.x/scale;
+      ev.coord.y=temp.mouseButton.y/scale;
       ev.input=temp.mouseButton.button;
       ev.state=1;
       break;
     case sf::Event::MouseButtonReleased:
       ev.type=eEventMouseButton;
-      ev.coord.x=temp.mouseButton.x;
-      ev.coord.y=temp.mouseButton.y;
+      ev.coord.x=temp.mouseButton.x/scale;
+      ev.coord.y=temp.mouseButton.y/scale;
       ev.input=temp.mouseButton.button;
       ev.state=0;
       break;
@@ -51,6 +51,7 @@ void eMainLoop(eEngine* eng) {
   eEvent ev;
   eFrame* curFrame;
   while (1) {
+    eng->preRender();
     eng->pause(eng->estWaitTime);
     /* event processing */
     while (eng->nextEvent(ev)) {
@@ -72,7 +73,6 @@ void eMainLoop(eEngine* eng) {
     if (eng->preDrawCallback!=NULL) {
       eng->preDrawCallback();
     }
-    eng->preRender();
     if (eng->drawStartCallback!=NULL) {
       eng->drawStartCallback();
     }
@@ -237,7 +237,15 @@ int eEngine::pause(double timeAsMicro) {
 }
 
 void eEngine::preRender() {
+  /*
+  struct timespec start, end;
+  clock_gettime(CLOCK_MONOTONIC,&start);
+  */
   win->clear();
+  /*
+  clock_gettime(CLOCK_MONOTONIC,&end);
+  printf("time: %ld\n",(start.tv_nsec-end.tv_nsec)/1000);
+  */
 }
 
 void eEngine::postRender() {

@@ -17,15 +17,8 @@ int eLabel::setSize(double size) {
 }
 
 int eLabel::draw() {
-  eRect src, dest;
   engine->drawColor(255,255,255,255);
-  src.x=0;
-  src.y=0;
-  src.w=w;
-  src.h=h;
-  dest=src;
-  dest.x=x;
-  dest.y=y;
+  inst->setPosition(x*engine->scale,y*engine->scale);
   engine->win->draw(*inst);
   return 0;
 }
