@@ -99,10 +99,12 @@ int eEngine::run() {
   return 0;
 }
 
+/* to be re-enabled
 int eEngine::runDetached() {
   std::thread runThread(eMainLoop,this);
   return 0;
 }
+*/
 
 int eEngine::setPreEventCallback(unsigned char event, void ((*callback)(const eEvent *))) {
   preEvCallback[event]=callback;

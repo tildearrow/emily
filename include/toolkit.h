@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stack>
 #include <string>
-#include <thread>
 #include <vector>
 #include <SFML/Graphics.hpp>
 
