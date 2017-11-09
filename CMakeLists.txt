@@ -27,6 +27,9 @@ set(SOURCES src/funcs.cpp
             
             src/widget/base.cpp
             src/widget/label.cpp)
+if (APPLE)
+  list(APPEND SOURCES src/nsstub.m)
+endif (APPLE)
 if (BUILD_STATIC)
   add_library(emily STATIC ${SOURCES})
 else (BUILD_STATIC)

@@ -1,4 +1,9 @@
 #include "toolkit.h"
+#ifdef __APPLE__
+extern "C" {
+#include "nsstub.h"
+}
+#endif
 
 double getScale() {
   char* env;
@@ -11,8 +16,14 @@ double getScale() {
   // linux (wayland) code here
 #elif defined(_WIN32)
   // windows code here
+  // this may need to be replaced
+  return (double)GetDpiForSystem()/96.0;
 #elif defined(__APPLE__)
   // macOS code here
+  double dpi;
+  if ((dpi=nsStubDPI())>0) {
+    return dpi;
+  }
 #elif defined(__ANDROID__)
   // android code here
 #endif
@@ -24,7 +35,7 @@ double getScale() {
   int dpi, defs;
   disp=xcb_connect(NULL,&defs);
   
-  if (disp!=NULL) {
+  if (!xcb_connection_has_error(disp)) {
     scr=xcb_setup_roots_iterator(xcb_get_setup(disp));
     for (int i=0; i<defs; i++) {
       xcb_screen_next(&scr);
@@ -33,6 +44,7 @@ double getScale() {
     xcb_disconnect(disp);
     return (double)dpi/96.0;
   }
+  xcb_disconnect(disp);
 #else
   Display* disp;
   int dpi;
