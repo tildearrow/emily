@@ -5,6 +5,17 @@
 #include <string>
 #include <vector>
 #include <SFML/Graphics.hpp>
+// platform-specific headers
+#ifdef _WIN32
+#include <windows.h>
+#endif
+#ifdef __unix__
+#ifdef USE_XCB
+#include <xcb/xcb.h>
+#else
+#include <X11/Xlib.h>
+#endif
+#endif
 
 typedef std::string string;
 

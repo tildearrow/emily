@@ -1,7 +1,55 @@
 #include "toolkit.h"
 
+double getScale() {
+  char* env;
+  // try with environment variable
+  env=getenv("EMILY_SCALE");
+  if (env!=NULL) {
+    return atof(env);
+  }
+#if defined(__linux__)
+  // linux (wayland) code here
+#elif defined(_WIN32)
+  // windows code here
+#elif defined(__APPLE__)
+  // macOS code here
+#elif defined(__ANDROID__)
+  // android code here
+#endif
+#if defined(__unix__)
+  // X11
+#ifdef USE_XCB
+  xcb_connection_t* disp;
+  xcb_screen_iterator_t scr;
+  int dpi, defs;
+  disp=xcb_connect(NULL,&defs);
+  
+  if (disp!=NULL) {
+    scr=xcb_setup_roots_iterator(xcb_get_setup(disp));
+    for (int i=0; i<defs; i++) {
+      xcb_screen_next(&scr);
+    }
+    dpi=(int)(0.5+(25.4*(double)scr.data->width_in_pixels/(double)scr.data->width_in_millimeters));
+    xcb_disconnect(disp);
+    return (double)dpi/96.0;
+  }
+#else
+  Display* disp;
+  int dpi;
+  disp=XOpenDisplay(NULL);
+  if (disp!=NULL) {
+    dpi=(int)(0.5+(25.4*(double)XDisplayWidth(disp,XDefaultScreen(disp))/(double)XDisplayWidthMM(disp,XDefaultScreen(disp))));
+    XCloseDisplay(disp);
+    return (double)dpi/96.0;
+  }
+#endif
+#endif
+  // assume 1
+  return 1;
+}
+
 eEngine::eEngine(double w, double h) {
-  scale=2;
+  scale=getScale();
   visible=false;
   title="Application";
   estWaitTime=13000;

@@ -19,6 +19,8 @@ add_subdirectory(sfml)
 
 include_directories(include sfml/include)
 
+find_library(USE_XCB xcb)
+
 set(SOURCES src/funcs.cpp
             src/bitmap.cpp
             src/font.cpp
@@ -36,6 +38,10 @@ endif (APPLE)
 if (BUILD_EXAMPLES)
   add_executable(hello examples/hello/hello.cpp)
 endif (BUILD_EXAMPLES)
+if (USE_XCB)
+  target_link_libraries(emily xcb)
+  target_compile_definitions(emily PUBLIC USE_XCB)
+endif (USE_XCB)
 target_link_libraries(emily sfml-graphics sfml-window sfml-system)
 if (UNIX)
   target_link_libraries(emily pthread)
