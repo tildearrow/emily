@@ -4,6 +4,6 @@
 // this may need to be replaced
 double nsStubDPI() {
   CGFloat val;
-  val=[mainScreen backingScaleFactor];
+  val=[[NSScreen mainScreen] backingScaleFactor];
   return (double)val;
 }

@@ -19,7 +19,9 @@ add_subdirectory(sfml)
 
 include_directories(include sfml/include)
 
+if (NOT APPLE)
 find_library(USE_XCB xcb)
+endif (NOT APPLE)
 
 set(SOURCES src/funcs.cpp
             src/bitmap.cpp
@@ -29,6 +31,7 @@ set(SOURCES src/funcs.cpp
             src/widget/label.cpp)
 if (APPLE)
   list(APPEND SOURCES src/nsstub.m)
+  find_library(HAVE_APPKIT AppKit PATHS ${CMAKE_OSX_SYSROOT}/System/Library PATH_SUFFIXES Frameworks NO_DEFAULT_PATH)
 endif (APPLE)
 if (BUILD_STATIC)
   add_library(emily STATIC ${SOURCES})
@@ -49,4 +52,7 @@ target_link_libraries(emily sfml-graphics sfml-window sfml-system)
 if (UNIX)
   target_link_libraries(emily pthread)
 endif (UNIX)
+if (APPLE)
+  target_link_libraries(emily ${HAVE_APPKIT})
+endif (APPLE)
 target_link_libraries(hello emily)
