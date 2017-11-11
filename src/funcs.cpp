@@ -122,6 +122,33 @@ void eMainLoop(eEngine* eng) {
         case eEventQuit:
           return;
           break;
+        case eEventMouseButton:
+        case eEventMouseMove:
+          for (int i=0; i<curFrame->widgets.size(); i++) {
+            curFrame->widgets[i]->_collision=ev.coord.x>curFrame->widgets[i]->x &&
+                ev.coord.x<curFrame->widgets[i]->x+curFrame->widgets[i]->w &&
+                ev.coord.y>curFrame->widgets[i]->y &&
+                ev.coord.y<curFrame->widgets[i]->y+curFrame->widgets[i]->h;
+            if ((ev.type==eEventMouseButton && curFrame->widgets[i]->_relPending) ||
+                (ev.type==eEventMouseMove && curFrame->widgets[i]->_highPending) ||
+                curFrame->widgets[i]->_collision) {
+              if (ev.type==eEventMouseButton) {
+                if (curFrame->widgets[i]->_collision) {
+                  curFrame->widgets[i]->_relPending=true;
+                } else {
+                  curFrame->widgets[i]->_relPending=false;
+                }
+              } else {
+                if (curFrame->widgets[i]->_collision) {
+                  curFrame->widgets[i]->_highPending=true;
+                } else {
+                  curFrame->widgets[i]->_highPending=false;
+                }
+              }
+              curFrame->widgets[i]->event(ev);
+            }
+          }
+          break;
         default:
           eLogD("got event %d\n",ev.type);
           break;
@@ -142,8 +169,8 @@ void eMainLoop(eEngine* eng) {
         curFrame->widgets[i]->draw();
       }
     }
-    eng->drawColor(255,255,255,255);
-    eng->line(0,0,eng->width,eng->height);
+    eng->drawColor({1,1,1,1});
+    //eng->line(0,0,eng->width,eng->height);
     if (eng->drawEndCallback!=NULL) {
       eng->drawEndCallback();
     }
@@ -205,16 +232,42 @@ int eEngine::popFrame() {
   frameStack.pop();
 }
 
-void eEngine::drawColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
-  /*
-  eDrawColor(backInst,r,g,b,a);
-  */
+void eEngine::drawColor(eColor color) {
+  drawCol=color;
 }
 
 void eEngine::line(double x1, double y1, double x2, double y2) {
   sf::VertexArray temp(sf::Lines,2);
   temp[0].position=sf::Vector2f(x1*scale,y1*scale);
   temp[1].position=sf::Vector2f(x2*scale,y2*scale);
+  win->draw(temp);
+}
+
+void eEngine::rect(double x1, double y1, double x2, double y2) {
+  sf::VertexArray temp(sf::LineStrip,5);
+  temp[0].position=sf::Vector2f(x1*scale,y1*scale);
+  temp[1].position=sf::Vector2f(x2*scale,y1*scale);
+  temp[2].position=sf::Vector2f(x2*scale,y2*scale);
+  temp[3].position=sf::Vector2f(x1*scale,y2*scale);
+  temp[4].position=sf::Vector2f(x1*scale,y1*scale);
+  temp[0].color=sf::Color(drawCol.r*255,drawCol.g*255,drawCol.b*255,drawCol.a*255);
+  temp[1].color=sf::Color(drawCol.r*255,drawCol.g*255,drawCol.b*255,drawCol.a*255);
+  temp[2].color=sf::Color(drawCol.r*255,drawCol.g*255,drawCol.b*255,drawCol.a*255);
+  temp[3].color=sf::Color(drawCol.r*255,drawCol.g*255,drawCol.b*255,drawCol.a*255);
+  temp[4].color=sf::Color(drawCol.r*255,drawCol.g*255,drawCol.b*255,drawCol.a*255);
+  win->draw(temp);
+}
+
+void eEngine::frect(double x1, double y1, double x2, double y2) {
+  sf::VertexArray temp(sf::TriangleFan,4);
+  temp[0].position=sf::Vector2f(x1*scale,y1*scale);
+  temp[1].position=sf::Vector2f(x2*scale,y1*scale);
+  temp[2].position=sf::Vector2f(x2*scale,y2*scale);
+  temp[3].position=sf::Vector2f(x1*scale,y2*scale);
+  temp[0].color=sf::Color(drawCol.r*255,drawCol.g*255,drawCol.b*255,drawCol.a*255);
+  temp[1].color=sf::Color(drawCol.r*255,drawCol.g*255,drawCol.b*255,drawCol.a*255);
+  temp[2].color=sf::Color(drawCol.r*255,drawCol.g*255,drawCol.b*255,drawCol.a*255);
+  temp[3].color=sf::Color(drawCol.r*255,drawCol.g*255,drawCol.b*255,drawCol.a*255);
   win->draw(temp);
 }
 

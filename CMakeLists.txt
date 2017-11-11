@@ -28,7 +28,8 @@ set(SOURCES src/funcs.cpp
             src/font.cpp
             
             src/widget/base.cpp
-            src/widget/label.cpp)
+            src/widget/label.cpp
+            src/widget/button.cpp)
 if (APPLE)
   list(APPEND SOURCES src/nsstub.m)
   find_library(HAVE_APPKIT AppKit PATHS ${CMAKE_OSX_SYSROOT}/System/Library PATH_SUFFIXES Frameworks NO_DEFAULT_PATH)

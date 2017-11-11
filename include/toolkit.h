@@ -64,6 +64,10 @@ struct eEvent {
   int mod;
 };
 
+struct eColor {
+  float r, g, b, a;
+};
+
 class eEngine;
 
 class eBitmap {
@@ -95,9 +99,12 @@ class eFont {
 
 class eWidget {
   friend class eFrame;
+  friend void eMainLoop(eEngine* eng);
   protected:
     eEngine* engine;
     double w, h;
+    virtual int event(eEvent& ev);
+    bool _relPending, _highPending, _collision;
   public:
     double x, y;
     virtual int init();
@@ -114,6 +121,9 @@ class eFrame {
     template<typename t> void* newWidget() {
       t* push=new t;
       push->engine=engine;
+      push->_collision=false;
+      push->_relPending=false;
+      push->_highPending=false;
       push->init();
       widgets.push_back(push);
       return push;
@@ -150,9 +160,12 @@ class eEngine {
   int width, height;
   double scale;
   float estWaitTime;
+  eColor drawCol;
   eFont* defFont;
   friend void eMainLoop(eEngine* eng);
+  friend class eWidget;
   friend class eLabel;
+  friend class eButton;
   int nextEvent(eEvent& ev);
   protected:
     sf::RenderWindow* win;
@@ -177,8 +190,10 @@ class eEngine {
     int pushFrame(eFrame* f);
     int popFrame();
     
-    void drawColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+    void drawColor(eColor color);
     void line(double x1, double y1, double x2, double y2);
+    void rect(double x1, double y1, double x2, double y2);
+    void frect(double x1, double y1, double x2, double y2);
 
     eTexture* getTexture(int width, int height, int type, int prop0, int prop1, int prop2, int prop3);
     eTexture* getUnmanagedTexture(int width, int height, int type);

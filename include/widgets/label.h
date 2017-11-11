@@ -5,6 +5,6 @@ class eLabel: public eWidget {
     bool scrolls;
     int init();
     int setString(string data);
-    int setSize(double size);
+    int setTextSize(double size);
     int draw();
 };

@@ -12,12 +12,12 @@ int eLabel::setString(string data) {
   return 0;
 }
 
-int eLabel::setSize(double size) {
+int eLabel::setTextSize(double size) {
   inst->setCharacterSize(size*engine->scale);
 }
 
 int eLabel::draw() {
-  engine->drawColor(255,255,255,255);
+  engine->drawColor({1,1,1,1});
   inst->setPosition(x*engine->scale,y*engine->scale);
   engine->win->draw(*inst);
   return 0;
