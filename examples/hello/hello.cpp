@@ -17,7 +17,7 @@ void myOtherCallback() {
 }
 
 int main(int argc, char** argv) {
-  gui=new eEngine(1280,800);
+  gui=new eEngine(480,320);
   gui->show();
   frame=gui->newFrame();
   hello=(eLabel*)frame->newWidget<eLabel>();

@@ -4,6 +4,7 @@
 #include <stack>
 #include <string>
 #include <vector>
+#include <fontconfig/fontconfig.h>
 #include <SFML/Graphics.hpp>
 // platform-specific headers
 #ifdef _WIN32

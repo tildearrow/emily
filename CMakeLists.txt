@@ -21,6 +21,7 @@ include_directories(include sfml/include)
 
 if (NOT APPLE)
 find_library(USE_XCB xcb)
+find_library(HAVE_FONTCONFIG fontconfig)
 endif (NOT APPLE)
 
 set(SOURCES src/funcs.cpp
@@ -49,6 +50,11 @@ if (USE_XCB)
   target_link_libraries(emily xcb)
   target_compile_definitions(emily PUBLIC USE_XCB)
 endif (USE_XCB)
+if (USE_XCB)
+  target_link_libraries(emily fontconfig)
+  target_compile_definitions(emily PUBLIC HAVE_FONTCONFIG)
+endif (USE_XCB)
+
 target_link_libraries(emily sfml-graphics sfml-window sfml-system)
 if (UNIX)
   target_link_libraries(emily pthread)
