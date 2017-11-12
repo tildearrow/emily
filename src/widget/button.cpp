@@ -61,8 +61,8 @@ int eButton::draw() {
   engine->frect(x,y,x+w,y+h);
   engine->drawColor({1,1,1,1});
   engine->rect(x,y,x+w,y+h);
-  linst->setPosition(((x+w/2)*engine->scale)-(linst->getLocalBounds().width/2),
-                     (y+h/2)*engine->scale-(linst->getLocalBounds().height*0.833333));
+  linst->setPosition((int)(((x+w/2)*engine->scale)-(linst->getLocalBounds().width/2)),
+                     (int)((y+h/2)*engine->scale-(linst->getLocalBounds().height*0.833333)));
   engine->win->draw(*linst);
   return 0;
 }
