@@ -9,5 +9,5 @@ double nsStubDPI() {
 }
 
 char* nsStubFontPath(const char* name) {
-  return NULL;
+  return "";
 };

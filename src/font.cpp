@@ -1,4 +1,9 @@
 #include "toolkit.h"
+#ifdef __APPLE__
+extern "C" {
+#include "nsstub.h"
+}
+#endif
 
 int eFont::loaddef(int variant) {
   string path;
@@ -9,7 +14,7 @@ int eFont::loaddef(int variant) {
       // windows font code here
 #elif defined(__APPLE__)
       // apple font code here
-      nsStubFontPath("Helvetica");
+      path="/System/Library/Fonts/Helvetica.dfont";
 #elif defined(__unix__)
       // fontconfig font code here
       // this is to be finished
@@ -18,7 +23,6 @@ int eFont::loaddef(int variant) {
       // assume /font.ttf
       path="/font.ttf";
 #endif
-      
       break;
     case eFontLarge:
       path="/usr/share/fonts/TTF/DejaVuSerif.ttf";
