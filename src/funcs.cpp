@@ -148,7 +148,7 @@ void eMainLoop(eEngine* eng) {
                 (ev.type==eEventMouseMove && curFrame->widgets[i]->_highPending) ||
                 curFrame->widgets[i]->_collision) {
               if (ev.type==eEventMouseButton) {
-                if (curFrame->widgets[i]->_collision) {
+                if (curFrame->widgets[i]->_collision && ev.state==1) {
                   curFrame->widgets[i]->_relPending=true;
                 } else {
                   curFrame->widgets[i]->_relPending=false;

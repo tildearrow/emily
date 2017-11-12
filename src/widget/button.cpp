@@ -29,12 +29,14 @@ int eButton::event(eEvent& ev) {
     if (ev.state==1) {
       clicked=true;
     } else {
-      if (_collision) {
-        if (leftClickCallback!=NULL) {
-          leftClickCallback();
+      if (clicked) {
+        if (_collision) {
+          if (leftClickCallback!=NULL) {
+            leftClickCallback();
+          }
         }
+        clicked=false;
       }
-      clicked=false;
     }
   }
   return 1;
