@@ -64,9 +64,17 @@ eEngine::eEngine(double w, double h) {
   scale=getScale();
   visible=false;
   title="Application";
-  estWaitTime=13000;
+  estWaitTime=0;
   width=w;
   height=h;
+  for (int i=0; i<256; i++) {
+    preEvCallback[i]=NULL;
+    postEvCallback[i]=NULL;
+    preDrawCallback=NULL;
+    postDrawCallback=NULL;
+    drawStartCallback=NULL;
+    drawEndCallback=NULL;
+  }
   defFont=new eFont;
   if (defFont->loaddef(eFontDefault)==0) {
     eLogE("Error while loading default font.\n");
@@ -110,10 +118,16 @@ int eEngine::nextEvent(eEvent& ev) {
 void eMainLoop(eEngine* eng) {
   eEvent ev;
   eFrame* curFrame;
+  long long rVBTime, rPrevVBTime, rStartTime, rEndTime;
+  rPrevVBTime=0;
+  rVBTime=0;
   while (1) {
     eng->preRender();
+    rPrevVBTime=rVBTime;
+    rVBTime=eng->perfCount();
     eng->pause(eng->estWaitTime);
     /* event processing */
+    rStartTime=eng->perfCount();
     while (eng->nextEvent(ev)) {
       if (eng->preEvCallback[ev.type]!=NULL) {
         eng->preEvCallback[ev.type](&ev);
@@ -178,6 +192,17 @@ void eMainLoop(eEngine* eng) {
     if (eng->postDrawCallback!=NULL) {
       eng->postDrawCallback();
     }
+    rEndTime=eng->perfCount();
+    if (rPrevVBTime==0) {
+      printf("wait times to be fixed\n");
+      eng->estWaitTime=0;
+    } else {
+      eng->estWaitTime=((rVBTime-rPrevVBTime)/1000)-((rEndTime-rStartTime)/1000)-2000;
+    }
+    if (eng->estWaitTime<0) {
+      eng->estWaitTime=0;
+    }
+    printf("WAIT TIME: %f\n",eng->estWaitTime);
   }
 }
 
@@ -349,6 +374,18 @@ int eEngine::drawTexture(eTexture* tex, double x, double y) {
 
 int eEngine::pause(double timeAsMicro) {
   sf::sleep(sf::microseconds(timeAsMicro));
+}
+
+long long eEngine::perfCount() {
+#ifdef _WIN32
+  long long temp;
+  QueryPerformanceCounter(&temp);
+  return temp;
+#else
+  struct timespec temp;
+  clock_gettime(CLOCK_MONOTONIC,&temp);
+  return (temp.tv_sec*1000000000)+temp.tv_nsec;
+#endif
 }
 
 void eEngine::preRender() {

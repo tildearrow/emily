@@ -122,6 +122,8 @@ class eFrame {
     template<typename t> void* newWidget() {
       t* push=new t;
       push->engine=engine;
+      push->x=0;
+      push->y=0;
       push->_collision=false;
       push->_relPending=false;
       push->_highPending=false;
@@ -186,6 +188,7 @@ class eEngine {
     int run();
     int runDetached();
     int pause(double timeAsMicro);
+    long long perfCount();
 
     eFrame* newFrame();
     int pushFrame(eFrame* f);
