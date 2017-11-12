@@ -1,5 +1,5 @@
 # please add this subdirectory to your project.
-# and link with target_link_libraries(target taToolkit)
+# and link with target_link_libraries(target emily)
 
 cmake_minimum_required(VERSION 3.1)
 project(emily)
