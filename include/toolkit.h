@@ -1,16 +1,20 @@
 #ifndef _TOOLKIT_H
 #define _TOOLKIT_H
 #include <stdio.h>
+#include <math.h>
 #include <stack>
 #include <string>
 #include <vector>
+#ifdef HAVE_FONTCONFIG
 #include <fontconfig/fontconfig.h>
+#endif
 #include <SFML/Graphics.hpp>
 // platform-specific headers
 #ifdef _WIN32
 #include <windows.h>
 #endif
 #ifdef __unix__
+#include <unistd.h>
 #ifdef USE_XCB
 #include <xcb/xcb.h>
 #else

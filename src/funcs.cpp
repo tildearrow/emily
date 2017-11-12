@@ -1,5 +1,6 @@
 #include "toolkit.h"
 #ifdef __APPLE__
+#include <mach/mach_time.h>
 extern "C" {
 #include "nsstub.h"
 }
@@ -118,7 +119,7 @@ int eEngine::nextEvent(eEvent& ev) {
 void eMainLoop(eEngine* eng) {
   eEvent ev;
   eFrame* curFrame;
-  long long rVBTime, rPrevVBTime, rStartTime, rEndTime;
+  int rVBTime, rPrevVBTime, rStartTime, rEndTime;
   rPrevVBTime=0;
   rVBTime=0;
   while (1) {
@@ -188,21 +189,21 @@ void eMainLoop(eEngine* eng) {
     if (eng->drawEndCallback!=NULL) {
       eng->drawEndCallback();
     }
+    rEndTime=eng->perfCount();
     eng->postRender();
     if (eng->postDrawCallback!=NULL) {
       eng->postDrawCallback();
     }
-    rEndTime=eng->perfCount();
     if (rPrevVBTime==0) {
       printf("wait times to be fixed\n");
       eng->estWaitTime=0;
     } else {
-      eng->estWaitTime=((rVBTime-rPrevVBTime)/1000)-((rEndTime-rStartTime)/1000)-2000;
+      eng->estWaitTime=fmin(eng->estWaitTime+100,((rVBTime-rPrevVBTime)/1000)-((rEndTime-rStartTime)/1000)-3000);
     }
+    //printf("wait time is %f\n",eng->estWaitTime);
     if (eng->estWaitTime<0) {
       eng->estWaitTime=0;
     }
-    printf("WAIT TIME: %f\n",eng->estWaitTime);
   }
 }
 
@@ -382,9 +383,13 @@ long long eEngine::perfCount() {
   QueryPerformanceCounter(&temp);
   return temp;
 #else
+#ifdef __MACH__
+  return mach_absolute_time();
+#else
   struct timespec temp;
   clock_gettime(CLOCK_MONOTONIC,&temp);
   return (temp.tv_sec*1000000000)+temp.tv_nsec;
+#endif
 #endif
 }
 
