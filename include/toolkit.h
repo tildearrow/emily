@@ -98,6 +98,20 @@ class eFont {
     int loaddef(int variant);
 };
 
+enum eObjectTypes {
+
+};
+
+class eSkin {
+  struct cacheElem {
+    int type, attrib[8], w, h;
+    sf::Texture* tex;
+  };
+  std::vector<cacheElem> cache;
+  public:
+    virtual sf::Texture* getTexture(int objectType, int attrib[8], int w, int h, double* xo, double* yo);
+};
+
 class eWidget {
   friend class eFrame;
   friend void eMainLoop(eEngine* eng);
@@ -172,6 +186,7 @@ class eEngine {
   int nextEvent(eEvent& ev);
   protected:
     sf::RenderWindow* win;
+    eSkin* skin;
   public:
     eEngine(double w, double h);
     ~eEngine();

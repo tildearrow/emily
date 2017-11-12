@@ -28,6 +28,8 @@ set(SOURCES src/funcs.cpp
             src/bitmap.cpp
             src/font.cpp
             
+            src/skin/default.cpp
+            
             src/widget/base.cpp
             src/widget/label.cpp
             src/widget/button.cpp)
