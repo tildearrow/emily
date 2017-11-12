@@ -7,3 +7,7 @@ double nsStubDPI() {
   val=[[NSScreen mainScreen] backingScaleFactor];
   return (double)val;
 }
+
+char* nsStubFontPath(const char* name) {
+  return NULL;
+};
