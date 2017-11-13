@@ -1,7 +1,7 @@
 class eButton: public eWidget {
   string label;
   sf::Text* linst;
-  sf::Texture tinst;
+  sf::Texture* tinst;
   sf::Sprite sinst;
   eColor color;
   float highlight;

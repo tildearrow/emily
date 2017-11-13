@@ -72,6 +72,8 @@ eEngine::eEngine(double w, double h) {
   estWaitTime=0;
   width=w;
   height=h;
+  skin=new eSkin;
+  skin->engine=this;
   for (int i=0; i<256; i++) {
     preEvCallback[i]=NULL;
     postEvCallback[i]=NULL;

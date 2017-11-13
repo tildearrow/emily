@@ -1,6 +1,8 @@
 #ifndef _TOOLKIT_H
 #define _TOOLKIT_H
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <math.h>
 #include <stack>
 #include <string>
@@ -82,10 +84,13 @@ class eEngine;
 
 class eBitmap {
   public:
-    int width, height, depth;
-    unsigned char* data;
+    int width, height;
+    float* data; // yes
     int pitch();
-    eBitmap(int inWidth, int inHeight, int inDepth);
+    void clear();
+    void rect(double x, double y, double w, double h, eColor color);
+    sf::Texture* toTexture();
+    eBitmap(int inWidth, int inHeight);
     ~eBitmap();
 };
 
@@ -108,7 +113,7 @@ class eFont {
 };
 
 enum eObjectTypes {
-
+  eObjectButton=0
 };
 
 class eSkin {
@@ -117,6 +122,8 @@ class eSkin {
     sf::Texture* tex;
   };
   std::vector<cacheElem> cache;
+  eEngine* engine;
+  friend class eEngine;
   public:
     virtual sf::Texture* getTexture(int objectType, int attrib[8], int w, int h, double* xo, double* yo);
 };
@@ -192,6 +199,7 @@ class eEngine {
   friend class eWidget;
   friend class eLabel;
   friend class eButton;
+  friend class eSkin;
   int nextEvent(eEvent& ev);
   protected:
     sf::RenderWindow* win;
