@@ -12,6 +12,11 @@
 // platform-specific headers
 #ifdef _WIN32
 #include <windows.h>
+#ifdef _MSC_VER
+#define XPT __declspec(dllexport)
+#else
+#define XPT 
+#endif
 #endif
 #ifdef __unix__
 #include <unistd.h>
@@ -122,13 +127,13 @@ class eWidget {
   protected:
     eEngine* engine;
     double w, h;
-    virtual int event(eEvent& ev);
+    XPT virtual int event(eEvent& ev);
     bool _relPending, _highPending, _collision;
   public:
     double x, y;
-    virtual int init();
-    virtual int setSize(double w, double h);
-    virtual int draw();
+    XPT virtual int init();
+    XPT virtual int setSize(double w, double h);
+    XPT virtual int draw();
 };
 
 class eFrame {
@@ -192,38 +197,38 @@ class eEngine {
     sf::RenderWindow* win;
     eSkin* skin;
   public:
-    eEngine(double w, double h);
-    ~eEngine();
-    eFont* newFont();
-    int setPreEventCallback(unsigned char event, void ((*callback)(const eEvent*)));
-    int setPostEventCallback(unsigned char event, void ((*callback)(const eEvent*)));
-    int setPreDrawCallback(void ((*callback)()));
-    int setDrawStartCallback(void ((*callback)()));
-    int setDrawEndCallback(void ((*callback)()));
-    int setPostDrawCallback(void ((*callback)()));
-    int setTitle(string t);
-    int setSize(int w, int h);
-    int show();
-    int run();
-    int runDetached();
-    int pause(double timeAsMicro);
-    long long perfCount();
+    XPT eEngine(double w, double h);
+    XPT ~eEngine();
+    XPT eFont* newFont();
+    XPT int setPreEventCallback(unsigned char event, void ((*callback)(const eEvent*)));
+    XPT int setPostEventCallback(unsigned char event, void ((*callback)(const eEvent*)));
+    XPT int setPreDrawCallback(void ((*callback)()));
+    XPT int setDrawStartCallback(void ((*callback)()));
+    XPT int setDrawEndCallback(void ((*callback)()));
+    XPT int setPostDrawCallback(void ((*callback)()));
+    XPT int setTitle(string t);
+    XPT int setSize(int w, int h);
+    XPT int show();
+    XPT int run();
+    XPT int runDetached();
+    XPT int pause(double timeAsMicro);
+    XPT long long perfCount();
 
-    eFrame* newFrame();
-    int pushFrame(eFrame* f);
-    int popFrame();
+    XPT eFrame* newFrame();
+    XPT int pushFrame(eFrame* f);
+    XPT int popFrame();
     
-    void drawColor(eColor color);
-    void line(double x1, double y1, double x2, double y2);
-    void rect(double x1, double y1, double x2, double y2);
-    void frect(double x1, double y1, double x2, double y2);
+    XPT void drawColor(eColor color);
+    XPT void line(double x1, double y1, double x2, double y2);
+    XPT void rect(double x1, double y1, double x2, double y2);
+    XPT void frect(double x1, double y1, double x2, double y2);
 
-    eTexture* getTexture(int width, int height, int type, int prop0, int prop1, int prop2, int prop3);
-    eTexture* getUnmanagedTexture(int width, int height, int type);
-    eTexture* getTextureFromBitmap(eBitmap* bitmap, int type);
-    void* lockTexture(eTexture* tex);
-    int unlockTexture(eTexture* tex);
-    int drawTexture(eTexture* tex, double x, double y);
+    XPT eTexture* getTexture(int width, int height, int type, int prop0, int prop1, int prop2, int prop3);
+    XPT eTexture* getUnmanagedTexture(int width, int height, int type);
+    XPT eTexture* getTextureFromBitmap(eBitmap* bitmap, int type);
+    XPT void* lockTexture(eTexture* tex);
+    XPT int unlockTexture(eTexture* tex);
+    XPT int drawTexture(eTexture* tex, double x, double y);
 };
 
 void eMainLoop(eEngine* eng);

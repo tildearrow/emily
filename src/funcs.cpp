@@ -17,8 +17,12 @@ double getScale() {
   // linux (wayland) code here
 #elif defined(_WIN32)
   // windows code here
-  // this may need to be replaced
-  return (double)GetDpiForSystem()/96.0;
+  HDC disp;
+  int dpi;
+  disp=GetDC(NULL);
+  dpi=GetDeviceCaps(disp,LOGPIXELSX);
+  ReleaseDC(NULL,disp);
+  return (double)dpi/96.0;
 #elif defined(__APPLE__)
   // macOS code here
   double dpi;
@@ -122,13 +126,19 @@ void eMainLoop(eEngine* eng) {
   int rVBTime, rPrevVBTime, rStartTime, rEndTime;
   rPrevVBTime=0;
   rVBTime=0;
+  curFrame=NULL;
   while (1) {
     eng->preRender();
     rPrevVBTime=rVBTime;
     rVBTime=eng->perfCount();
+#ifndef _WIN32
     eng->pause(eng->estWaitTime);
+#endif
     /* event processing */
     rStartTime=eng->perfCount();
+    if (eng->frameStack.size()) {
+      curFrame=eng->frameStack.top();
+    }
     while (eng->nextEvent(ev)) {
       if (eng->preEvCallback[ev.type]!=NULL) {
         eng->preEvCallback[ev.type](&ev);
@@ -139,7 +149,7 @@ void eMainLoop(eEngine* eng) {
           break;
         case eEventMouseButton:
         case eEventMouseMove:
-          for (int i=0; i<curFrame->widgets.size(); i++) {
+          for (size_t i=0; i<curFrame->widgets.size(); i++) {
             curFrame->widgets[i]->_collision=ev.coord.x>curFrame->widgets[i]->x &&
                 ev.coord.x<curFrame->widgets[i]->x+curFrame->widgets[i]->w &&
                 ev.coord.y>curFrame->widgets[i]->y &&
@@ -178,11 +188,8 @@ void eMainLoop(eEngine* eng) {
     if (eng->drawStartCallback!=NULL) {
       eng->drawStartCallback();
     }
-    if (eng->frameStack.size()) {
-      curFrame=eng->frameStack.top();
-      for (int i=0; i<curFrame->widgets.size(); i++) {
-        curFrame->widgets[i]->draw();
-      }
+    for (int i=0; i<curFrame->widgets.size(); i++) {
+      curFrame->widgets[i]->draw();
     }
     eng->drawColor({1,1,1,1});
     //eng->line(0,0,eng->width,eng->height);
@@ -221,26 +228,32 @@ int eEngine::runDetached() {
 
 int eEngine::setPreEventCallback(unsigned char event, void ((*callback)(const eEvent *))) {
   preEvCallback[event]=callback;
+  return 1;
 }
 
 int eEngine::setPostEventCallback(unsigned char event, void ((*callback)(const eEvent *))) {
   postEvCallback[event]=callback;
+  return 1;
 }
 
 int eEngine::setPreDrawCallback(void ((*callback)())) {
   preDrawCallback=callback;
+  return 1;
 }
 
 int eEngine::setDrawStartCallback(void ((*callback)())) {
   drawStartCallback=callback;
+  return 1;
 }
 
 int eEngine::setDrawEndCallback(void ((*callback)())) {
   drawEndCallback=callback;
+  return 1;
 }
 
 int eEngine::setPostDrawCallback(void ((*callback)())) {
   postDrawCallback=callback;
+  return 1;
 }
 
 eFrame* eEngine::newFrame() {
@@ -252,10 +265,12 @@ eFrame* eEngine::newFrame() {
 
 int eEngine::pushFrame(eFrame* f) {
   frameStack.push(f);
+  return 1;
 }
 
 int eEngine::popFrame() {
   frameStack.pop();
+  return 1;
 }
 
 void eEngine::drawColor(eColor color) {
@@ -302,7 +317,9 @@ int eEngine::show() {
     win=new sf::RenderWindow(sf::VideoMode(width*scale,height*scale),title,sf::Style::Titlebar|sf::Style::Close);
     win->setVerticalSyncEnabled(true);
     visible=true;
+    return 1;
   }
+  return 0;
 }
 
 eTexture* eEngine::getUnmanagedTexture(int width, int height, int type) {
@@ -375,13 +392,15 @@ int eEngine::drawTexture(eTexture* tex, double x, double y) {
 
 int eEngine::pause(double timeAsMicro) {
   sf::sleep(sf::microseconds(timeAsMicro));
+  return 1;
 }
 
 long long eEngine::perfCount() {
 #ifdef _WIN32
-  long long temp;
+  LARGE_INTEGER temp, prec;
   QueryPerformanceCounter(&temp);
-  return temp;
+  QueryPerformanceFrequency(&prec);
+  return temp.QuadPart*(1000000000/prec.QuadPart);
 #else
 #ifdef __MACH__
   return mach_absolute_time();

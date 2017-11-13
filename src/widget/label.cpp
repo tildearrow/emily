@@ -4,6 +4,7 @@ int eLabel::init() {
   inst=new sf::Text();
   inst->setFont(engine->defFont->inst);
   inst->setCharacterSize(12*engine->scale);
+  return 1;
 }
 
 int eLabel::setString(string data) {
@@ -14,6 +15,7 @@ int eLabel::setString(string data) {
 
 int eLabel::setTextSize(double size) {
   inst->setCharacterSize(size*engine->scale);
+  return 0;
 }
 
 int eLabel::draw() {

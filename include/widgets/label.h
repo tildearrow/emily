@@ -3,8 +3,8 @@ class eLabel: public eWidget {
   sf::Text* inst;
   public:
     bool scrolls;
-    int init();
-    int setString(string data);
-    int setTextSize(double size);
-    int draw();
+    XPT int init();
+    XPT int setString(string data);
+    XPT int setTextSize(double size);
+    XPT int draw();
 };

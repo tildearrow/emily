@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <math.h>
-#include <unistd.h>
+//#include <unistd.h>
 #include "toolkit.h"
 
 eEngine* gui;
@@ -16,7 +16,7 @@ void myOtherCallback() {
 
 void sineCallback() {
   sineVal++;
-  hello->x=210+sin(2*M_PI*((float)sineVal/256))*80;
+  hello->x=210+sin(2*3.141592653589793238*((float)sineVal/256))*80;
 }
 
 int main(int argc, char** argv) {

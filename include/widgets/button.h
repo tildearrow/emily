@@ -8,13 +8,13 @@ class eButton: public eWidget {
   void (*leftClickCallback)();
   bool clicked;
   public:
-    int init();
-    int setLabel(string data);
-    int setLabelSize(double size);
-    int setSize(double w, double h);
-    int setColor(eColor col);
-    int event(eEvent& ev);
-    int setCallback(void (*callback)());
-    int update();
-    int draw();
+    XPT int init();
+    XPT int setLabel(string data);
+    XPT int setLabelSize(double size);
+    XPT int setSize(double w, double h);
+    XPT int setColor(eColor col);
+    XPT int event(eEvent& ev);
+    XPT int setCallback(void (*callback)());
+    XPT int update();
+    XPT int draw();
 };

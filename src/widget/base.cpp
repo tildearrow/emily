@@ -12,6 +12,7 @@ int eWidget::event(eEvent& ev) {
 int eWidget::setSize(double wi, double he) {
   w=wi;
   h=he;
+  return 0;
 }
 
 int eWidget::draw() {

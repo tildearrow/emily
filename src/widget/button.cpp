@@ -7,21 +7,24 @@ int eButton::init() {
   linst->setFont(engine->defFont->inst);
   linst->setCharacterSize(12*engine->scale);
   setSize(64,32);
+  return 1;
 }
 
 int eButton::setSize(double wi, double he) {
   w=wi;
   h=he;
+  return 1;
 }
 
 int eButton::setLabel(string data) {
   label=data;
   linst->setString(data);
-  return 0;
+  return 1;
 }
 
 int eButton::setColor(eColor col) {
   color=col;
+  return 1;
 }
 
 int eButton::event(eEvent& ev) {
@@ -44,6 +47,7 @@ int eButton::event(eEvent& ev) {
 
 int eButton::setCallback(void (*callback)()) {
   leftClickCallback=callback;
+  return 1;
 }
 
 int eButton::draw() {

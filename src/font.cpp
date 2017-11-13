@@ -12,6 +12,7 @@ int eFont::loaddef(int variant) {
     case eFontDefault:
 #if defined(_WIN32)
       // windows font code here
+      path="C:\\Windows\\Fonts\\segoeui.ttf";
 #elif defined(__APPLE__)
       // apple font code here
       path="/System/Library/Fonts/Helvetica.dfont";
