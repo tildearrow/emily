@@ -10,13 +10,13 @@
 #endif
 #include <SFML/Graphics.hpp>
 // platform-specific headers
-#ifdef _WIN32
-#include <windows.h>
 #ifdef _MSC_VER
 #define XPT __declspec(dllexport)
 #else
-#define XPT 
+#define XPT
 #endif
+#ifdef _WIN32
+#include <windows.h>
 #endif
 #ifdef __unix__
 #include <unistd.h>
