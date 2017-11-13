@@ -94,10 +94,6 @@ class eBitmap {
     ~eBitmap();
 };
 
-struct eRect {
-  double x, y, w, h;
-};
-
 struct eTexture {
   unsigned int id[4];
   int width, height, type;
