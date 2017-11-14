@@ -8,6 +8,29 @@ void eBitmap::clear() {
   memset(data,0,width*height*4*sizeof(float));
 }
 
+void eBitmap::blitOn(eBitmap* src, int x, int y) {
+  int tw, th;
+  eColor* dataPix;
+  eColor* destin;
+  tw=src->width;
+  th=src->height;
+  for (int j=0; j<th; j++) {
+    for (int i=0; i<tw; i++) {
+      dataPix=(eColor*)&src->data[(i+j*src->width)<<2];
+      destin=(eColor*)&data[(x+i+(y+j)*width)<<2];
+      if (dataPix->a==0) continue;
+      if (dataPix->a==1) {
+        *destin=*dataPix;
+      } else {
+        destin->r+=(dataPix->r-destin->r)*dataPix->a;
+        destin->g+=(dataPix->g-destin->g)*dataPix->a;
+        destin->b+=(dataPix->b-destin->b)*dataPix->a;
+        destin->a=dataPix->a+(destin->a*(1-dataPix->a));
+      }
+    }
+  }
+}
+
 void eBitmap::rect(double x, double y, double w, double h, eColor color) {
   int ax1, ay1, ax2, ay2;
   float lbi, rbi, tbi, bbi;

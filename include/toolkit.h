@@ -89,6 +89,7 @@ class eBitmap {
     int pitch();
     void clear();
     void rect(double x, double y, double w, double h, eColor color);
+    void blitOn(eBitmap* src, int x, int y);
     sf::Texture* toTexture();
     eBitmap(int inWidth, int inHeight);
     ~eBitmap();
@@ -196,7 +197,7 @@ class eEngine {
   friend class eLabel;
   friend class eButton;
   friend class eSkin;
-  int nextEvent(eEvent& ev);
+  int nextEvent(eEvent& ev, bool wait);
   protected:
     sf::RenderWindow* win;
     eSkin* skin;
