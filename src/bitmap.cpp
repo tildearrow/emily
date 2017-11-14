@@ -31,6 +31,63 @@ void eBitmap::blitOn(eBitmap* src, int x, int y) {
   }
 }
 
+void eBitmap::shadeGlowBack(int radius, int passes) {
+  float accum, ksize, rksize;
+  int bounded;
+  float buffer[256];
+  int bufpos;
+  ksize=1+radius*2;
+  rksize=1/ksize;
+  // clear bitmap
+  for (int i=0; i<width*height; i++) {
+    data[i<<2]=1;
+    data[1+(i<<2)]=1;
+    data[2+(i<<2)]=1;
+  }
+  if (radius==0) return;
+  for (int h=0; h<passes; h++) {
+    // horizontal
+    for (int j=0; j<height; j++) {
+      accum=0;
+      // prepare accumulator
+      for (int i=0; i<ksize; i++) {
+        accum+=data[3+((j*width+i-radius)<<2)];
+      }
+      for (int i=0; i<width; i++) {
+        buffer[bufpos]=data[3+((j*width+i)<<2)];
+        data[3+(i<<2)]=accum*rksize;
+        accum-=buffer[bufpos-radius];
+        accum+=data[3+((j*width+i+radius)<<2)];
+        bufpos++;
+      }
+    }
+    // vertical
+    for (int j=0; j<width; j++) {
+      accum=0;
+      // prepare accumulator
+      for (int i=0; i<ksize; i++) {
+        accum+=data[3+((j+(i-radius)*width)<<2)];
+      }
+      for (int i=0; i<height; i++) {
+        buffer[bufpos]=data[3+((j+i*width)<<2)];
+        data[3+(i<<2)]=accum*rksize;
+        accum-=buffer[(bufpos-radius)&255];
+        accum+=data[3+((j+(i+radius)*width)<<2)];
+        bufpos++;
+      }
+    }
+  }
+}
+
+void eBitmap::shadeColor(eColor c) {
+  for (int i=0; i<width*height; i++) {
+    data[i<<2]*=c.r;
+    data[1+(i<<2)]*=c.g;
+    data[2+(i<<2)]*=c.b;
+    data[3+(i<<2)]*=c.a;
+  }
+}
+
 void eBitmap::shadeVGrad(double p1, double p2, eColor c1, eColor c2) {
   if (p1>p2) {
     return;
