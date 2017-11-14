@@ -7,6 +7,7 @@ int eButton::init() {
   linst->setFont(engine->defFont->inst);
   linst->setCharacterSize(12*engine->scale);
   tinst=NULL;
+  setColor(engine->skin->getDefaultColor(eObjectButton));
   setSize(12,32);
   return 1;
 }
@@ -17,12 +18,14 @@ int eButton::setSize(double wi, double he) {
   w=wi;
   h=he;
   if (tinst!=NULL) {
-    printf("DELETING!\n");
     delete tinst;
     tinst=NULL;
   }
+  ((eColor*)atrList)->r=color.r;
+  ((eColor*)atrList)->g=color.g;
+  ((eColor*)atrList)->b=color.b;
+  ((eColor*)atrList)->a=color.a;
   tinst=engine->skin->getTexture(0,atrList,w,h,&xo,&yo);
-  printf("%d %d\n",tinst->getSize().x,tinst->getSize().y);
   sinst.setTexture(*tinst,true);
   sinst.setOrigin(sf::Vector2f(xo,yo));
   return 1;

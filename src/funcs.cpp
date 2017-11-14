@@ -131,13 +131,14 @@ int eEngine::nextEvent(eEvent& ev, bool wait) {
 void eMainLoop(eEngine* eng) {
   eEvent ev;
   eFrame* curFrame;
-  int rVBTime, rPrevVBTime, rStartTime, rEndTime, avgVBTime;
+  int rVBTime, rPrevVBTime, rStartTime, rEndTime, avgVBTime, waitStart;
   bool wait;
   rPrevVBTime=0;
   rVBTime=0;
   avgVBTime=0;
+  waitStart=32;
   curFrame=NULL;
-  wait=true;
+  wait=false;
   while (1) {
     eng->preRender();
     rPrevVBTime=rVBTime;
@@ -150,9 +151,14 @@ void eMainLoop(eEngine* eng) {
     if (eng->frameStack.size()) {
       curFrame=eng->frameStack.top();
     }
-    //wait=true;
+    /*
+    if (--waitStart<=0) {
+      wait=true;
+    }
+    */
     while (eng->nextEvent(ev,wait)) {
       wait=false;
+      waitStart=32;
       if (eng->preEvCallback[ev.type]!=NULL) {
         eng->preEvCallback[ev.type](&ev);
       }
@@ -215,13 +221,12 @@ void eMainLoop(eEngine* eng) {
       eng->postDrawCallback();
     }
     if (rPrevVBTime==0) {
-      printf("wait times to be fixed\n");
       eng->estWaitTime=0;
     } else {
       eng->estWaitTime=fmin(eng->estWaitTime+100,avgVBTime-((rEndTime-rStartTime)/1000)-3000);
     }
     avgVBTime=((avgVBTime*15)+((rVBTime-rPrevVBTime)/1000))/16;
-    printf("vblank %d wait %f\n",avgVBTime,eng->estWaitTime);
+    //printf("vblank %d wait %f\n",avgVBTime,eng->estWaitTime);
     if (eng->estWaitTime<0) {
       eng->estWaitTime=0;
     }

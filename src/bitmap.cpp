@@ -31,6 +31,91 @@ void eBitmap::blitOn(eBitmap* src, int x, int y) {
   }
 }
 
+void eBitmap::shadeVGrad(double p1, double p2, eColor c1, eColor c2) {
+  if (p1>p2) {
+    return;
+  }
+  for (int j=0; j<p1*height; j++) {
+    for (int i=0; i<width; i++) {
+      data[(j*width+i)<<2]*=c1.r;
+      data[1+((j*width+i)<<2)]*=c1.g;
+      data[2+((j*width+i)<<2)]*=c1.b;
+      data[3+((j*width+i)<<2)]*=c1.a;
+    }
+  }
+  for (int j=p1*height; j<p2*height; j++) {
+    for (int i=0; i<width; i++) {
+      data[(j*width+i)<<2]*=c1.r+(c2.r-c1.r)*(((double)j-(p1*height))/((p2-p1)*height));
+      data[1+((j*width+i)<<2)]*=c1.g+(c2.g-c1.g)*(((double)j-(p1*height))/((p2-p1)*height));
+      data[2+((j*width+i)<<2)]*=c1.b+(c2.b-c1.b)*(((double)j-(p1*height))/((p2-p1)*height));
+      data[3+((j*width+i)<<2)]*=c1.a+(c2.a-c1.a)*(((double)j-(p1*height))/((p2-p1)*height));
+    }
+  }
+  for (int j=p2*height; j<height; j++) {
+    for (int i=0; i<width; i++) {
+      data[(j*width+i)<<2]*=c2.r;
+      data[1+((j*width+i)<<2)]*=c2.g;
+      data[2+((j*width+i)<<2)]*=c2.b;
+      data[3+((j*width+i)<<2)]*=c2.a;
+    }
+  }
+}
+
+void eBitmap::roundRect(int x, int y, int w, int h, int r, eColor color) {
+  int ffd, ax1, ay1, ax2, ay2;
+  float* alphaMap;
+  float k;
+  ffd=ceil((float)r/1.414213562373095);
+  ax1=0;
+  if (x<0) {
+    ax1=-x;
+  }
+  ay1=0;
+  if (y<0) {
+    ay1=-y;
+  }
+  ax2=w;
+  if (w+x>width) {
+    ax2=w+x-width;
+  }
+  ay2=h;
+  if (h+y>height) {
+    ay2=h+y-height;
+  }
+  alphaMap=new float[w*h];
+  for (int i=0; i<w*h; i++) {
+    alphaMap[i]=1;
+  }
+  ffd=round((float)r/1.414213562373095);
+  for (int j=0; j<r; j++) {
+    k=r-sqrt(r*r-(r-j)*(r-j));
+    for (int i=0; i<k-1; i++) {
+      alphaMap[j*w+i]=0;
+    }
+  }
+  for (int i=1; i<ffd+1; i++) {
+    k=sqrt(r*r-i*i);
+    alphaMap[w*(r-(int)k-1)+r-i]=(k-(int)k);
+    alphaMap[w*(r-i)+r-(int)k-1]=(k-(int)k);
+  }
+  for (int j=0; j<r; j++) {
+    for (int i=0; i<r; i++) {
+      alphaMap[w*j+w-1-i]=alphaMap[w*j+i];
+      alphaMap[w*(h-1-j)+i]=alphaMap[w*j+i];
+      alphaMap[w*(h-1-j)+w-1-i]=alphaMap[w*j+i];
+    }
+  }
+  for (int j=ay1; j<ay2; j++) {
+    for (int i=ax1; i<ax2; i++) {
+      data[((j+y)*width+x+i)<<2]+=(color.r-data[((j+y)*width+x+i)<<2])*color.a*alphaMap[w*j+i];
+      data[1+(((j+y)*width+x+i)<<2)]+=(color.g-data[1+(((j+y)*width+x+i)<<2)])*color.a*alphaMap[w*j+i];
+      data[2+(((j+y)*width+x+i)<<2)]+=(color.b-data[2+(((j+y)*width+x+i)<<2)])*color.a*alphaMap[w*j+i];
+      data[3+(((j+y)*width+x+i)<<2)]=(color.a*alphaMap[w*j+i])+(data[3+(((j+y)*width+x+i)<<2)]*(1-(color.a*alphaMap[w*j+i])));
+    }
+  }
+  delete[] alphaMap;
+}
+
 void eBitmap::rect(double x, double y, double w, double h, eColor color) {
   int ax1, ay1, ax2, ay2;
   float lbi, rbi, tbi, bbi;

@@ -88,7 +88,9 @@ class eBitmap {
     float* data; // yes
     int pitch();
     void clear();
+    void roundRect(int x, int y, int w, int h, int r, eColor color);
     void rect(double x, double y, double w, double h, eColor color);
+    void shadeVGrad(double p1, double p2, eColor c1, eColor c2);
     void blitOn(eBitmap* src, int x, int y);
     sf::Texture* toTexture();
     eBitmap(int inWidth, int inHeight);
@@ -110,6 +112,10 @@ class eFont {
 };
 
 enum eObjectTypes {
+  /* attrib list for eObjectButton:
+   * [0-3]=(eColor)buttonColor,
+   * [4]=buttonStatus
+   */
   eObjectButton=0
 };
 
@@ -122,6 +128,7 @@ class eSkin {
   eEngine* engine;
   friend class eEngine;
   public:
+    virtual eColor getDefaultColor(int objectType);
     virtual sf::Texture* getTexture(int objectType, int attrib[8], int w, int h, double* xo, double* yo);
 };
 

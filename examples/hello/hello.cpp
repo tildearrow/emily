@@ -29,7 +29,6 @@ int main(int argc, char** argv) {
   hello->y=64;
   but=(eButton*)frame->newWidget<eButton>();
   but->setLabel("Button");
-  but->setColor({32,32,32,255});
   but->setSize(80,32);
   but->setCallback(myOtherCallback);
   but->x=200;
