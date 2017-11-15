@@ -47,11 +47,10 @@ void eBitmap::shadeGlowBack(int radius, int passes) {
   if (radius==0) return;
   for (int h=0; h<passes; h++) {
     // horizontal
-    printf("i do blur\n");
     for (int j=0; j<height; j++) {
       accum=0;
       for (int i=0; i<256; i++) {
-        buffer[i]=data[3+(j*width)];
+        buffer[i]=data[3+((j*width)<<2)];
       }
       // prepare accumulator
       for (int i=0; i<ksize; i++) {
@@ -61,29 +60,46 @@ void eBitmap::shadeGlowBack(int radius, int passes) {
       bufpos=0;
       for (int i=0; i<width-radius; i++) {
         buffer[bufpos]=data[3+((j*width+i)<<2)];
-        data[3+(i<<2)]=accum*rksize;
+        data[3+((j*width+i)<<2)]=accum*rksize;
         accum-=buffer[(bufpos-radius)&255];
         accum+=data[3+((j*width+i+radius)<<2)];
         bufpos++;
       }
+      for (int i=width-radius; i<width; i++) {
+        buffer[bufpos]=data[3+((j*width+i)<<2)];
+        data[3+((j*width+i)<<2)]=accum*rksize;
+        accum-=buffer[(bufpos-radius)&255];
+        accum+=data[3+(((j+1)*width-1)<<2)];
+        bufpos++;
+      }
     }
     // vertical
-    /*
     for (int j=0; j<width; j++) {
       accum=0;
+      for (int i=0; i<256; i++) {
+        buffer[i]=data[3+(j<<2)];
+      }
       // prepare accumulator
       for (int i=0; i<ksize; i++) {
-        accum+=data[3+((j+(i-radius)*width)<<2)];
+        bounded=(i-radius<0)?0:(i-radius);
+        accum+=data[3+((j+bounded*width)<<2)];
       }
-      for (int i=0; i<height; i++) {
+      bufpos=0;
+      for (int i=0; i<height-radius; i++) {
         buffer[bufpos]=data[3+((j+i*width)<<2)];
-        data[3+(i<<2)]=accum*rksize;
+        data[3+((j+i*width)<<2)]=accum*rksize;
         accum-=buffer[(bufpos-radius)&255];
         accum+=data[3+((j+(i+radius)*width)<<2)];
         bufpos++;
       }
+      for (int i=height-radius; i<height; i++) {
+        buffer[bufpos]=data[3+((j+i*width)<<2)];
+        data[3+((j+i*width)<<2)]=accum*rksize;
+        accum-=buffer[(bufpos-radius)&255];
+        accum+=data[3+((width*(height-1)+j)<<2)];
+        bufpos++;
+      }
     }
-    */
   }
 }
 
