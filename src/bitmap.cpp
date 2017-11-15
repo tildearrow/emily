@@ -47,21 +47,28 @@ void eBitmap::shadeGlowBack(int radius, int passes) {
   if (radius==0) return;
   for (int h=0; h<passes; h++) {
     // horizontal
+    printf("i do blur\n");
     for (int j=0; j<height; j++) {
       accum=0;
+      for (int i=0; i<256; i++) {
+        buffer[i]=data[3+(j*width)];
+      }
       // prepare accumulator
       for (int i=0; i<ksize; i++) {
-        accum+=data[3+((j*width+i-radius)<<2)];
+        bounded=(i-radius<0)?0:(i-radius);
+        accum+=data[3+((j*width+bounded)<<2)];
       }
-      for (int i=0; i<width; i++) {
+      bufpos=0;
+      for (int i=0; i<width-radius; i++) {
         buffer[bufpos]=data[3+((j*width+i)<<2)];
         data[3+(i<<2)]=accum*rksize;
-        accum-=buffer[bufpos-radius];
+        accum-=buffer[(bufpos-radius)&255];
         accum+=data[3+((j*width+i+radius)<<2)];
         bufpos++;
       }
     }
     // vertical
+    /*
     for (int j=0; j<width; j++) {
       accum=0;
       // prepare accumulator
@@ -76,6 +83,7 @@ void eBitmap::shadeGlowBack(int radius, int passes) {
         bufpos++;
       }
     }
+    */
   }
 }
 
