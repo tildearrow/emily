@@ -22,9 +22,9 @@ sf::Texture* eSkin::getTexture(int objectType, int attrib[8], int w, int h, doub
       temp2.b*=0.5;
       bitmap=new eBitmap((w+10)*engine->scale,(h+10)*engine->scale);
       bitmap->clear();
-      bitmap->roundRect(3*engine->scale,3*engine->scale,(w+3)*engine->scale,(h+3)*engine->scale,2*engine->scale,temp1);
+      bitmap->roundRect(5*engine->scale,5*engine->scale,(w)*engine->scale,(h)*engine->scale,2*engine->scale,temp1);
       //bitmap->roundRect(1*engine->scale,1*engine->scale,(w-2)*engine->scale,(h-2)*engine->scale,2*engine->scale,temp2);
-      bitmap->shadeGlowBack(5,2);
+      bitmap->shadeGlowBack(3*engine->scale,2);
       bitmap->roundRect(5*engine->scale,5*engine->scale,(w)*engine->scale,(h)*engine->scale,2*engine->scale,{0,0,0,1});
       //bitmap->roundRect(6*engine->scale,6*engine->scale,(w-2)*engine->scale,(h-2)*engine->scale,2*engine->scale,temp2);
       ret=bitmap->toTexture();

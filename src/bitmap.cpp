@@ -73,6 +73,7 @@ void eBitmap::shadeGlowBack(int radius, int passes) {
         bufpos++;
       }
     }
+    /*
     // vertical
     for (int j=0; j<width; j++) {
       accum=0;
@@ -100,6 +101,7 @@ void eBitmap::shadeGlowBack(int radius, int passes) {
         bufpos++;
       }
     }
+     */
   }
 }
 
