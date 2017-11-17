@@ -132,12 +132,17 @@ int eEngine::nextEvent(eEvent& ev, bool wait) {
 void eMainLoop(eEngine* eng) {
   eEvent ev;
   eFrame* curFrame;
-  int rVBTime, rPrevVBTime, rStartTime, rEndTime, avgVBTime, waitStart;
+  int rVBTime, rPrevVBTime, rStartTime, rEndTime, avgVBTime;
+#ifdef ENABLE_WAIT
+  int waitStart;
+#endif
   bool wait;
   rPrevVBTime=0;
   rVBTime=0;
   avgVBTime=0;
+#ifdef ENABLE_WAIT
   waitStart=32;
+#endif
   curFrame=NULL;
   wait=false;
   while (1) {
@@ -152,14 +157,16 @@ void eMainLoop(eEngine* eng) {
     if (eng->frameStack.size()) {
       curFrame=eng->frameStack.top();
     }
-    /*
+#ifdef ENABLE_WAIT
     if (--waitStart<=0) {
       wait=true;
     }
-    */
+#endif
     while (eng->nextEvent(ev,wait)) {
       wait=false;
+#ifdef ENABLE_WAIT
       waitStart=32;
+#endif
       if (eng->preEvCallback[ev.type]!=NULL) {
         eng->preEvCallback[ev.type](&ev);
       }
@@ -208,7 +215,7 @@ void eMainLoop(eEngine* eng) {
     if (eng->drawStartCallback!=NULL) {
       eng->drawStartCallback();
     }
-    for (int i=0; i<curFrame->widgets.size(); i++) {
+    for (size_t i=0; i<curFrame->widgets.size(); i++) {
       curFrame->widgets[i]->draw();
     }
     eng->drawColor({1,1,1,1});
