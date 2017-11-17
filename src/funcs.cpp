@@ -126,6 +126,7 @@ int eEngine::nextEvent(eEvent& ev, bool wait) {
       ev.type=eEventBackend;
       break;
   }
+  return 1;
 }
 
 void eMainLoop(eEngine* eng) {
