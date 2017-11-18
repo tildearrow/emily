@@ -88,6 +88,11 @@ eEngine::eEngine(double w, double h) {
   }
 }
 
+int eEngine::setTitle(string t) {
+  title=t;
+  return 1;
+}
+
 int eEngine::nextEvent(eEvent& ev, bool wait) {
   sf::Event temp;
   if (wait) {
