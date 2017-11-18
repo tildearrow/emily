@@ -39,6 +39,7 @@ sf::Texture* eSkin::getTexture(int objectType, int attrib[8], int w, int h, doub
       temp2.a=1;
       
       retBitmap=new eBitmap((w+10)*engine->scale*3,(h+10)*engine->scale);
+      retBitmap->clear();
       
       // NORMAL BEGIN //
       bitmap=new eBitmap((w+10)*engine->scale,(h+10)*engine->scale);
@@ -142,6 +143,7 @@ sf::Texture* eSkin::getTexture(int objectType, int attrib[8], int w, int h, doub
       *yo=5*engine->scale;
       *frameWidth=(w+10)*engine->scale;
       *frameHeight=(h+10)*engine->scale;
+      delete retBitmap;
       return ret;
       break;
     default:
