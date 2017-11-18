@@ -12,6 +12,8 @@ unsigned char sineVal;
 
 void myOtherCallback() {
   printf("hello world!\n");
+  but->setColor({(float)(rand()&0xff)/256,(float)(rand()&0xff)/256,(float)(rand()&0xff)/256,1});
+  but->setSize(80,32);
 }
 
 void sineCallback() {
@@ -29,6 +31,7 @@ int main(int argc, char** argv) {
   hello->y=64;
   but=(eButton*)frame->newWidget<eButton>();
   but->setLabel("Button");
+  but->setColor({0,0.75,1,1});
   but->setSize(80,32);
   but->setCallback(myOtherCallback);
   but->x=200;

@@ -3,9 +3,13 @@ class eButton: public eWidget {
   sf::Text* linst;
   sf::Texture* tinst;
   sf::Sprite sinst;
+  sf::Sprite sinstHigh;
+  sf::Sprite sinstClick;
   eColor color;
   float highlight;
   void (*leftClickCallback)();
+  double xo, yo;
+  int fw, fh;
   bool clicked;
   public:
     XPT int init();

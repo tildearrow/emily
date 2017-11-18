@@ -131,7 +131,7 @@ class eSkin {
   friend class eEngine;
   public:
     virtual eColor getDefaultColor(int objectType);
-    virtual sf::Texture* getTexture(int objectType, int attrib[8], int w, int h, double* xo, double* yo);
+    virtual sf::Texture* getTexture(int objectType, int attrib[8], int w, int h, double* xo, double* yo, int* frameWidth, int* frameHeight);
 };
 
 class eWidget {
