@@ -10,7 +10,7 @@
 #ifdef HAVE_FONTCONFIG
 #include <fontconfig/fontconfig.h>
 #endif
-#include <SFML/Graphics.hpp>
+#include "SFML/Graphics.hpp"
 // platform-specific headers
 #ifdef _MSC_VER
 #define XPT __declspec(dllexport)
