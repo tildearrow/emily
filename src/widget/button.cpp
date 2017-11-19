@@ -95,7 +95,7 @@ int eButton::draw() {
   engine->rect(x,y,x+w,y+h);
   */
   linst->setPosition((int)(((x+w/2)*engine->scale)-(linst->getLocalBounds().width/2)),
-                     (int)((y+h/2)*engine->scale-(linst->getLocalBounds().height*0.833333)));
+                     (int)round((y+h/2)*engine->scale-(linst->getCharacterSize()*0.667)));
   sinst.setPosition(x*engine->scale,y*engine->scale);
   sinstHigh.setPosition(x*engine->scale,y*engine->scale);
   sinstClick.setPosition(x*engine->scale,y*engine->scale);
