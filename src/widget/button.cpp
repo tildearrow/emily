@@ -7,6 +7,7 @@ int eButton::init() {
   linst->setFont(engine->defFont->inst);
   linst->setCharacterSize(12*engine->scale);
   tinst=NULL;
+  leftClickCallback=NULL;
   setColor(engine->skin->getDefaultColor(eObjectButton));
   setSize(12,32);
   return 1;
