@@ -5,8 +5,12 @@
 
 eEngine* gui;
 eFrame* frame;
+eFrame* frame1;
 eLabel* hello;
 eButton* but;
+eFrameView* fview;
+eButton* but1;
+eButton* but2;
 
 unsigned char sineVal;
 
@@ -14,6 +18,14 @@ void myOtherCallback() {
   printf("hello world!\n");
   but->setColor({(float)(rand()&0xff)/256,(float)(rand()&0xff)/256,(float)(rand()&0xff)/256,1});
   but->setSize(80,32);
+}
+
+void oneCallback() {
+  printf("one\n");
+}
+
+void twoCallback() {
+  printf("two\n");
 }
 
 void sineCallback() {
@@ -36,6 +48,26 @@ int main(int argc, char** argv) {
   but->setCallback(myOtherCallback);
   but->x=200;
   but->y=200;
+  frame1=gui->newFrame();
+  but1=(eButton*)frame1->newWidget<eButton>();
+  but1->setColor({1,1,0,1});
+  but1->setSize(64,32);
+  but1->setLabel("one");
+  but1->setCallback(oneCallback);
+  but1->x=4;
+  but1->y=4;
+  but2=(eButton*)frame1->newWidget<eButton>();
+  but2->setColor({1,1,0,1});
+  but2->setSize(64,32);
+  but2->setLabel("two");
+  but2->setCallback(twoCallback);
+  but2->x=72;
+  but2->y=4;
+  fview=(eFrameView*)frame->newWidget<eFrameView>();
+  fview->setSize(256,40);
+  fview->pushFrame(frame1);
+  fview->x=32;
+  fview->y=32;
   gui->setPreDrawCallback(sineCallback);
   gui->pushFrame(frame);
   return gui->run();

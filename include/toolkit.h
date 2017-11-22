@@ -136,6 +136,7 @@ class eSkin {
 
 class eWidget {
   friend class eFrame;
+  friend class eFrameView;
   friend void eMainLoop(eEngine* eng);
   protected:
     eEngine* engine;
@@ -154,6 +155,7 @@ class eFrame {
   std::vector<eWidget*> widgets;
   friend void eMainLoop(eEngine* eng);
   friend class eEngine;
+  friend class eFrameView;
   public:
     template<typename t> void* newWidget() {
       t* push=new t;
@@ -205,6 +207,7 @@ class eEngine {
   friend class eWidget;
   friend class eLabel;
   friend class eButton;
+  friend class eFrameView;
   friend class eSkin;
   int nextEvent(eEvent& ev, bool wait);
   protected:
