@@ -157,7 +157,7 @@ class eFrame {
   friend class eEngine;
   friend class eFrameView;
   public:
-    template<typename t> void* newWidget() {
+    template<typename t> t* newWidget() {
       t* push=new t;
       push->engine=engine;
       push->x=0;
@@ -208,6 +208,7 @@ class eEngine {
   friend class eLabel;
   friend class eButton;
   friend class eFrameView;
+  friend class eSlider;
   friend class eSkin;
   int nextEvent(eEvent& ev, bool wait);
   protected:

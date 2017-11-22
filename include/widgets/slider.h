@@ -6,41 +6,31 @@ class eSlider: public eWidget {
   eColor color;
   float highlight;
   int curType;
-  struct {
-    float min, max;
-    float* val;
-  } f;
-  struct {
-    double min, max;
-    double* val;
-  } d;
-  struct {
-    int min, max;
-    int* val;
-  } i;
-  struct {
-    short min, max;
-    short* val;
-  } s;
-  struct {
-    char min, max;
-    char* val;
-  } c;
+  double min, max;
+  double* val;
   void (*holdCallback)();
   void (*releaseCallback)();
   void (*valueCallback)();
   double xo, yo;
+  double hrad;
   int fw, fh;
   bool clicked;
+  std::vector<double> attPoints;
   public:
     XPT int init();
-    XPT int setHandleSize(double w, double h);
+    XPT int setHandleSize(double rad);
     XPT int setSize(double w, double h);
+    XPT int setRange(double min, double max);
+    XPT int setTrack(double& val);
     XPT int setColor(eColor col);
     XPT int event(eEvent& ev);
     XPT int setHoldCallback(void (*callback)());
     XPT int setReleaseCallback(void (*callback)());
     XPT int setValueCallback(void (*callback)());
+    XPT int addAttPoint(double val);
+    XPT int delAttPoint(int which);
+    XPT double getAttPoint(int which);
+    XPT int attPointCount();
     XPT int update();
     XPT int draw();
 };

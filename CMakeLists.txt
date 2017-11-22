@@ -33,7 +33,8 @@ set(SOURCES src/funcs.cpp
             src/widget/base.cpp
             src/widget/label.cpp
             src/widget/button.cpp
-            src/widget/frameview.cpp)
+            src/widget/frameview.cpp
+            src/widget/slider.cpp)
 if (APPLE)
   list(APPEND SOURCES src/nsstub.m)
   find_library(HAVE_APPKIT AppKit PATHS ${CMAKE_OSX_SYSROOT}/System/Library PATH_SUFFIXES Frameworks NO_DEFAULT_PATH)
