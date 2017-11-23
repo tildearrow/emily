@@ -3,6 +3,7 @@
 int eSlider::init() {
   highlight=0;
   clicked=false;
+  active=false;
   val=NULL;
   holdCallback=NULL;
   releaseCallback=NULL;
@@ -42,9 +43,45 @@ int eSlider::setRange(double tmin, double tmax) {
 }
 
 int eSlider::event(eEvent& ev) {
-  printf("event\n");
-  if (ev.type==eEventMouseButton) {
-    // to be done
+  double rpos;
+  switch (ev.type) {
+    case eEventMouseButton:
+      if (ev.state==1) {
+        engine->grabMouse(true);
+        _wantsAllEvents=true;
+        rpos=w*((*val-min)/(max-min));
+        if (ev.coord.x>(x+rpos-hrad) && ev.coord.x<(x+rpos+hrad) &&
+            ev.coord.y>(y+h/2-hrad) && ev.coord.y<(y+h/2+hrad)) {
+          active=true;
+          if (holdCallback!=NULL) {
+            holdCallback();
+          }
+        }
+      } else {
+        engine->grabMouse(false);
+        _wantsAllEvents=false;
+        if (active) {
+          active=false;
+          if (releaseCallback!=NULL) {
+            releaseCallback();
+          }
+        }
+      }
+      break;
+    case eEventMouseMove:
+      if (active) {
+        *val=min+(max-min)*((ev.coord.x-x)/w);
+        if (*val<min) {
+          *val=min;
+        }
+        if (*val>max) {
+          *val=max;
+        }
+        if (valueCallback!=NULL) {
+          valueCallback();
+        }
+      }
+      break;
   }
   return 1;
 }

@@ -14,7 +14,7 @@ class eSlider: public eWidget {
   double xo, yo;
   double hrad;
   int fw, fh;
-  bool clicked;
+  bool clicked, active;
   std::vector<double> attPoints;
   public:
     XPT int init();

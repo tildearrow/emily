@@ -223,7 +223,8 @@ void eMainLoop(eEngine* eng) {
                 ev.coord.y<curFrame->widgets[i]->y+curFrame->widgets[i]->h;
             if ((ev.type==eEventMouseButton && curFrame->widgets[i]->_relPending) ||
                 (ev.type==eEventMouseMove && curFrame->widgets[i]->_highPending) ||
-                curFrame->widgets[i]->_collision) {
+                curFrame->widgets[i]->_collision ||
+                curFrame->widgets[i]->_wantsAllEvents) {
               if (ev.type==eEventMouseButton) {
                 if (curFrame->widgets[i]->_collision && ev.state==1) {
                   curFrame->widgets[i]->_relPending=true;

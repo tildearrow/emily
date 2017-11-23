@@ -143,6 +143,7 @@ class eWidget {
     double w, h;
     XPT virtual int event(eEvent& ev);
     bool _relPending, _highPending, _collision;
+    bool _wantsAllEvents; // widgets may set this one
   public:
     double x, y;
     XPT virtual int init();
@@ -165,6 +166,7 @@ class eFrame {
       push->_collision=false;
       push->_relPending=false;
       push->_highPending=false;
+      push->_wantsAllEvents=false;
       push->init();
       widgets.push_back(push);
       return push;
