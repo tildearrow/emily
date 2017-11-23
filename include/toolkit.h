@@ -226,6 +226,7 @@ class eEngine {
     XPT int setPostDrawCallback(void ((*callback)()));
     XPT int setTitle(string t);
     XPT int setSize(int w, int h);
+    XPT int grabMouse(bool status);
     XPT int show();
     XPT int run();
     XPT int runDetached();

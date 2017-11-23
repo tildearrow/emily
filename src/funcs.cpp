@@ -134,6 +134,38 @@ int eEngine::nextEvent(eEvent& ev, bool wait) {
   return 1;
 }
 
+int eEngine::grabMouse(bool status) {
+  win->setMouseCursorGrabbed(status);
+  return 1;
+  // enable the rest if behavior is not the expected one
+#if defined(__linux__)
+  // linux (wayland) code here
+#elif defined(_WIN32)
+  // windows code here
+  sf::WindowHandle wh;
+  wh=win->getSystemHandle();
+  if (status) {
+    SetCapture(wh);
+    return 1;
+  } else {
+    return ReleaseCapture();
+  }
+#elif defined(__APPLE__)
+  // macOS code here
+  return 1;
+#elif defined(__ANDROID__)
+  // android code here
+  return 1;
+#endif
+#if defined(__unix__)
+  // X11
+#ifdef USE_XCB
+#else
+#endif
+#endif
+  return 1;
+}
+
 void eMainLoop(eEngine* eng) {
   eEvent ev;
   eFrame* curFrame;
@@ -180,7 +212,13 @@ void eMainLoop(eEngine* eng) {
           return;
           break;
         case eEventMouseButton:
+          if (ev.state==1) {
+            eng->grabMouse(1);
+          } else {
+            eng->grabMouse(0);
+          }
         case eEventMouseMove:
+          printf("EVENT %f %f\n",ev.coord.x,ev.coord.y);
           for (size_t i=0; i<curFrame->widgets.size(); i++) {
             curFrame->widgets[i]->_collision=ev.coord.x>curFrame->widgets[i]->x &&
                 ev.coord.x<curFrame->widgets[i]->x+curFrame->widgets[i]->w &&
