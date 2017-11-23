@@ -135,9 +135,6 @@ int eEngine::nextEvent(eEvent& ev, bool wait) {
 }
 
 int eEngine::grabMouse(bool status) {
-  win->setMouseCursorGrabbed(status);
-  return 1;
-  // enable the rest if behavior is not the expected one
 #if defined(__linux__)
   // linux (wayland) code here
 #elif defined(_WIN32)
@@ -145,13 +142,14 @@ int eEngine::grabMouse(bool status) {
   sf::WindowHandle wh;
   wh=win->getSystemHandle();
   if (status) {
-    SetCapture(wh);
+    SetCapture(wh); // ???
     return 1;
   } else {
     return ReleaseCapture();
   }
 #elif defined(__APPLE__)
   // macOS code here
+  // seems like there is no way to do this directly :(
   return 1;
 #elif defined(__ANDROID__)
   // android code here
@@ -159,9 +157,14 @@ int eEngine::grabMouse(bool status) {
 #endif
 #if defined(__unix__)
   // X11
-#ifdef USE_XCB
-#else
-#endif
+  sf::WindowHandle wh;
+  wh=win->getSystemHandle();
+  if (status) {
+    return XGrabPointer(x11conn,wh,True,None,GrabModeAsync,GrabModeAsync,None,None,CurrentTime);
+  } else {
+    XUngrabPointer(x11conn,CurrentTime);
+    return 1;
+  }
 #endif
   return 1;
 }
@@ -212,13 +215,7 @@ void eMainLoop(eEngine* eng) {
           return;
           break;
         case eEventMouseButton:
-          if (ev.state==1) {
-            eng->grabMouse(1);
-          } else {
-            eng->grabMouse(0);
-          }
         case eEventMouseMove:
-          printf("EVENT %f %f\n",ev.coord.x,ev.coord.y);
           for (size_t i=0; i<curFrame->widgets.size(); i++) {
             curFrame->widgets[i]->_collision=ev.coord.x>curFrame->widgets[i]->x &&
                 ev.coord.x<curFrame->widgets[i]->x+curFrame->widgets[i]->w &&
@@ -385,6 +382,7 @@ void eEngine::frect(double x1, double y1, double x2, double y2) {
 int eEngine::show() {
   if (!visible) {
     win=new sf::RenderWindow(sf::VideoMode(width*scale,height*scale),title,sf::Style::Titlebar|sf::Style::Close);
+    x11conn=XOpenDisplay(NULL);
     win->setVerticalSyncEnabled(true);
     visible=true;
     return 1;

@@ -24,10 +24,10 @@
 #include <unistd.h>
 #ifdef USE_XCB
 #include <xcb/xcb.h>
-#else
+#endif
 #include <X11/Xlib.h>
 #endif
-#endif
+
 
 typedef std::string string;
 
@@ -203,6 +203,9 @@ class eEngine {
   float estWaitTime;
   eColor drawCol;
   eFont* defFont;
+#ifdef __unix__
+  Display* x11conn;
+#endif
   friend void eMainLoop(eEngine* eng);
   friend class eWidget;
   friend class eLabel;
