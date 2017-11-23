@@ -146,6 +146,61 @@ void eBitmap::shadeVGrad(double p1, double p2, eColor c1, eColor c2) {
   }
 }
 
+void eBitmap::circle(int x, int y, int r, eColor color) {
+  int ffd, ax1, ay1, ax2, ay2;
+  float* alphaMap;
+  float k;
+  ffd=ceil((float)r/1.414213562373095);
+  ax1=0;
+  if (x<0) {
+    ax1=-x;
+  }
+  ay1=0;
+  if (y<0) {
+    ay1=-y;
+  }
+  ax2=r*2;
+  if (r*2+x>width) {
+    ax2=r*2+x-width;
+  }
+  ay2=r*2;
+  if (r*2+y>height) {
+    ay2=r*2+y-height;
+  }
+  alphaMap=new float[r*r*4];
+  for (int i=0; i<r*r*4; i++) {
+    alphaMap[i]=1;
+  }
+  ffd=round((float)r/1.414213562373095);
+  for (int j=0; j<r; j++) {
+    k=r-sqrt(r*r-(r-j)*(r-j));
+    for (int i=0; i<k-1; i++) {
+      alphaMap[j*r*2+i]=0;
+    }
+  }
+  for (int i=1; i<ffd+1; i++) {
+    k=sqrt(r*r-i*i);
+    alphaMap[r*2*(r-(int)k-1)+r-i]=(k-(int)k);
+    alphaMap[r*2*(r-i)+r-(int)k-1]=(k-(int)k);
+  }
+  for (int j=0; j<r; j++) {
+    for (int i=0; i<r; i++) {
+      alphaMap[r*2*j+r*2-1-i]=alphaMap[r*2*j+i];
+      alphaMap[r*2*(r*2-1-j)+i]=alphaMap[r*2*j+i];
+      alphaMap[r*2*(r*2-1-j)+r*2-1-i]=alphaMap[r*2*j+i];
+    }
+  }
+  for (int j=ay1; j<ay2; j++) {
+    for (int i=ax1; i<ax2; i++) {
+      data[((j+y-r)*width+x-r+i)<<2]+=(color.r-data[((j+y-r)*width+x-r+i)<<2])*color.a*alphaMap[r*2*j+i];
+      data[1+(((j+y-r)*width+x-r+i)<<2)]+=(color.g-data[1+(((j+y-r)*width+x-r+i)<<2)])*color.a*alphaMap[r*2*j+i];
+      data[2+(((j+y-r)*width+x-r+i)<<2)]+=(color.b-data[2+(((j+y-r)*width+x-r+i)<<2)])*color.a*alphaMap[r*2*j+i];
+      data[3+(((j+y-r)*width+x-r+i)<<2)]=(color.a*alphaMap[r*2*j+i])+(data[3+(((j+y-r)*width+x-r+i)<<2)]*(1-(color.a*alphaMap[r*2*j+i])));
+    }
+  }
+  delete[] alphaMap;
+}
+
 void eBitmap::roundRect(int x, int y, int w, int h, int r, eColor color) {
   int ffd, ax1, ay1, ax2, ay2;
   float* alphaMap;
