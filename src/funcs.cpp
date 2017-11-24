@@ -155,7 +155,7 @@ int eEngine::grabMouse(bool status) {
   // android code here
   return 1;
 #endif
-#if defined(__unix__)
+#if defined(__unix__) && !defined(__APPLE__)
   // X11
   sf::WindowHandle wh;
   wh=win->getSystemHandle();
@@ -383,7 +383,9 @@ void eEngine::frect(double x1, double y1, double x2, double y2) {
 int eEngine::show() {
   if (!visible) {
     win=new sf::RenderWindow(sf::VideoMode(width*scale,height*scale),title,sf::Style::Titlebar|sf::Style::Close);
+#if defined(__unix__) && !defined(__APPLE__)
     x11conn=XOpenDisplay(NULL);
+#endif
     win->setVerticalSyncEnabled(true);
     visible=true;
     return 1;
