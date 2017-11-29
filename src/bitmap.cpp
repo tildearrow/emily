@@ -160,12 +160,12 @@ void eBitmap::circle(int x, int y, int r, eColor color) {
     ay1=-y;
   }
   ax2=r*2;
-  if (r*2+x>width) {
-    ax2=r*2+x-width;
+  if (r+x>width) {
+    ax2=r+x-width;
   }
   ay2=r*2;
-  if (r*2+y>height) {
-    ay2=r*2+y-height;
+  if (r+y>height) {
+    ay2=r+y-height;
   }
   alphaMap=new float[r*r*4];
   for (int i=0; i<r*r*4; i++) {
@@ -180,8 +180,8 @@ void eBitmap::circle(int x, int y, int r, eColor color) {
   }
   for (int i=1; i<ffd+1; i++) {
     k=sqrt(r*r-i*i);
-    alphaMap[r*2*(r-(int)k-1)+r-i]=(k-(int)k);
-    alphaMap[r*2*(r-i)+r-(int)k-1]=(k-(int)k);
+    alphaMap[r*2*(r-(int)k-1)+r-i]=k-(int)k;
+    alphaMap[r*2*(r-i)+r-(int)k-1]=k-(int)k;
   }
   for (int j=0; j<r; j++) {
     for (int i=0; i<r; i++) {

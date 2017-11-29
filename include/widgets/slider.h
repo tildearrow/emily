@@ -3,7 +3,7 @@ class eSlider: public eWidget {
   sf::Texture* tinstHandle;
   sf::Sprite sinstBack;
   sf::Sprite sinstHandle;
-  eColor color;
+  eColor bcolor, hcolor;
   float highlight;
   int curType;
   double min, max;
@@ -11,9 +11,9 @@ class eSlider: public eWidget {
   void (*holdCallback)();
   void (*releaseCallback)();
   void (*valueCallback)();
-  double xo, yo;
+  double hxo, hyo;
   double hrad;
-  int fw, fh;
+  int hfw, hfh;
   bool clicked, active;
   std::vector<double> attPoints;
   public:
@@ -22,7 +22,8 @@ class eSlider: public eWidget {
     XPT int setSize(double w, double h);
     XPT int setRange(double min, double max);
     XPT int setTrack(double& val);
-    XPT int setColor(eColor col);
+    XPT int setBackColor(eColor col);
+    XPT int setHandleColor(eColor col);
     XPT int event(eEvent& ev);
     XPT int setHoldCallback(void (*callback)());
     XPT int setReleaseCallback(void (*callback)());

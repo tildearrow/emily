@@ -119,7 +119,9 @@ enum eObjectTypes {
    * [0-3]=(eColor)buttonColor,
    * [4]=buttonStatus
    */
-  eObjectButton=0
+  eObjectButton=0,
+  eObjectSliderB,
+  eObjectSliderH
 };
 
 class eSkin {

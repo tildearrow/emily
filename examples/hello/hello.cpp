@@ -54,6 +54,8 @@ int main(int argc, char** argv) {
   slider=frame->newWidget<eSlider>();
   slider->setTrack(value);
   slider->setRange(-1,1);
+  slider->setHandleColor({0,0.75,1,1});
+  slider->setHandleSize(6);
   frame1=gui->newFrame();
   but1=frame1->newWidget<eButton>();
   but1->setColor({1,1,0,1});
