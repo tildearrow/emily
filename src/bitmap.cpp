@@ -169,8 +169,14 @@ void eBitmap::circle(int x, int y, int r, eColor color) {
   }
   alphaMap=new float[r*r*4];
   for (int i=0; i<r*r*4; i++) {
-    alphaMap[i]=1;
+    alphaMap[i]=0;
   }
+  for (int j=0; j<r*2*16; j++) {
+    for (int i=0; i<r*2*16; i++) {
+      alphaMap[(j>>4)*r*2+(i>>4)]+=(((i-r*16)*(i-r*16)+(j-r*16)*(j-r*16))<r*r*256)?(1.0/256.0):(0);
+    }
+  }
+  /*
   ffd=round((float)r/1.414213562373095);
   for (int j=0; j<r; j++) {
     k=r-sqrt(r*r-(r-j)*(r-j));
@@ -190,6 +196,7 @@ void eBitmap::circle(int x, int y, int r, eColor color) {
       alphaMap[r*2*(r*2-1-j)+r*2-1-i]=alphaMap[r*2*j+i];
     }
   }
+  */
   for (int j=ay1; j<ay2; j++) {
     for (int i=ax1; i<ax2; i++) {
       data[((j+y-r)*width+x-r+i)<<2]+=(color.r-data[((j+y-r)*width+x-r+i)<<2])*color.a*alphaMap[r*2*j+i];
