@@ -8,6 +8,17 @@ void eBitmap::clear() {
   memset(data,0,width*height*4*sizeof(float));
 }
 
+void eBitmap::copyBlitOn(eBitmap* src, int x, int y) {
+  int tw, th;
+  eColor* dataPix;
+  eColor* destin;
+  tw=src->width;
+  th=src->height;
+  for (int j=0; j<th; j++) {
+    memcpy(&data[(x+(y+j)*width)<<2],&src->data[(j*src->width)<<2],tw*4*sizeof(float));
+  }
+}
+
 void eBitmap::blitOn(eBitmap* src, int x, int y) {
   int tw, th;
   eColor* dataPix;
@@ -116,7 +127,26 @@ void eBitmap::shadeColor(eColor c) {
   }
 }
 
+void eBitmap::shadeHMGrad(eColor c1, eColor c2) {
+  double gpos;
+  for (int i=0; i<width/2; i++) {
+    gpos=(((double)i*2/width));
+    for (int j=0; j<height; j++) {
+      data[(j*width+i)<<2]*=c1.r+(c2.r-c1.r)*gpos;
+      data[1+((j*width+i)<<2)]*=c1.g+(c2.g-c1.g)*gpos;
+      data[2+((j*width+i)<<2)]*=c1.b+(c2.b-c1.b)*gpos;
+      data[3+((j*width+i)<<2)]*=c1.a+(c2.a-c1.a)*gpos;
+      
+      data[(j*width+(width-i-1))<<2]*=c1.r+(c2.r-c1.r)*gpos;
+      data[1+((j*width+(width-i-1))<<2)]*=c1.g+(c2.g-c1.g)*gpos;
+      data[2+((j*width+(width-i-1))<<2)]*=c1.b+(c2.b-c1.b)*gpos;
+      data[3+((j*width+(width-i-1))<<2)]*=c1.a+(c2.a-c1.a)*gpos;
+    }
+  }
+}
+
 void eBitmap::shadeVGrad(double p1, double p2, eColor c1, eColor c2) {
+  double gpos;
   if (p1>p2) {
     return;
   }
@@ -129,11 +159,12 @@ void eBitmap::shadeVGrad(double p1, double p2, eColor c1, eColor c2) {
     }
   }
   for (int j=p1*height; j<p2*height; j++) {
+    gpos=(((double)j-(p1*height))/((p2-p1)*height));
     for (int i=0; i<width; i++) {
-      data[(j*width+i)<<2]*=c1.r+(c2.r-c1.r)*(((double)j-(p1*height))/((p2-p1)*height));
-      data[1+((j*width+i)<<2)]*=c1.g+(c2.g-c1.g)*(((double)j-(p1*height))/((p2-p1)*height));
-      data[2+((j*width+i)<<2)]*=c1.b+(c2.b-c1.b)*(((double)j-(p1*height))/((p2-p1)*height));
-      data[3+((j*width+i)<<2)]*=c1.a+(c2.a-c1.a)*(((double)j-(p1*height))/((p2-p1)*height));
+      data[(j*width+i)<<2]*=c1.r+(c2.r-c1.r)*gpos;
+      data[1+((j*width+i)<<2)]*=c1.g+(c2.g-c1.g)*gpos;
+      data[2+((j*width+i)<<2)]*=c1.b+(c2.b-c1.b)*gpos;
+      data[3+((j*width+i)<<2)]*=c1.a+(c2.a-c1.a)*gpos;
     }
   }
   for (int j=p2*height; j<height; j++) {

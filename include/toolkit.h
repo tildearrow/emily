@@ -93,7 +93,9 @@ class eBitmap {
     void rect(double x, double y, double w, double h, eColor color);
     void shadeGlowBack(int radius, int passes);
     void shadeColor(eColor c);
+    void shadeHMGrad(eColor c1, eColor c2);
     void shadeVGrad(double p1, double p2, eColor c1, eColor c2);
+    void copyBlitOn(eBitmap* src, int x, int y);
     void blitOn(eBitmap* src, int x, int y);
     sf::Texture* toTexture();
     eBitmap(int inWidth, int inHeight);
@@ -117,7 +119,7 @@ class eFont {
 enum eObjectTypes {
   /* attrib list for eObjectButton:
    * [0-3]=(eColor)buttonColor,
-   * [4]=buttonStatus
+   * [4]=buttonType (0: normal, 1: flat)
    */
   eObjectButton=0,
   eObjectSliderB,

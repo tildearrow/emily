@@ -20,7 +20,6 @@ double value;
 void myOtherCallback() {
   printf("hello world!\n");
   but->setColor({(float)(rand()&0xff)/256,(float)(rand()&0xff)/256,(float)(rand()&0xff)/256,1});
-  but->setSize(80,32);
 }
 
 void oneCallback() {
@@ -48,6 +47,7 @@ int main(int argc, char** argv) {
   but->setLabel("Button");
   but->setColor({0,0.75,1,1});
   but->setSize(80,32);
+  but->setStyle(eButtonFlat);
   but->setCallback(myOtherCallback);
   but->x=200;
   but->y=200;

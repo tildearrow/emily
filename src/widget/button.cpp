@@ -8,36 +8,23 @@ int eButton::init() {
   linst->setCharacterSize(12*engine->scale);
   tinst=NULL;
   leftClickCallback=NULL;
+  regenGraphics=true;
   setColor(engine->skin->getDefaultColor(eObjectButton));
   setSize(12,32);
+  setStyle(eButtonNormal);
   return 1;
 }
 
 int eButton::setSize(double wi, double he) {
-  int atrList[8];
   w=wi;
   h=he;
-  if (tinst!=NULL) {
-    delete tinst;
-    tinst=NULL;
-  }
-  ((eColor*)atrList)->r=color.r;
-  ((eColor*)atrList)->g=color.g;
-  ((eColor*)atrList)->b=color.b;
-  ((eColor*)atrList)->a=color.a;
-  tinst=engine->skin->getTexture(eObjectButton,atrList,w,h,&xo,&yo,&fw,&fh);
-  
-  sinst.setTexture(*tinst);
-  sinst.setTextureRect(sf::IntRect(0,0,fw,fh));
-  sinst.setOrigin(sf::Vector2f(xo,yo));
-  
-  sinstHigh.setTexture(*tinst);
-  sinstHigh.setTextureRect(sf::IntRect(fw,0,fw,fh));
-  sinstHigh.setOrigin(sf::Vector2f(xo,yo));
-  
-  sinstClick.setTexture(*tinst);
-  sinstClick.setTextureRect(sf::IntRect(fw*2,0,fw,fh));
-  sinstClick.setOrigin(sf::Vector2f(xo,yo));
+  regenGraphics=true;
+  return 1;
+}
+
+int eButton::setStyle(eButtonStyles style) {
+  bstyle=style;
+  regenGraphics=true;
   return 1;
 }
 
@@ -49,6 +36,7 @@ int eButton::setLabel(string data) {
 
 int eButton::setColor(eColor col) {
   color=col;
+  regenGraphics=true;
   return 1;
 }
 
@@ -76,6 +64,36 @@ int eButton::setCallback(void (*callback)()) {
 }
 
 int eButton::draw() {
+  int start, end;
+  if (regenGraphics) {
+    if (tinst!=NULL) {
+      delete tinst;
+      tinst=NULL;
+    }
+    ((eColor*)atrList)->r=color.r;
+    ((eColor*)atrList)->g=color.g;
+    ((eColor*)atrList)->b=color.b;
+    ((eColor*)atrList)->a=color.a;
+    atrList[4]=bstyle;
+    start=engine->perfCount();
+    tinst=engine->skin->getTexture(eObjectButton,atrList,w,h,&xo,&yo,&fw,&fh);
+    end=engine->perfCount();
+    sinst.setTexture(*tinst);
+    sinst.setTextureRect(sf::IntRect(0,0,fw,fh));
+    sinst.setOrigin(sf::Vector2f(xo,yo));
+  
+    sinstHigh.setTexture(*tinst);
+    sinstHigh.setTextureRect(sf::IntRect(fw,0,fw,fh));
+    sinstHigh.setOrigin(sf::Vector2f(xo,yo));
+    
+    sinstClick.setTexture(*tinst);
+    sinstClick.setTextureRect(sf::IntRect(fw*2,0,fw,fh));
+    sinstClick.setOrigin(sf::Vector2f(xo,yo));
+    regenGraphics=false;
+    
+    printf("time: %d\n",end-start);
+  }
+  
   if (_collision) {
     highlight+=0.125;
   } else {
