@@ -2,6 +2,7 @@
 #define _TOOLKIT_H
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 #include <string.h>
 #include <math.h>
 #include <stack>
@@ -79,6 +80,8 @@ struct eEvent {
 struct eColor {
   float r, g, b, a;
 };
+
+string strFormat(const char* format, ...);
 
 class eEngine;
 

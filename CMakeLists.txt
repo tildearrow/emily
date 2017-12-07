@@ -27,6 +27,7 @@ endif (NOT APPLE)
 set(SOURCES src/funcs.cpp
             src/bitmap.cpp
             src/font.cpp
+            src/string.cpp
             
             src/skin/default.cpp
             

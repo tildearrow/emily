@@ -45,6 +45,10 @@ void sineCallback() {
   hello->x=210+sin(2*3.141592653589793238*((float)sineVal/256))*80;
 }
 
+void updateLabel() {
+  hello->setString(strFormat("%f",value));
+}
+
 int main(int argc, char** argv) {
   gui=new eEngine(480,320);
   srand(gui->perfCount());
@@ -78,6 +82,7 @@ int main(int argc, char** argv) {
   slider->setRange(-1,1);
   slider->setHandleColor({0,0.75,1,1});
   slider->setHandleSize(6);
+  slider->setValueCallback(updateLabel);
   
   frame1=gui->newFrame();
   
