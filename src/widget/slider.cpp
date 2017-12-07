@@ -18,6 +18,18 @@ int eSlider::init() {
   return 1;
 }
 
+int eSlider::setHoldCallback(void (*callback)()) {
+  holdCallback=callback;
+}
+
+int eSlider::setReleaseCallback(void (*callback)()) {
+  releaseCallback=callback;
+}
+
+int eSlider::setValueCallback(void (*callback)()) {
+  valueCallback=callback;
+}
+
 int eSlider::setBackColor(eColor col) {
   bcolor=col;
   return 1;
