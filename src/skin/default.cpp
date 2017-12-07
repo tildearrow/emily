@@ -125,13 +125,13 @@ sf::Texture* eSkin::getTexture(int objectType, int attrib[8], int w, int h, doub
         
         bitmap->clear();
         bitmap->roundRect(4*engine->scale,4*engine->scale,(w+2)*engine->scale,(h+2)*engine->scale,2*engine->scale,{1,1,1,1});
-        bitmap->shadeGlowBack(3*engine->scale,2);
+        bitmap->shadeGlowBack(2*engine->scale,2);
         bitmap->shadeColor(temp1);
         
         bitmap->roundRect(5*engine->scale,5*engine->scale,(w)*engine->scale,(h)*engine->scale,2*engine->scale,temp1);
         bitmap->blitOn(bitmap1,5*engine->scale,5*engine->scale);
         
-        retBitmap->blitOn(bitmap,0,0);
+        retBitmap->copyBlitOn(bitmap,0,0);
         // NORMAL END //
         
         // HIGHLIGHT BEGIN //
@@ -143,14 +143,14 @@ sf::Texture* eSkin::getTexture(int objectType, int attrib[8], int w, int h, doub
         bitmap1->roundRect(1*engine->scale,1*engine->scale,(w-2)*engine->scale,(h-2)*engine->scale,2*engine->scale,{1,1,1,0.075});
         
         bitmap->clear();
-        bitmap->roundRect(3*engine->scale,3*engine->scale,(w+4)*engine->scale,(h+4)*engine->scale,2*engine->scale,{1,1,1,1});
+        bitmap->roundRect(4*engine->scale,4*engine->scale,(w+2)*engine->scale,(h+2)*engine->scale,2*engine->scale,{1,1,1,1});
         bitmap->shadeGlowBack(3*engine->scale,2);
         bitmap->shadeColor(temp1);
         
         bitmap->roundRect(5*engine->scale,5*engine->scale,(w)*engine->scale,(h)*engine->scale,2*engine->scale,temp1);
         bitmap->blitOn(bitmap1,5*engine->scale,5*engine->scale);
         
-        retBitmap->blitOn(bitmap,(w+10)*engine->scale,0);
+        retBitmap->copyBlitOn(bitmap,(w+10)*engine->scale,0);
         // HIGHLIGHT END //
         
         // CLICK BEGIN //
@@ -175,7 +175,7 @@ sf::Texture* eSkin::getTexture(int objectType, int attrib[8], int w, int h, doub
         bitmap->roundRect(5*engine->scale,5*engine->scale,(w)*engine->scale,(h)*engine->scale,2*engine->scale,temp1);
         bitmap->blitOn(bitmap1,5*engine->scale,5*engine->scale);
         
-        retBitmap->blitOn(bitmap,(w+10)*engine->scale*2,0);
+        retBitmap->copyBlitOn(bitmap,(w+10)*engine->scale*2,0);
         // CLICK END //
         
         ret=retBitmap->toTexture();

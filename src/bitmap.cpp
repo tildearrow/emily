@@ -61,7 +61,7 @@ void eBitmap::shadeGlowBack(int radius, int passes) {
     for (int j=0; j<height; j++) {
       accum=0;
       for (int i=0; i<256; i++) {
-        buffer[i]=data[3+((j*width)<<2)];
+        buffer[i]=0;
       }
       // prepare accumulator
       for (int i=0; i<ksize; i++) {
@@ -89,12 +89,12 @@ void eBitmap::shadeGlowBack(int radius, int passes) {
     for (int j=0; j<width; j++) {
       accum=0;
       for (int i=0; i<256; i++) {
-        buffer[i]=data[3+(j<<2)];
+        buffer[i]=0;
       }
       // prepare accumulator
       for (int i=0; i<ksize; i++) {
         if (i-radius<0) continue;
-        accum+=data[3+((j+bounded*width)<<2)];
+        accum+=data[3+((j+(i-radius)*width)<<2)];
       }
       bufpos=0;
       for (int i=0; i<height-radius; i++) {
@@ -114,6 +114,7 @@ void eBitmap::shadeGlowBack(int radius, int passes) {
       }
     }
   }
+  shadeAlpha(1+((float)passes/(float)radius));
 }
 
 void eBitmap::shadeColor(eColor c) {
@@ -122,6 +123,12 @@ void eBitmap::shadeColor(eColor c) {
     data[1+(i<<2)]*=c.g;
     data[2+(i<<2)]*=c.b;
     data[3+(i<<2)]*=c.a;
+  }
+}
+
+void eBitmap::shadeAlpha(float a) {
+  for (int i=0; i<width*height; i++) {
+    data[3+(i<<2)]*=a;
   }
 }
 

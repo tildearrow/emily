@@ -93,6 +93,7 @@ class eBitmap {
     void rect(double x, double y, double w, double h, eColor color);
     void shadeGlowBack(int radius, int passes);
     void shadeColor(eColor c);
+    void shadeAlpha(float a);
     void shadeHMGrad(eColor c1, eColor c2);
     void shadeVGrad(double p1, double p2, eColor c1, eColor c2);
     void copyBlitOn(eBitmap* src, int x, int y);
