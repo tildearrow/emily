@@ -70,7 +70,7 @@ void eBitmap::shadeGlowBack(int radius, int passes) {
       }
       bufpos=0;
       for (int i=0; i<width-radius; i++) {
-        buffer[bufpos]=data[3+((j*width+i)<<2)];
+        buffer[bufpos&255]=data[3+((j*width+i)<<2)];
         data[3+((j*width+i)<<2)]=accum*rksize*0.5;
         accum-=buffer[(bufpos-radius)&255];
         accum+=data[3+((j*width+i+radius)<<2)];
@@ -78,7 +78,7 @@ void eBitmap::shadeGlowBack(int radius, int passes) {
         data[3+((j*width+i)<<2)]+=accum*rksize*0.5;
       }
       for (int i=width-radius; i<width; i++) {
-        buffer[bufpos]=data[3+((j*width+i)<<2)];
+        buffer[bufpos&255]=data[3+((j*width+i)<<2)];
         data[3+((j*width+i)<<2)]=accum*rksize*0.5;
         accum-=buffer[(bufpos-radius)&255];
         bufpos++;
@@ -98,7 +98,7 @@ void eBitmap::shadeGlowBack(int radius, int passes) {
       }
       bufpos=0;
       for (int i=0; i<height-radius; i++) {
-        buffer[bufpos]=data[3+((j+i*width)<<2)];
+        buffer[bufpos&255]=data[3+((j+i*width)<<2)];
         data[3+((j+i*width)<<2)]=accum*rksize*0.5;
         accum-=buffer[(bufpos-radius)&255];
         accum+=data[3+((j+(i+radius)*width)<<2)];
@@ -106,7 +106,7 @@ void eBitmap::shadeGlowBack(int radius, int passes) {
         data[3+((j+i*width)<<2)]+=accum*rksize*0.5;
       }
       for (int i=height-radius; i<height; i++) {
-        buffer[bufpos]=data[3+((j+i*width)<<2)];
+        buffer[bufpos&255]=data[3+((j+i*width)<<2)];
         data[3+((j+i*width)<<2)]=accum*rksize*0.5;
         accum-=buffer[(bufpos-radius)&255];
         bufpos++;
