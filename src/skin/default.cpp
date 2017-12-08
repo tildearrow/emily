@@ -2,11 +2,22 @@
 
 eColor eSkin::getDefaultColor(int objectType) {
   eColor temp;
-  temp.r=0.5;
-  temp.g=0.5;
-  temp.b=0.5;
-  temp.a=1;
-  return temp;
+  switch (objectType) {
+    case eObjectButton: case eObjectSliderH:
+      temp.r=0.5;
+      temp.g=0.5;
+      temp.b=0.5;
+      temp.a=1;
+      return temp;
+      break;
+    case eObjectSliderB:
+      temp.r=1;
+      temp.g=1;
+      temp.b=1;
+      temp.a=1;
+      return temp;
+      break;
+  }
 };
 
 sf::Texture* eSkin::getTexture(int objectType, int attrib[8], int w, int h, double* xo, double* yo, int* frameWidth, int* frameHeight) {
@@ -219,37 +230,24 @@ sf::Texture* eSkin::getTexture(int objectType, int attrib[8], int w, int h, doub
       bitmap2=new eBitmap(w*engine->scale,h*engine->scale);
       
       bitmap1->clear();
-      bitmap1->circle((w/2)*engine->scale,(h/2)*engine->scale,(w/2)*engine->scale,temp2);
-      bitmap1->circle((w/2)*engine->scale,(h/2)*engine->scale,(w/2)*engine->scale,temp2);
+      bitmap1->roundRect(1*engine->scale,1*engine->scale,(w-2)*engine->scale,(h-2)*engine->scale,2*engine->scale,temp2);
       bitmap1->shadeVGrad(0,1,{1,1,1,1},{0.83,0.83,0.83,1});
-      
+        
       bitmap2->clear();
-      bitmap2->circle((w/2)*engine->scale,(h/2)*engine->scale,(w/2-1)*engine->scale,{1,1,1,1});
-      bitmap2->circle((w/2)*engine->scale,(h/2)*engine->scale,(w/2-1)*engine->scale,{1,1,1,1});
+      bitmap2->roundRect(2*engine->scale,2*engine->scale,(w-4)*engine->scale,(h-4)*engine->scale,2*engine->scale,{1,1,1,1});
       bitmap2->shadeVGrad(0,0.5,{1,1,1,0.075},{1,1,1,0});
-      
+        
       bitmap1->blitOn(bitmap2,0,0);
-      delete bitmap2;
-      
+        
       bitmap->clear();
-
-      bitmap->circle((5+w/2)*engine->scale,(5+h/2)*engine->scale,(w/2+3)*engine->scale,{1,1,1,1});
-      bitmap->shadeGlowBack(6,1);
-      
-      
+      bitmap->roundRect(4*engine->scale,4*engine->scale,(w+2)*engine->scale,(h+2)*engine->scale,2*engine->scale,{1,1,1,1});
+      bitmap->shadeGlowBack(2*engine->scale,2);
       bitmap->shadeColor(temp1);
-      bitmap->shadeColor({1,1,1,1});
-      
-      bitmap->circle((5+w/2)*engine->scale,(5+h/2)*engine->scale,(w/2+1)*engine->scale,temp1);
-      bitmap->circle((5+w/2)*engine->scale,(5+h/2)*engine->scale,(w/2+1)*engine->scale,temp1);
-      
+        
+      bitmap->roundRect(5*engine->scale,5*engine->scale,(w)*engine->scale,(h)*engine->scale,2*engine->scale,temp1);
       bitmap->blitOn(bitmap1,5*engine->scale,5*engine->scale);
-      
-      delete bitmap1;
-      
-      retBitmap->blitOn(bitmap,0,0);
-      
-      delete bitmap;
+        
+      retBitmap->copyBlitOn(bitmap,0,0);
       // NORMAL END //
       
       ret=retBitmap->toTexture();
@@ -257,8 +255,33 @@ sf::Texture* eSkin::getTexture(int objectType, int attrib[8], int w, int h, doub
       *yo=5*engine->scale;
       *frameWidth=(w+10)*engine->scale;
       *frameHeight=(h+10)*engine->scale;
+      delete bitmap;
+      delete bitmap1;
+      delete bitmap2;
       delete retBitmap;
       return ret;
+      break;
+    case eObjectSliderB:
+      temp1=*(eColor*)attrib;
+      retBitmap=new eBitmap((w+10)*engine->scale*3,16*engine->scale);
+      
+      // BEGIN //
+      retBitmap->clear();
+      retBitmap->rect(3*engine->scale,7.5*engine->scale,(w+4)*engine->scale,2*engine->scale,{1,1,1,1});
+      retBitmap->shadeGlowBack(6,2);
+      temp1.a=1;
+      retBitmap->shadeColor(temp1);
+      retBitmap->rect(5*engine->scale,8*engine->scale,w*engine->scale,engine->scale,temp1);
+      // END //
+      
+      ret=retBitmap->toTexture();
+      *xo=5*engine->scale;
+      *yo=8*engine->scale;
+      *frameWidth=(w+10)*engine->scale;
+      *frameHeight=16*engine->scale;
+      delete retBitmap;
+      return ret;
+      break;
     default:
       return NULL;
   }

@@ -10,8 +10,8 @@ int eSlider::init() {
   holdCallback=NULL;
   releaseCallback=NULL;
   valueCallback=NULL;
-  setBackColor(engine->skin->getDefaultColor(eObjectButton));
-  setHandleColor(engine->skin->getDefaultColor(eObjectButton));
+  setBackColor(engine->skin->getDefaultColor(eObjectSliderB));
+  setHandleColor(engine->skin->getDefaultColor(eObjectSliderH));
   setSize(128,24);
   setHandleSize(6);
   setRange(0,1);
@@ -51,15 +51,27 @@ int eSlider::setHandleSize(double rad) {
   ((eColor*)atrList)->g=hcolor.g;
   ((eColor*)atrList)->b=hcolor.b;
   ((eColor*)atrList)->a=hcolor.a;
-  tinstHandle=engine->skin->getTexture(eObjectSliderH,atrList,rad*2,rad*2,&hxo,&hyo,&hfw,&hfh);
+  tinstHandle=engine->skin->getTexture(eObjectSliderH,atrList,rad*2,h,&hxo,&hyo,&hfw,&hfh);
   sinstHandle.setTexture(*tinstHandle);
   sinstHandle.setOrigin(sf::Vector2f(hxo,hyo));
   return 1;
 }
 
 int eSlider::setSize(double wi, double he) {
+  int atrList[8];
   w=wi;
   h=he;
+  if (tinstBack!=NULL) {
+    delete tinstBack;
+    tinstBack=NULL;
+  }
+  ((eColor*)atrList)->r=bcolor.r;
+  ((eColor*)atrList)->g=bcolor.g;
+  ((eColor*)atrList)->b=bcolor.b;
+  ((eColor*)atrList)->a=bcolor.a;
+  tinstBack=engine->skin->getTexture(eObjectSliderB,atrList,w,engine->scale,&bxo,&byo,&bfw,&bfh);
+  sinstBack.setTexture(*tinstBack);
+  sinstBack.setOrigin(sf::Vector2f(bxo,byo));
   return 1;
 }
 
@@ -83,7 +95,7 @@ int eSlider::event(eEvent& ev) {
         _wantsAllEvents=true;
         rpos=w*((*val-min)/(max-min));
         if (ev.coord.x>(x+rpos-hrad) && ev.coord.x<(x+rpos+hrad) &&
-            ev.coord.y>(y+h/2-hrad) && ev.coord.y<(y+h/2+hrad)) {
+            ev.coord.y>(y) && ev.coord.y<(y+h)) {
           active=true;
           if (holdCallback!=NULL) {
             holdCallback();
@@ -120,10 +132,12 @@ int eSlider::event(eEvent& ev) {
 
 int eSlider::draw() {
   double rpos;
-  engine->line(x,y+h/2,x+w,y+h/2);
+  sinstBack.setPosition(x*engine->scale,(y+h/2)*engine->scale);
+  engine->win->draw(sinstBack);
+  //engine->line(x,y+h/2,x+w,y+h/2);
   if (val!=NULL) {
     rpos=w*((*val-min)/(max-min));
-    sinstHandle.setPosition((x+rpos-hrad)*engine->scale,(y+h/2-hrad)*engine->scale);
+    sinstHandle.setPosition((x+rpos-hrad)*engine->scale,(y)*engine->scale);
     engine->win->draw(sinstHandle);
     //engine->frect(,x+rpos+hrad,y+h/2+hrad);
   }

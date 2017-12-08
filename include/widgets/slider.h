@@ -11,9 +11,9 @@ class eSlider: public eWidget {
   void (*holdCallback)();
   void (*releaseCallback)();
   void (*valueCallback)();
-  double hxo, hyo;
+  double bxo, byo, hxo, hyo;
   double hrad;
-  int hfw, hfh;
+  int bfw, bfh, hfw, hfh;
   bool clicked, active;
   std::vector<double> attPoints;
   public:

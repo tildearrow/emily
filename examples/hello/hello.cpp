@@ -80,9 +80,12 @@ int main(int argc, char** argv) {
   slider=frame->newWidget<eSlider>();
   slider->setTrack(value);
   slider->setRange(-1,1);
+  slider->setSize(128,16);
   slider->setHandleColor({0,0.75,1,1});
-  slider->setHandleSize(6);
+  slider->setHandleSize(4);
   slider->setValueCallback(updateLabel);
+  slider->x=8;
+  slider->y=8;
   
   frame1=gui->newFrame();
   
