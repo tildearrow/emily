@@ -127,6 +127,30 @@ int eEngine::nextEvent(eEvent& ev, bool wait) {
       ev.input=temp.mouseButton.button;
       ev.state=0;
       break;
+    case sf::Event::KeyPressed:
+      ev.type=eEventKey;
+      ev.input=temp.key.code;
+      ev.state=1;
+      ev.mod=0;
+      if (temp.key.control) ev.mod|=eKeyModCtrl;
+      if (temp.key.alt) ev.mod|=eKeyModAlt;
+      if (temp.key.shift) ev.mod|=eKeyModShift;
+      if (temp.key.system) ev.mod|=eKeyModMeta;
+      break;
+    case sf::Event::KeyReleased:
+      ev.type=eEventKey;
+      ev.input=temp.key.code;
+      ev.state=0;
+      ev.mod=0;
+      if (temp.key.control) ev.mod|=eKeyModCtrl;
+      if (temp.key.alt) ev.mod|=eKeyModAlt;
+      if (temp.key.shift) ev.mod|=eKeyModShift;
+      if (temp.key.system) ev.mod|=eKeyModMeta;
+      break;
+    case sf::Event::TextEntered:
+      ev.type=eEventType;
+      ev.input=temp.text.unicode;
+      break;
     default:
       ev.type=eEventBackend;
       break;

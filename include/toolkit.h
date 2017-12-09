@@ -56,6 +56,13 @@ enum eEventInput {
   eEventFile=0x51,
 };
 
+enum eKeyMods {
+  eKeyModCtrl=0x01,
+  eKeyModAlt=0x02,
+  eKeyModShift=0x04,
+  eKeyModMeta=0x08
+};
+
 enum eFontVariant {
   eFontDefault=0,
   eFontLarge
