@@ -44,6 +44,8 @@ typedef std::string string;
 
 enum eEventSystem {
   eEventQuit=0x01,
+  eEventResize=0x02,
+  eEventFocus=0xfd,
   eEventBackend=0xfe,
 };
 
@@ -51,10 +53,20 @@ enum eEventInput {
   eEventMouseMove=0x11,
   eEventMouseButton=0x12,
   eEventMouseWheel=0x13,
-  eEventTouch=0x21,
+  eEventMouseEnter=0x14,
+  eEventMouseLeave=0x15,
+  eEventTouchMove=0x21,
+  eEventTouchState=0x22,
   eEventKey=0x31,
   eEventType=0x41,
   eEventFile=0x51,
+  eEventSensor=0x60,
+  eEventAccel=0x61,
+  eEventGyro=0x62,
+  eEventMagnet=0x63,
+  eEventGrav=0x64,
+  eEventAcceleration=0x65,
+  eEventOrient=0x66
 };
 
 enum eKeyMods {

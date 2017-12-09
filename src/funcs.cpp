@@ -140,6 +140,32 @@ int eEngine::nextEvent(eEvent& ev, bool wait) {
         ev.coord.y=-temp.mouseWheelScroll.delta;
       }
       break;
+    case sf::Event::MouseEntered:
+      ev.type=eEventMouseEnter;
+      break;
+    case sf::Event::MouseLeft:
+      ev.type=eEventMouseLeave;
+      break;
+    case sf::Event::TouchMoved:
+      ev.type=eEventTouchMove;
+      ev.coord.x=temp.touch.x/scale;
+      ev.coord.y=temp.touch.y/scale;
+      ev.input=temp.touch.finger;
+      break;
+    case sf::Event::TouchBegan:
+      ev.type=eEventTouchState;
+      ev.coord.x=temp.touch.x/scale;
+      ev.coord.y=temp.touch.y/scale;
+      ev.input=temp.touch.finger;
+      ev.state=1;
+      break;
+    case sf::Event::TouchEnded:
+      ev.type=eEventTouchState;
+      ev.coord.x=temp.touch.x/scale;
+      ev.coord.y=temp.touch.y/scale;
+      ev.input=temp.touch.finger;
+      ev.state=0;
+      break;
     case sf::Event::KeyPressed:
       ev.type=eEventKey;
       ev.input=temp.key.code;
@@ -164,8 +190,51 @@ int eEngine::nextEvent(eEvent& ev, bool wait) {
       ev.type=eEventType;
       ev.input=temp.text.unicode;
       break;
+    case sf::Event::GainedFocus:
+      ev.type=eEventFocus;
+      ev.state=1;
+      break;
+    case sf::Event::LostFocus:
+      ev.type=eEventFocus;
+      ev.state=0;
+      break;
+    case sf::Event::Resized:
+      ev.type=eEventResize;
+      ev.coord.x=temp.size.width;
+      ev.coord.y=temp.size.height;
+      break;
+    case sf::Event::SensorChanged:
+      ev.type=eEventSensor;
+      switch (temp.sensor.type) {
+        case sf::Sensor::Accelerometer:
+          ev.type=eEventAccel;
+          break;
+        case sf::Sensor::Gyroscope:
+          ev.type=eEventGyro;
+          break;
+        case sf::Sensor::Magnetometer:
+          ev.type=eEventMagnet;
+          break;
+        case sf::Sensor::Gravity:
+          ev.type=eEventGrav;
+          break;
+        case sf::Sensor::UserAcceleration:
+          ev.type=eEventAcceleration;
+          break;
+        case sf::Sensor::Orientation:
+          ev.type=eEventOrient;
+          break;
+        // to satisfy KDevelop and maybe Xcode
+        case sf::Sensor::Count:
+          ev.type=eEventSensor;
+          break;
+      }
+      ev.coord.x=temp.sensor.x;
+      ev.coord.y=temp.sensor.y;
+      ev.coord.z=temp.sensor.z;
     default:
       ev.type=eEventBackend;
+      eLogI("got backend event %d\n",temp.type);
       break;
   }
   return 1;
