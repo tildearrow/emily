@@ -15,6 +15,7 @@ int eSlider::init() {
   setSize(128,24);
   setHandleSize(6);
   setRange(0,1);
+  setHighlightArea(eSliderLeft);
   return 1;
 }
 
@@ -130,13 +131,48 @@ int eSlider::event(eEvent& ev) {
   return 1;
 }
 
+int eSlider::setHighlightArea(unsigned char area) {
+  harea=area;
+}
+
 int eSlider::draw() {
   double rpos;
-  sinstBack.setPosition(x*engine->scale,(y+h/2)*engine->scale);
-  engine->win->draw(sinstBack);
-  //engine->line(x,y+h/2,x+w,y+h/2);
+  if (_collision || active) {
+    highlight+=0.125;
+  } else {
+    highlight-=0.0625;
+  }
+  if (highlight>1) highlight=1;
+  if (highlight<0) highlight=0;
   if (val!=NULL) {
     rpos=w*((*val-min)/(max-min));
+    // left side
+    sinstBack.setTextureRect(sf::IntRect(0,(harea&eSliderLeft)?(bfh):(0),bxo+rpos*engine->scale,bfh));
+    sinstBack.setPosition(x*engine->scale,(y+h/2)*engine->scale);
+    engine->win->draw(sinstBack);
+    // right side
+    sinstBack.setTextureRect(sf::IntRect(bxo+rpos*engine->scale,(harea&eSliderRight)?(bfh):(0),bfw-((rpos)*engine->scale-bxo),bfh));
+    sinstBack.setPosition((x+rpos)*engine->scale+bxo,(y+h/2)*engine->scale);
+    engine->win->draw(sinstBack);
+    
+    // highlight
+    if (highlight>0) {
+      if (harea&eSliderLeft) {
+        sinstBack.setTextureRect(sf::IntRect(0,(harea&eSliderLeft)?(bfh):(0),bxo+rpos*engine->scale,bfh));
+        sinstBack.setPosition(x*engine->scale,(y+h/2)*engine->scale);
+        sinstBack.setColor(sf::Color(255,255,255,highlight*255));
+        engine->win->draw(sinstBack);
+        sinstBack.setColor(sf::Color(255,255,255,255));
+      }
+      if (harea&eSliderRight) {
+        sinstBack.setTextureRect(sf::IntRect(bxo+rpos*engine->scale,(harea&eSliderRight)?(bfh):(0),bfw-((rpos)*engine->scale-bxo),bfh));
+        sinstBack.setPosition((x+rpos)*engine->scale+bxo,(y+h/2)*engine->scale);
+        sinstBack.setColor(sf::Color(255,255,255,highlight*255));
+        engine->win->draw(sinstBack);
+        sinstBack.setColor(sf::Color(255,255,255,255));
+      }
+    }
+    
     sinstHandle.setPosition((x+rpos-hrad)*engine->scale,(y)*engine->scale);
     engine->win->draw(sinstHandle);
     //engine->frect(,x+rpos+hrad,y+h/2+hrad);

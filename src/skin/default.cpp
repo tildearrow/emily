@@ -263,16 +263,33 @@ sf::Texture* eSkin::getTexture(int objectType, int attrib[8], int w, int h, doub
       break;
     case eObjectSliderB:
       temp1=*(eColor*)attrib;
-      retBitmap=new eBitmap((w+10)*engine->scale*3,16*engine->scale);
+      retBitmap=new eBitmap((w+10)*engine->scale,16*engine->scale*3);
+      bitmap=new eBitmap((w+10)*engine->scale,16*engine->scale);
       
-      // BEGIN //
-      retBitmap->clear();
-      retBitmap->rect(3*engine->scale,7.5*engine->scale,(w+4)*engine->scale,2*engine->scale,{1,1,1,1});
-      retBitmap->shadeGlowBack(6,2);
       temp1.a=1;
-      retBitmap->shadeColor(temp1);
-      retBitmap->rect(5*engine->scale,8*engine->scale,w*engine->scale,engine->scale,temp1);
-      // END //
+      // NORMAL BEGIN //
+      bitmap->clear();
+      bitmap->rect(5*engine->scale,8*engine->scale,w*engine->scale,engine->scale,temp1);
+      retBitmap->copyBlitOn(bitmap,0,0);
+      // NORMAL END //
+      
+      // LIT BEGIN //
+      bitmap->clear();
+      bitmap->rect(3*engine->scale,7.5*engine->scale,(w+4)*engine->scale,2*engine->scale,{1,1,1,1});
+      bitmap->shadeGlowBack(6,2);
+      bitmap->shadeColor(temp1);
+      bitmap->rect(5*engine->scale,8*engine->scale,w*engine->scale,engine->scale,temp1);
+      retBitmap->copyBlitOn(bitmap,0,16*engine->scale);
+      // LIT END //
+      
+      // HIGHLIGHT BEGIN //
+      bitmap->clear();
+      bitmap->rect(3*engine->scale,7.5*engine->scale,(w+4)*engine->scale,2*engine->scale,{1,1,1,1});
+      bitmap->shadeGlowBack(6,2);
+      bitmap->shadeColor(temp1);
+      bitmap->rect(5*engine->scale,8*engine->scale,w*engine->scale,engine->scale,temp1);
+      retBitmap->copyBlitOn(bitmap,0,16*engine->scale*2);
+      // HIGHLIGHT END //
       
       ret=retBitmap->toTexture();
       *xo=5*engine->scale;
@@ -280,6 +297,7 @@ sf::Texture* eSkin::getTexture(int objectType, int attrib[8], int w, int h, doub
       *frameWidth=(w+10)*engine->scale;
       *frameHeight=16*engine->scale;
       delete retBitmap;
+      delete bitmap;
       return ret;
       break;
     default:
