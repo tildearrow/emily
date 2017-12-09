@@ -28,7 +28,7 @@
 #endif
 #include <X11/Xlib.h>
 #endif
-
+#include "icons.h"
 
 typedef std::string string;
 
@@ -202,7 +202,42 @@ class eFrame {
     }
 };
 
+class eIcon {
+  bool isImage;
+  sf::Texture iconTex;
+  sf::Text iconText;
+  public:
+    int hasLoaded;
+    int draw(double x, double y);
+    eIcon(string path);
+    eIcon(eBitmap* bitmap);
+    eIcon(eIcons icon, double size);
+};
+
 #include "widgets/widgets.h"
+
+class eMenuItem {
+  eIcon icon;
+  bool iconAfter, containsMore;
+  string text;
+  std::vector<eMenuItem> more;
+  void (*callback)();
+  public:
+    int addItem(eMenuItem item);
+    int removeItem(int index);
+    int itemCount();
+    eMenuItem();
+    eMenuItem(eIcon icon, string text, void (*callback)());
+    ~eMenuItem();
+};
+
+class eContextMenu {
+  std::vector<eMenuItem> items;
+  public:
+    int addItem(eMenuItem item);
+    int removeItem(int index);
+    int itemCount();
+};
 
 class eEngine {
   /*void* (*createWin)(void**,const char*,int,int,int,int,bool);
