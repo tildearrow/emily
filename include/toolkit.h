@@ -50,6 +50,7 @@ enum eEventSystem {
 enum eEventInput {
   eEventMouseMove=0x11,
   eEventMouseButton=0x12,
+  eEventMouseWheel=0x13,
   eEventTouch=0x21,
   eEventKey=0x31,
   eEventType=0x41,

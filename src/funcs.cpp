@@ -127,6 +127,19 @@ int eEngine::nextEvent(eEvent& ev, bool wait) {
       ev.input=temp.mouseButton.button;
       ev.state=0;
       break;
+    case sf::Event::MouseWheelMoved:
+      return 0;
+      break;
+    case sf::Event::MouseWheelScrolled:
+      ev.type=eEventMouseWheel;
+      ev.coord.x=0;
+      ev.coord.y=0;
+      if (temp.mouseWheelScroll.wheel==sf::Mouse::HorizontalWheel) {
+        ev.coord.x=-temp.mouseWheelScroll.delta;
+      } else {
+        ev.coord.y=-temp.mouseWheelScroll.delta;
+      }
+      break;
     case sf::Event::KeyPressed:
       ev.type=eEventKey;
       ev.input=temp.key.code;
