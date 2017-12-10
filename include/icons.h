@@ -668,7 +668,6 @@ enum eIcons {
   eIconXing,
   eIconXingSquare,
   eIconYCombinator,
-  eIconYCombinatorSquare,
   eIconYahoo,
   eIconYelp,
   eIconYen,
