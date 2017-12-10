@@ -1,8 +1,17 @@
+enum eSliderHighlight {
+  eSliderLeft=1,
+  eSliderRight=2  
+};
+
 class eSlider: public eWidget {
   sf::Texture* tinstBack;
   sf::Texture* tinstHandle;
   sf::Sprite sinstBack;
+  sf::Sprite sinstBackI;
+  sf::Sprite sinstBackH;
   sf::Sprite sinstHandle;
+  sf::Sprite sinstHandleH;
+  sf::Sprite sinstHandleC;
   eColor bcolor, hcolor;
   float highlight;
   int curType;
@@ -14,6 +23,7 @@ class eSlider: public eWidget {
   double bxo, byo, hxo, hyo;
   double hrad;
   int bfw, bfh, hfw, hfh;
+  unsigned char harea;
   bool clicked, active;
   std::vector<double> attPoints;
   public:
@@ -32,6 +42,7 @@ class eSlider: public eWidget {
     XPT int delAttPoint(int which);
     XPT double getAttPoint(int which);
     XPT int attPointCount();
+    XPT int setHighlightArea(unsigned char area);
     XPT int update();
     XPT int draw();
 };
