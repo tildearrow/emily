@@ -244,6 +244,8 @@ class eContextMenu {
     int draw();
 };
 
+XPT long long perfCount();
+
 class eEngine {
   /*void* (*createWin)(void**,const char*,int,int,int,int,bool);
   int (*eNextEvent)(void*,eEvent&);*/
@@ -308,7 +310,6 @@ class eEngine {
     XPT int run();
     XPT int runDetached();
     XPT int pause(double timeAsMicro);
-    XPT long long perfCount();
 
     XPT eFrame* newFrame();
     XPT int pushFrame(eFrame* f);

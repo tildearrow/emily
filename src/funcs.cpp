@@ -298,12 +298,12 @@ void eMainLoop(eEngine* eng) {
   while (1) {
     eng->preRender();
     rPrevVBTime=rVBTime;
-    rVBTime=eng->perfCount();
+    rVBTime=perfCount();
 #ifndef _WIN32
     eng->pause(eng->estWaitTime);
 #endif
     /* event processing */
-    rStartTime=eng->perfCount();
+    rStartTime=perfCount();
     if (eng->frameStack.size()) {
       curFrame=eng->frameStack.top();
     }
@@ -376,7 +376,7 @@ void eMainLoop(eEngine* eng) {
     if (eng->drawEndCallback!=NULL) {
       eng->drawEndCallback();
     }
-    rEndTime=eng->perfCount();
+    rEndTime=perfCount();
     eng->postRender();
     if (eng->postDrawCallback!=NULL) {
       eng->postDrawCallback();
@@ -587,7 +587,7 @@ int eEngine::pause(double timeAsMicro) {
   return 1;
 }
 
-long long eEngine::perfCount() {
+long long perfCount() {
 #ifdef _WIN32
   LARGE_INTEGER temp, prec;
   QueryPerformanceCounter(&temp);

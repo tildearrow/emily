@@ -75,9 +75,9 @@ int eButton::draw() {
     ((eColor*)atrList)->b=color.b;
     ((eColor*)atrList)->a=color.a;
     atrList[4]=bstyle;
-    start=engine->perfCount();
+    start=perfCount();
     tinst=engine->skin->getTexture(eObjectButton,atrList,w,h,&xo,&yo,&fw,&fh);
-    end=engine->perfCount();
+    end=perfCount();
     sinst.setTexture(*tinst);
     sinst.setTextureRect(sf::IntRect(0,0,fw,fh));
     sinst.setOrigin(sf::Vector2f(xo,yo));

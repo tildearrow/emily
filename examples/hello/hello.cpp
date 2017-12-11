@@ -51,7 +51,7 @@ void updateLabel() {
 
 int main(int argc, char** argv) {
   gui=new eEngine(480,320);
-  srand(gui->perfCount());
+  srand(perfCount());
   gui->show();
   frame=gui->newFrame();
   
