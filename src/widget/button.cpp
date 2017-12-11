@@ -8,6 +8,7 @@ int eButton::init() {
   linst->setCharacterSize(12*engine->scale);
   tinst=NULL;
   leftClickCallback=NULL;
+  icon=NULL;
   regenGraphics=true;
   setColor(engine->skin->getDefaultColor(eObjectButton));
   setSize(12,32);
@@ -31,6 +32,15 @@ int eButton::setStyle(eButtonStyles style) {
 int eButton::setLabel(string data) {
   label=data;
   linst->setString(data);
+  return 1;
+}
+
+int eButton::setIcon(eIcons index, double size, eDirection placement) {
+  if (icon!=NULL) {
+    delete icon;
+  }
+  icon=engine->newIcon(index,size);
+  iconPlace=placement;
   return 1;
 }
 
@@ -65,6 +75,7 @@ int eButton::setCallback(void (*callback)()) {
 
 int eButton::draw() {
   int start, end;
+  double wh;
   if (regenGraphics) {
     if (tinst!=NULL) {
       delete tinst;
@@ -112,8 +123,6 @@ int eButton::draw() {
   engine->drawColor({1,1,1,1});
   engine->rect(x,y,x+w,y+h);
   */
-  linst->setPosition((int)(((x+w/2)*engine->scale)-(linst->getLocalBounds().width/2)),
-                     (int)round((y+h/2)*engine->scale-(linst->getCharacterSize()*0.667)));
   sinst.setPosition(x*engine->scale,y*engine->scale);
   sinstHigh.setPosition(x*engine->scale,y*engine->scale);
   sinstClick.setPosition(x*engine->scale,y*engine->scale);
@@ -122,6 +131,18 @@ int eButton::draw() {
   engine->win->draw(sinstHigh);
   if (clicked && _collision) {
     engine->win->draw(sinstClick);
+  }
+  if (icon!=NULL) {
+    if (iconPlace==eLeft || iconPlace==eRight) {
+      wh=icon->width()+linst->getLocalBounds().width+3*engine->scale;
+      icon->setPos(x*engine->scale,(y)*engine->scale);
+      /*linst->setPosition((int)(((x+w/2)*engine->scale)-(wh)+icon->width()),
+                     (int)round((y+h/2)*engine->scale-(linst->getCharacterSize()*0.667)));*/
+      icon->draw();
+    }
+  } else {
+    linst->setPosition((int)(((x+w/2)*engine->scale)-(linst->getLocalBounds().width/2)),
+                     (int)round((y+h/2)*engine->scale-(linst->getCharacterSize()*0.667)));
   }
   engine->win->draw(*linst);
   return 0;

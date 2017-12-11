@@ -87,6 +87,13 @@ enum eTextureTypes {
   eTarget
 };
 
+enum eDirection {
+  eRight=0,
+  eUp,
+  eLeft,
+  eDown
+};
+
 struct eEvent {
   unsigned char type;
   struct {
@@ -210,10 +217,14 @@ class eIcon {
   sf::Text* iconText;
   protected:
     eEngine* engine;
+    int charIndex;
+    double charW, charH;
   public:
     ~eIcon();
     int setPos(double x, double y);
     int hasLoaded();
+    double width();
+    double height();
     int draw();
 };
 

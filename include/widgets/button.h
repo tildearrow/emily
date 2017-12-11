@@ -5,6 +5,7 @@ enum eButtonStyles {
 
 class eButton: public eWidget {
   string label;
+  eIcon* icon;
   sf::Text* linst;
   sf::Texture* tinst;
   sf::Sprite sinst;
@@ -19,10 +20,12 @@ class eButton: public eWidget {
   bool clicked;
   int atrList[8];
   bool regenGraphics;
+  char iconPlace;
   public:
     XPT int init();
     XPT int setLabel(string data);
     XPT int setLabelSize(double size);
+    XPT int setIcon(eIcons index, double size, eDirection placement);
     XPT int setSize(double w, double h);
     XPT int setStyle(eButtonStyles style);
     XPT int setColor(eColor col);

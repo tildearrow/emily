@@ -575,10 +575,15 @@ int eEngine::drawTexture(eTexture* tex, double x, double y) {
 
 eIcon* eEngine::newIcon(eIcons icon, double size) {
   eIcon* ret;
+  sf::Glyph gl;
   ret=new eIcon;
   ret->isImage=false;
+  ret->charIndex=icon;
   ret->iconText=new sf::Text(sf::String((sf::Uint32)icon),iconFont,size*scale);
   ret->engine=this;
+  gl=iconFont.getGlyph(icon,size*scale,false);
+  ret->charW=gl.textureRect.width;
+  ret->charH=gl.textureRect.height;
   return ret;
 }
 

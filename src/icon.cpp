@@ -8,11 +8,19 @@ eIcon::~eIcon() {
   }
 }
 
+double eIcon::width() {
+  return iconText->getLocalBounds().width;
+}
+
+double eIcon::height() {
+  return iconText->getLocalBounds().height;
+}
+
 int eIcon::setPos(double x, double y) {
   if (isImage) {
     // TODO
   } else {
-    iconText->setPosition(x*engine->scale,y*engine->scale);
+    iconText->setPosition(x,y);
   }
 }
 
