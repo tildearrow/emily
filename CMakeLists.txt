@@ -24,10 +24,12 @@ find_library(USE_XCB xcb)
 find_library(HAVE_FONTCONFIG fontconfig)
 endif (NOT APPLE)
 
+
 set(SOURCES src/funcs.cpp
             src/bitmap.cpp
             src/font.cpp
             src/string.cpp
+            src/icon.cpp
             
             src/skin/default.cpp
             
@@ -60,6 +62,7 @@ if (USE_XCB)
   target_compile_definitions(emily PUBLIC HAVE_FONTCONFIG)
 endif (USE_XCB)
 
+add_custom_command(TARGET emily WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/fa COMMAND xxd -i FontAwesome.otf > fa.h)
 target_link_libraries(emily sfml-graphics sfml-window sfml-system)
 if (UNIX)
   target_link_libraries(emily pthread)

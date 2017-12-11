@@ -5,6 +5,7 @@ extern "C" {
 #include "nsstub.h"
 }
 #endif
+#include "../fa/fa.h"
 
 double getScale() {
   char* env;
@@ -86,6 +87,7 @@ eEngine::eEngine(double w, double h) {
   if (defFont->loaddef(eFontDefault)==0) {
     eLogE("Error while loading default font.\n");
   }
+  iconFont.loadFromMemory(FontAwesome_otf,FontAwesome_otf_len);
 }
 
 int eEngine::setTitle(string t) {
@@ -278,6 +280,7 @@ int eEngine::grabMouse(bool status) {
 void eMainLoop(eEngine* eng) {
   eEvent ev;
   eFrame* curFrame;
+  eIcon* iii;
   int rVBTime, rPrevVBTime, rStartTime, rEndTime, avgVBTime;
 #ifdef ENABLE_WAIT
   int waitStart;
@@ -291,6 +294,7 @@ void eMainLoop(eEngine* eng) {
 #endif
   curFrame=NULL;
   wait=false;
+  iii=eng->newIcon(eIconTTY,16);
   while (1) {
     eng->preRender();
     rPrevVBTime=rVBTime;
@@ -366,6 +370,8 @@ void eMainLoop(eEngine* eng) {
       curFrame->widgets[i]->draw();
     }
     eng->drawColor({1,1,1,1});
+    iii->setPos(eng->estWaitTime/50,eng->estWaitTime/100);
+    iii->draw();
     //eng->line(0,0,eng->width,eng->height);
     if (eng->drawEndCallback!=NULL) {
       eng->drawEndCallback();
@@ -565,6 +571,15 @@ int eEngine::drawTexture(eTexture* tex, double x, double y) {
   /*
   return eDrawTexture(backInst,tex,x,y);
   */
+}
+
+eIcon* eEngine::newIcon(eIcons icon, double size) {
+  eIcon* ret;
+  ret=new eIcon;
+  ret->isImage=false;
+  ret->iconText=new sf::Text(sf::String((sf::Uint32)icon),iconFont,size*scale);
+  ret->engine=this;
+  return ret;
 }
 
 int eEngine::pause(double timeAsMicro) {

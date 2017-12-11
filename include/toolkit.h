@@ -203,15 +203,17 @@ class eFrame {
 };
 
 class eIcon {
+  friend class eEngine;
   bool isImage;
-  sf::Texture iconTex;
-  sf::Text iconText;
+  sf::Texture* iconTex;
+  sf::Text* iconText;
+  protected:
+    eEngine* engine;
   public:
-    int hasLoaded;
-    int draw(double x, double y);
-    eIcon(string path);
-    eIcon(eBitmap* bitmap);
-    eIcon(eIcons icon, double size);
+    ~eIcon();
+    int setPos(double x, double y);
+    int hasLoaded();
+    int draw();
 };
 
 #include "widgets/widgets.h"
@@ -233,10 +235,13 @@ class eMenuItem {
 
 class eContextMenu {
   std::vector<eMenuItem> items;
+  protected:
+    eEngine* engine;
   public:
     int addItem(eMenuItem item);
     int removeItem(int index);
     int itemCount();
+    int draw();
 };
 
 class eEngine {
@@ -269,6 +274,7 @@ class eEngine {
   float estWaitTime;
   eColor drawCol;
   eFont* defFont;
+  sf::Font iconFont;
 #ifdef __unix__
   Display* x11conn;
 #endif
@@ -279,6 +285,7 @@ class eEngine {
   friend class eFrameView;
   friend class eSlider;
   friend class eSkin;
+  friend class eIcon;
   int nextEvent(eEvent& ev, bool wait);
   protected:
     sf::RenderWindow* win;
@@ -287,6 +294,7 @@ class eEngine {
     XPT eEngine(double w, double h);
     XPT ~eEngine();
     XPT eFont* newFont();
+    XPT eIcon* newIcon(eIcons icon, double size);
     XPT int setPreEventCallback(unsigned char event, void ((*callback)(const eEvent*)));
     XPT int setPostEventCallback(unsigned char event, void ((*callback)(const eEvent*)));
     XPT int setPreDrawCallback(void ((*callback)()));
