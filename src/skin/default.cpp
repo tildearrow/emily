@@ -52,11 +52,9 @@ sf::Texture* eSkin::getTexture(int objectType, int attrib[8], int w, int h, doub
         retBitmap=new eBitmap(w*engine->scale*3,h*engine->scale);
         bitmap=new eBitmap(w*engine->scale,h*engine->scale);
         bitmap1=new eBitmap(w*engine->scale,h*engine->scale);
-        retBitmap->clear();
         
         // NORMAL BEGIN //
-        bitmap->clear();
-        bitmap->rect(0,0,w*engine->scale,h*engine->scale,temp1);
+        bitmap->clearToColor(temp1);
         bitmap->shadeVGrad(0,1,{1,1,1,1},{0.67,0.67,0.67,1});
         retBitmap->copyBlitOn(bitmap,0,0);
         // NORMAL END //
@@ -78,8 +76,7 @@ sf::Texture* eSkin::getTexture(int objectType, int attrib[8], int w, int h, doub
         // HIGHLIGHT END //
         
         // NORMAL BEGIN //
-        bitmap->clear();
-        bitmap->rect(0,0,w*engine->scale,h*engine->scale,temp1);
+        bitmap->clearToColor(temp1);
         bitmap->shadeVGrad(0,1,{0.75,0.75,0.75,1},{1,1,1,1});
         bitmap->blitOn(bitmap1,0,0);
         retBitmap->copyBlitOn(bitmap,2*w*engine->scale,0);

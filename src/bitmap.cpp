@@ -30,6 +30,16 @@ void eBitmap::clear() { OP_BEGIN
   OP_END("clear")
 }
 
+void eBitmap::clearToColor(eColor c) { OP_BEGIN
+  for (int i=0; i<width*height; i++) {
+    data[(i<<2)]=c.r;
+    data[1+(i<<2)]=c.g;
+    data[2+(i<<2)]=c.b;
+    data[3+(i<<2)]=c.a;
+  }
+  OP_END("clearToColor")
+}
+
 void eBitmap::copyBlitOn(eBitmap* src, int x, int y) { OP_BEGIN
   int tw, th;
   eColor* dataPix;
@@ -158,18 +168,23 @@ void eBitmap::shadeAlpha(float a) { OP_BEGIN
 
 void eBitmap::shadeHMGrad(eColor c1, eColor c2) { OP_BEGIN
   double gpos;
+  eColor toUse;
   for (int i=0; i<width/2; i++) {
     gpos=(((double)i*2/width));
+    toUse.r=c1.r+(c2.r-c1.r)*gpos;
+    toUse.g=c1.g+(c2.g-c1.g)*gpos;
+    toUse.b=c1.b+(c2.b-c1.b)*gpos;
+    toUse.a=c1.a+(c2.a-c1.a)*gpos;
     for (int j=0; j<height; j++) {
-      data[(j*width+i)<<2]*=c1.r+(c2.r-c1.r)*gpos;
-      data[1+((j*width+i)<<2)]*=c1.g+(c2.g-c1.g)*gpos;
-      data[2+((j*width+i)<<2)]*=c1.b+(c2.b-c1.b)*gpos;
-      data[3+((j*width+i)<<2)]*=c1.a+(c2.a-c1.a)*gpos;
+      data[(j*width+i)<<2]*=toUse.r;
+      data[1+((j*width+i)<<2)]*=toUse.g;
+      data[2+((j*width+i)<<2)]*=toUse.b;
+      data[3+((j*width+i)<<2)]*=toUse.a;
       
-      data[(j*width+(width-i-1))<<2]*=c1.r+(c2.r-c1.r)*gpos;
-      data[1+((j*width+(width-i-1))<<2)]*=c1.g+(c2.g-c1.g)*gpos;
-      data[2+((j*width+(width-i-1))<<2)]*=c1.b+(c2.b-c1.b)*gpos;
-      data[3+((j*width+(width-i-1))<<2)]*=c1.a+(c2.a-c1.a)*gpos;
+      data[(j*width+(width-i-1))<<2]*=toUse.r;
+      data[1+((j*width+(width-i-1))<<2)]*=toUse.g;
+      data[2+((j*width+(width-i-1))<<2)]*=toUse.b;
+      data[3+((j*width+(width-i-1))<<2)]*=toUse.a;
     }
   }
   OP_END("shadeHMGrad")
@@ -178,6 +193,7 @@ void eBitmap::shadeHMGrad(eColor c1, eColor c2) { OP_BEGIN
 void eBitmap::shadeVGrad(double p1, double p2, eColor c1, eColor c2) { OP_BEGIN
   double gpos;
   eColor delta;
+  eColor toUse;
   delta.r=c2.r-c1.r;
   delta.g=c2.g-c1.g;
   delta.b=c2.b-c1.b;
@@ -195,11 +211,15 @@ void eBitmap::shadeVGrad(double p1, double p2, eColor c1, eColor c2) { OP_BEGIN
   }
   for (int j=p1*height; j<p2*height; j++) {
     gpos=(((double)j-(p1*height))/((p2-p1)*height));
+    toUse.r=c1.r+delta.r*gpos;
+    toUse.g=c1.g+delta.g*gpos;
+    toUse.b=c1.b+delta.b*gpos;
+    toUse.a=c1.a+delta.a*gpos;
     for (int i=0; i<width; i++) {
-      data[(j*width+i)<<2]*=c1.r+delta.r*gpos;
-      data[1+((j*width+i)<<2)]*=c1.g+delta.g*gpos;
-      data[2+((j*width+i)<<2)]*=c1.b+delta.b*gpos;
-      data[3+((j*width+i)<<2)]*=c1.a+delta.a*gpos;
+      data[(j*width+i)<<2]*=toUse.r;
+      data[1+((j*width+i)<<2)]*=toUse.g;
+      data[2+((j*width+i)<<2)]*=toUse.b;
+      data[3+((j*width+i)<<2)]*=toUse.a;
     }
   }
   for (int j=p2*height; j<height; j++) {

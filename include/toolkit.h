@@ -111,6 +111,7 @@ class eBitmap {
     float* data; // yes
     int pitch();
     void clear();
+    void clearToColor(eColor c);
     void roundRect(int x, int y, int w, int h, int r, eColor color);
     void circle(int x, int y, int r, eColor color);
     void rect(double x, double y, double w, double h, eColor color);
