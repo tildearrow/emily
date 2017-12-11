@@ -1,14 +1,36 @@
 #include "toolkit.h"
 
+//#define OP_PROF
+
+#ifdef OP_PROF
+
+#define OP_BEGIN \
+  int opBegin, opEnd; \
+  opBegin=perfCount();
+
+#define OP_END(name) \
+  opEnd=perfCount(); \
+  eLogD("%p "\
+        name\
+        ": %dns\n",this,opEnd-opBegin);
+  
+#else
+  
+#define OP_BEGIN ;
+#define OP_END(name) ;
+  
+#endif
+
 int eBitmap::pitch() {
   return width*4*sizeof(float);
 }
 
-void eBitmap::clear() {
+void eBitmap::clear() { OP_BEGIN
   memset(data,0,width*height*4*sizeof(float));
+  OP_END("clear")
 }
 
-void eBitmap::copyBlitOn(eBitmap* src, int x, int y) {
+void eBitmap::copyBlitOn(eBitmap* src, int x, int y) { OP_BEGIN
   int tw, th;
   eColor* dataPix;
   eColor* destin;
@@ -17,9 +39,10 @@ void eBitmap::copyBlitOn(eBitmap* src, int x, int y) {
   for (int j=0; j<th; j++) {
     memcpy(&data[(x+(y+j)*width)<<2],&src->data[(j*src->width)<<2],tw*4*sizeof(float));
   }
+  OP_END("copyBlitOn")
 }
 
-void eBitmap::blitOn(eBitmap* src, int x, int y) {
+void eBitmap::blitOn(eBitmap* src, int x, int y) { OP_BEGIN
   int tw, th;
   eColor* dataPix;
   eColor* destin;
@@ -40,9 +63,10 @@ void eBitmap::blitOn(eBitmap* src, int x, int y) {
       }
     }
   }
+  OP_END("blitOn")
 }
 
-void eBitmap::shadeGlowBack(int radius, int passes) {
+void eBitmap::shadeGlowBack(int radius, int passes, eColor col) { OP_BEGIN
   float accum, ksize, rksize;
   int bounded;
   float buffer[256];
@@ -51,36 +75,33 @@ void eBitmap::shadeGlowBack(int radius, int passes) {
   rksize=1/ksize;
   // clear bitmap
   for (int i=0; i<width*height; i++) {
-    data[i<<2]=1;
-    data[1+(i<<2)]=1;
-    data[2+(i<<2)]=1;
+    data[i<<2]=col.r;
+    data[1+(i<<2)]=col.g;
+    data[2+(i<<2)]=col.b;
   }
   if (radius==0) return;
   for (int h=0; h<passes; h++) {
     // horizontal
     for (int j=0; j<height; j++) {
       accum=0;
-      for (int i=0; i<256; i++) {
-        buffer[i]=0;
-      }
+      memset(buffer,0,256*sizeof(float));
       // prepare accumulator
-      for (int i=0; i<ksize; i++) {
-        if (i-radius<0) continue;
-        accum+=data[3+((j*width+i-radius)<<2)];
+      for (int i=0; i<radius+1; i++) {
+        accum+=data[3+((j*width+i)<<2)];
       }
       bufpos=0;
       for (int i=0; i<width-radius; i++) {
-        buffer[bufpos&255]=data[3+((j*width+i)<<2)];
+        buffer[(unsigned char)bufpos]=data[3+((j*width+i)<<2)];
         data[3+((j*width+i)<<2)]=accum*rksize*0.5;
-        accum-=buffer[(bufpos-radius)&255];
+        accum-=buffer[(unsigned char)(bufpos-radius)];
         accum+=data[3+((j*width+i+radius)<<2)];
         bufpos++;
         data[3+((j*width+i)<<2)]+=accum*rksize*0.5;
       }
       for (int i=width-radius; i<width; i++) {
-        buffer[bufpos&255]=data[3+((j*width+i)<<2)];
+        buffer[(unsigned char)bufpos]=data[3+((j*width+i)<<2)];
         data[3+((j*width+i)<<2)]=accum*rksize*0.5;
-        accum-=buffer[(bufpos-radius)&255];
+        accum-=buffer[(unsigned char)(bufpos-radius)];
         bufpos++;
         data[3+((j*width+i)<<2)]+=accum*rksize*0.5;
       }
@@ -88,51 +109,54 @@ void eBitmap::shadeGlowBack(int radius, int passes) {
     // vertical
     for (int j=0; j<width; j++) {
       accum=0;
-      for (int i=0; i<256; i++) {
-        buffer[i]=0;
-      }
+      memset(buffer,0,256*sizeof(float));
       // prepare accumulator
-      for (int i=0; i<ksize; i++) {
-        if (i-radius<0) continue;
-        accum+=data[3+((j+(i-radius)*width)<<2)];
+      for (int i=0; i<radius+1; i++) {
+        accum+=data[3+((j+(i)*width)<<2)];
       }
       bufpos=0;
       for (int i=0; i<height-radius; i++) {
-        buffer[bufpos&255]=data[3+((j+i*width)<<2)];
+        buffer[(unsigned char)bufpos]=data[3+((j+i*width)<<2)];
         data[3+((j+i*width)<<2)]=accum*rksize*0.5;
-        accum-=buffer[(bufpos-radius)&255];
+        accum-=buffer[(unsigned char)(bufpos-radius)];
         accum+=data[3+((j+(i+radius)*width)<<2)];
         bufpos++;
         data[3+((j+i*width)<<2)]+=accum*rksize*0.5;
       }
       for (int i=height-radius; i<height; i++) {
-        buffer[bufpos&255]=data[3+((j+i*width)<<2)];
+        buffer[(unsigned char)bufpos]=data[3+((j+i*width)<<2)];
         data[3+((j+i*width)<<2)]=accum*rksize*0.5;
-        accum-=buffer[(bufpos-radius)&255];
+        accum-=buffer[(unsigned char)(bufpos-radius)];
         bufpos++;
         data[3+((j+i*width)<<2)]+=accum*rksize*0.5;
       }
     }
   }
   shadeAlpha(1+((float)passes/(float)radius));
+  if (col.a!=1) {
+    shadeAlpha(col.a);
+  }
+  OP_END("shadeGlowBack")
 }
 
-void eBitmap::shadeColor(eColor c) {
+void eBitmap::shadeColor(eColor c) { OP_BEGIN
   for (int i=0; i<width*height; i++) {
     data[i<<2]*=c.r;
     data[1+(i<<2)]*=c.g;
     data[2+(i<<2)]*=c.b;
     data[3+(i<<2)]*=c.a;
   }
+  OP_END("shadeColor")
 }
 
-void eBitmap::shadeAlpha(float a) {
+void eBitmap::shadeAlpha(float a) { OP_BEGIN
   for (int i=0; i<width*height; i++) {
     data[3+(i<<2)]*=a;
   }
+  OP_END("shadeAlpha"); 
 }
 
-void eBitmap::shadeHMGrad(eColor c1, eColor c2) {
+void eBitmap::shadeHMGrad(eColor c1, eColor c2) { OP_BEGIN
   double gpos;
   for (int i=0; i<width/2; i++) {
     gpos=(((double)i*2/width));
@@ -148,10 +172,16 @@ void eBitmap::shadeHMGrad(eColor c1, eColor c2) {
       data[3+((j*width+(width-i-1))<<2)]*=c1.a+(c2.a-c1.a)*gpos;
     }
   }
+  OP_END("shadeHMGrad")
 }
 
-void eBitmap::shadeVGrad(double p1, double p2, eColor c1, eColor c2) {
+void eBitmap::shadeVGrad(double p1, double p2, eColor c1, eColor c2) { OP_BEGIN
   double gpos;
+  eColor delta;
+  delta.r=c2.r-c1.r;
+  delta.g=c2.g-c1.g;
+  delta.b=c2.b-c1.b;
+  delta.a=c2.a-c1.a;
   if (p1>p2) {
     return;
   }
@@ -166,10 +196,10 @@ void eBitmap::shadeVGrad(double p1, double p2, eColor c1, eColor c2) {
   for (int j=p1*height; j<p2*height; j++) {
     gpos=(((double)j-(p1*height))/((p2-p1)*height));
     for (int i=0; i<width; i++) {
-      data[(j*width+i)<<2]*=c1.r+(c2.r-c1.r)*gpos;
-      data[1+((j*width+i)<<2)]*=c1.g+(c2.g-c1.g)*gpos;
-      data[2+((j*width+i)<<2)]*=c1.b+(c2.b-c1.b)*gpos;
-      data[3+((j*width+i)<<2)]*=c1.a+(c2.a-c1.a)*gpos;
+      data[(j*width+i)<<2]*=c1.r+delta.r*gpos;
+      data[1+((j*width+i)<<2)]*=c1.g+delta.g*gpos;
+      data[2+((j*width+i)<<2)]*=c1.b+delta.b*gpos;
+      data[3+((j*width+i)<<2)]*=c1.a+delta.a*gpos;
     }
   }
   for (int j=p2*height; j<height; j++) {
@@ -180,9 +210,10 @@ void eBitmap::shadeVGrad(double p1, double p2, eColor c1, eColor c2) {
       data[3+((j*width+i)<<2)]*=c2.a;
     }
   }
+  OP_END("shadeVGrad")
 }
 
-void eBitmap::circle(int x, int y, int r, eColor color) {
+void eBitmap::circle(int x, int y, int r, eColor color) { OP_BEGIN
   int ffd, ax1, ay1, ax2, ay2;
   float* alphaMap;
   float k;
@@ -242,10 +273,12 @@ void eBitmap::circle(int x, int y, int r, eColor color) {
     }
   }
   delete[] alphaMap;
+  OP_END("circle")
 }
 
-void eBitmap::roundRect(int x, int y, int w, int h, int r, eColor color) {
+void eBitmap::roundRect(int x, int y, int w, int h, int r, eColor color) { OP_BEGIN
   int ffd, ax1, ay1, ax2, ay2;
+  int off;
   float* alphaMap;
   float k;
   ffd=ceil((float)r/1.414213562373095);
@@ -288,18 +321,39 @@ void eBitmap::roundRect(int x, int y, int w, int h, int r, eColor color) {
       alphaMap[w*(h-1-j)+w-1-i]=alphaMap[w*j+i];
     }
   }
-  for (int j=ay1; j<ay2; j++) {
-    for (int i=ax1; i<ax2; i++) {
-      data[((j+y)*width+x+i)<<2]+=(color.r-data[((j+y)*width+x+i)<<2])*color.a*alphaMap[w*j+i];
-      data[1+(((j+y)*width+x+i)<<2)]+=(color.g-data[1+(((j+y)*width+x+i)<<2)])*color.a*alphaMap[w*j+i];
-      data[2+(((j+y)*width+x+i)<<2)]+=(color.b-data[2+(((j+y)*width+x+i)<<2)])*color.a*alphaMap[w*j+i];
-      data[3+(((j+y)*width+x+i)<<2)]=(color.a*alphaMap[w*j+i])+(data[3+(((j+y)*width+x+i)<<2)]*(1-(color.a*alphaMap[w*j+i])));
+  if (color.a==1) {
+    for (int j=ay1; j<ay2; j++) {
+      for (int i=ax1; i<ax2; i++) {
+        off=((j+y)*width+x+i);
+        if (alphaMap[w*j+i]==1) {
+          data[off<<2]=color.r;
+          data[1+(off<<2)]=color.g;
+          data[2+(off<<2)]=color.b;
+          data[3+(off<<2)]=1;
+          continue;
+        }
+        data[off<<2]+=(color.r-data[off<<2])*alphaMap[w*j+i];
+        data[1+(off<<2)]+=(color.g-data[1+(off<<2)])*alphaMap[w*j+i];
+        data[2+(off<<2)]+=(color.b-data[2+(off<<2)])*alphaMap[w*j+i];
+        data[3+(off<<2)]=(alphaMap[w*j+i])+(data[3+(off<<2)]*(1-(alphaMap[w*j+i])));
+      }
+    }
+  } else {
+    for (int j=ay1; j<ay2; j++) {
+      for (int i=ax1; i<ax2; i++) {
+        off=((j+y)*width+x+i);
+        data[off<<2]+=(color.r-data[off<<2])*color.a*alphaMap[w*j+i];
+        data[1+(off<<2)]+=(color.g-data[1+(off<<2)])*color.a*alphaMap[w*j+i];
+        data[2+(off<<2)]+=(color.b-data[2+(off<<2)])*color.a*alphaMap[w*j+i];
+        data[3+(off<<2)]=(color.a*alphaMap[w*j+i])+(data[3+(off<<2)]*(1-(color.a*alphaMap[w*j+i])));
+      }
     }
   }
   delete[] alphaMap;
+  OP_END("roundRect")
 }
 
-void eBitmap::rect(double x, double y, double w, double h, eColor color) {
+void eBitmap::rect(double x, double y, double w, double h, eColor color) { OP_BEGIN
   int ax1, ay1, ax2, ay2;
   float lbi, rbi, tbi, bbi;
   if (color.a==0) return;
@@ -418,6 +472,7 @@ void eBitmap::rect(double x, double y, double w, double h, eColor color) {
       }
     }
   }
+  OP_END("rect")
 }
 
 sf::Texture* eBitmap::toTexture() {

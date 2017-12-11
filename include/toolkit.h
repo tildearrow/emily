@@ -114,7 +114,7 @@ class eBitmap {
     void roundRect(int x, int y, int w, int h, int r, eColor color);
     void circle(int x, int y, int r, eColor color);
     void rect(double x, double y, double w, double h, eColor color);
-    void shadeGlowBack(int radius, int passes);
+    void shadeGlowBack(int radius, int passes, eColor col);
     void shadeColor(eColor c);
     void shadeAlpha(float a);
     void shadeHMGrad(eColor c1, eColor c2);
