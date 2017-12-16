@@ -288,7 +288,6 @@ int eEngine::grabMouse(bool status) {
 void eMainLoop(eEngine* eng) {
   eEvent ev;
   eFrame* curFrame;
-  eIcon* iii;
   int rVBTime, rPrevVBTime, rStartTime, rEndTime, avgVBTime;
 #ifdef ENABLE_WAIT
   int waitStart;
@@ -302,7 +301,6 @@ void eMainLoop(eEngine* eng) {
 #endif
   curFrame=NULL;
   wait=false;
-  iii=eng->newIcon(eIconTTY,16);
   while (1) {
     eng->preRender();
     rPrevVBTime=rVBTime;
@@ -378,8 +376,6 @@ void eMainLoop(eEngine* eng) {
       curFrame->widgets[i]->draw();
     }
     eng->drawColor({1,1,1,1});
-    iii->setPos(eng->estWaitTime/50,eng->estWaitTime/100);
-    iii->draw();
     //eng->line(0,0,eng->width,eng->height);
     if (eng->drawEndCallback!=NULL) {
       eng->drawEndCallback();
