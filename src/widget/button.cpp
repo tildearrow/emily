@@ -9,7 +9,7 @@ int eButton::init() {
   tinst=NULL;
   leftClickCallback=NULL;
   icon=NULL;
-  regenGraphics=true;
+  _regenGraphics=true;
   setColor(engine->skin->getDefaultColor(eObjectButton));
   setSize(12,32);
   setStyle(eButtonNormal);
@@ -19,13 +19,13 @@ int eButton::init() {
 int eButton::setSize(double wi, double he) {
   w=wi;
   h=he;
-  regenGraphics=true;
+  _regenGraphics=true;
   return 1;
 }
 
 int eButton::setStyle(eButtonStyles style) {
   bstyle=style;
-  regenGraphics=true;
+  _regenGraphics=true;
   return 1;
 }
 
@@ -46,7 +46,7 @@ int eButton::setIcon(eIcons index, double size, eDirection placement) {
 
 int eButton::setColor(eColor col) {
   color=col;
-  regenGraphics=true;
+  _regenGraphics=true;
   return 1;
 }
 
@@ -76,7 +76,7 @@ int eButton::setCallback(void (*callback)()) {
 int eButton::draw() {
   int start, end;
   double wh;
-  if (regenGraphics) {
+  if (_regenGraphics) {
     if (tinst!=NULL) {
       delete tinst;
       tinst=NULL;
@@ -100,7 +100,7 @@ int eButton::draw() {
     sinstClick.setTexture(*tinst);
     sinstClick.setTextureRect(sf::IntRect(fw*2,0,fw,fh));
     sinstClick.setOrigin(sf::Vector2f(xo,yo));
-    regenGraphics=false;
+    _regenGraphics=false;
     
     printf("time: %d\n",end-start);
   }

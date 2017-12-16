@@ -184,6 +184,7 @@ class eWidget {
     XPT virtual int event(eEvent& ev);
     bool _relPending, _highPending, _collision;
     bool _wantsAllEvents; // widgets may set this one
+    bool _regenGraphics; // this one too
   public:
     double x, y;
     XPT virtual int init();

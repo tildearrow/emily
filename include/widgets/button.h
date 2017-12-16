@@ -22,7 +22,6 @@ class eButton: public eWidget {
   int bstyle;
   bool clicked;
   int atrList[8];
-  bool regenGraphics;
   char iconPlace;
   public:
     XPT int init();
