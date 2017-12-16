@@ -133,16 +133,35 @@ int eButton::draw() {
     engine->win->draw(sinstClick);
   }
   if (icon!=NULL) {
-    if (iconPlace==eLeft || iconPlace==eRight) {
-      wh=icon->width()+linst->getLocalBounds().width+3*engine->scale;
-      icon->setPos(x*engine->scale,(y)*engine->scale);
-      /*linst->setPosition((int)(((x+w/2)*engine->scale)-(wh)+icon->width()),
-                     (int)round((y+h/2)*engine->scale-(linst->getCharacterSize()*0.667)));*/
-      icon->draw();
+    switch (iconPlace) {
+      case eLeft:
+        wh=icon->width()+linst->getLocalBounds().width+iconSpacing*engine->scale;
+        icon->setPos((x+w/2)*engine->scale-wh/2,(y+h/2)*engine->scale-icon->height()/2);
+        linst->setPosition((int)(((x+w/2)*engine->scale)-(wh/2)+icon->width()+iconSpacing*engine->scale),
+                           (int)round((y+h/2)*engine->scale-(linst->getCharacterSize()*0.667)));
+        break;
+      case eRight:
+        wh=icon->width()+linst->getLocalBounds().width+iconSpacing*engine->scale;
+        icon->setPos((x+w/2)*engine->scale-wh/2+linst->getLocalBounds().width+iconSpacing*engine->scale,(y+h/2)*engine->scale-icon->height()/2);
+        linst->setPosition((int)(((x+w/2)*engine->scale)-(wh/2)),
+                           (int)round((y+h/2)*engine->scale-(linst->getCharacterSize()*0.667)));
+        break;
+      case eUp:
+        // TODO
+        break;
+      case eDown:
+        // TODO
+        break;
+      case eCenter:
+        icon->setPos((x+w/2)*engine->scale-icon->width()/2,(y+h/2)*engine->scale-icon->height()/2);
+        linst->setPosition((int)(((x+w/2)*engine->scale)-(linst->getLocalBounds().width/2)),
+                           (int)round((y+h/2)*engine->scale-(linst->getCharacterSize()*0.667)));
+        break;
     }
+    icon->draw();
   } else {
     linst->setPosition((int)(((x+w/2)*engine->scale)-(linst->getLocalBounds().width/2)),
-                     (int)round((y+h/2)*engine->scale-(linst->getCharacterSize()*0.667)));
+                       (int)round((y+h/2)*engine->scale-(linst->getCharacterSize()*0.667)));
   }
   engine->win->draw(*linst);
   return 0;

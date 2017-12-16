@@ -29,6 +29,8 @@
 #include <X11/Xlib.h>
 #endif
 #include "icons.h"
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 typedef std::string string;
 
@@ -91,7 +93,8 @@ enum eDirection {
   eRight=0,
   eUp,
   eLeft,
-  eDown
+  eDown,
+  eCenter
 };
 
 struct eEvent {
@@ -212,9 +215,8 @@ class eFrame {
 
 class eIcon {
   friend class eEngine;
-  bool isImage;
-  sf::Texture* iconTex;
-  sf::Text* iconText;
+  sf::Texture* iconT;
+  sf::Sprite iconS;
   protected:
     eEngine* engine;
     int charIndex;
@@ -288,7 +290,8 @@ class eEngine {
   float estWaitTime;
   eColor drawCol;
   eFont* defFont;
-  sf::Font iconFont;
+  FT_Library ftlib;
+  FT_Face iconFont;
 #ifdef __unix__
   Display* x11conn;
 #endif

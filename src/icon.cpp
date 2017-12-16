@@ -1,33 +1,21 @@
 #include "toolkit.h"
 
 eIcon::~eIcon() {
-  if (isImage) {
-    delete iconTex;
-  } else {
-    delete iconText;
-  }
+  delete iconT;
 }
 
 double eIcon::width() {
-  return iconText->getLocalBounds().width;
+  return charW;
 }
 
 double eIcon::height() {
-  return iconText->getLocalBounds().height;
+  return charH;
 }
 
 int eIcon::setPos(double x, double y) {
-  if (isImage) {
-    // TODO
-  } else {
-    iconText->setPosition(x,y);
-  }
+  iconS.setPosition(x,y);
 }
 
 int eIcon::draw() {
-  if (isImage) {
-    // TODO
-  } else {
-    engine->win->draw(*iconText);
-  }
+  engine->win->draw(iconS);
 }

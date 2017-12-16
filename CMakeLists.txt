@@ -17,13 +17,18 @@ else (BUILD_STATIC)
 endif (BUILD_STATIC)
 add_subdirectory(sfml)
 
-include_directories(include sfml/include)
+if (APPLE OR WIN32)
+  include_directories(include sfml/include sfml/extlibs/headers/freetype2)
+else (APPLE OR WIN32)
+  include_directories(include sfml/include /usr/include/freetype2)
+endif (APPLE OR WIN32)
 
 if (NOT APPLE)
 find_library(USE_XCB xcb)
 find_library(HAVE_FONTCONFIG fontconfig)
 endif (NOT APPLE)
 
+find_library(HAVE_FT2 freetype2)
 
 set(SOURCES src/funcs.cpp
             src/bitmap.cpp

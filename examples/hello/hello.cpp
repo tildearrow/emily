@@ -25,6 +25,7 @@ eColor getRandomColor() {
 void myOtherCallback() {
   printf("hello world!\n");
   but->setColor(getRandomColor());
+  but->setSize(80+(rand()%64),32+(rand()%64));
 }
 
 void myOtherCallbackF() {
@@ -64,7 +65,7 @@ int main(int argc, char** argv) {
   but->setLabel("Normal");
   but->setColor(getRandomColor());
   but->setSize(80,32);
-  but->setIcon(eIconAddressCard,24,eLeft);
+  but->setIcon(eIconAdjust,12,eLeft);
   but->setCallback(myOtherCallback);
   but->x=100;
   but->y=200;

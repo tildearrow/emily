@@ -3,6 +3,9 @@ enum eButtonStyles {
   eButtonFlat=1
 };
 
+// temporary
+#define iconSpacing 4
+
 class eButton: public eWidget {
   string label;
   eIcon* icon;

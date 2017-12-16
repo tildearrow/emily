@@ -67,6 +67,7 @@ double getScale() {
 }
 
 eEngine::eEngine(double w, double h) {
+  int status;
   scale=getScale();
   visible=false;
   title="Application";
@@ -87,7 +88,14 @@ eEngine::eEngine(double w, double h) {
   if (defFont->loaddef(eFontDefault)==0) {
     eLogE("Error while loading default font.\n");
   }
-  iconFont.loadFromMemory(FontAwesome_otf,FontAwesome_otf_len);
+  if (FT_Init_FreeType(&ftlib)) {
+    eLogE("Error while loading FreeType library.\n");
+  } else {
+    status=FT_New_Memory_Face(ftlib,FontAwesome_otf,FontAwesome_otf_len,0,&iconFont);
+    if (status) {
+      eLogE("Error while loading icon font.\n");
+    }
+  }
 }
 
 int eEngine::setTitle(string t) {
@@ -575,15 +583,34 @@ int eEngine::drawTexture(eTexture* tex, double x, double y) {
 
 eIcon* eEngine::newIcon(eIcons icon, double size) {
   eIcon* ret;
-  sf::Glyph gl;
+  int bsize;
+  unsigned char* expand;
+  FT_Set_Char_Size(iconFont,0,64*size,96*scale,96*scale);
+  if (FT_Load_Char(iconFont,icon,FT_LOAD_RENDER)) {
+    return NULL;
+  }
   ret=new eIcon;
-  ret->isImage=false;
   ret->charIndex=icon;
-  ret->iconText=new sf::Text(sf::String((sf::Uint32)icon),iconFont,size*scale);
+  bsize=iconFont->glyph->bitmap.width*iconFont->glyph->bitmap.rows;
+  expand=new unsigned char[bsize*4];
+  for (int i=0; i<bsize; i++) {
+    expand[(i<<2)]=255;
+    expand[1+(i<<2)]=255;
+    expand[2+(i<<2)]=255;
+    expand[3+(i<<2)]=iconFont->glyph->bitmap.buffer[i];
+  }
+  /* border debug
+  expand[3]=255;
+  expand[(bsize*4)-1]=255;
+  */
   ret->engine=this;
-  gl=iconFont.getGlyph(icon,size*scale,false);
-  ret->charW=gl.textureRect.width;
-  ret->charH=gl.textureRect.height;
+  ret->iconT=new sf::Texture;
+  ret->iconT->create(iconFont->glyph->bitmap.width,iconFont->glyph->bitmap.rows);
+  ret->iconT->update(expand);
+  ret->charW=iconFont->glyph->bitmap.width;
+  ret->charH=iconFont->glyph->bitmap.rows;
+  ret->iconS.setTexture(*ret->iconT);
+  delete[] expand;
   return ret;
 }
 
