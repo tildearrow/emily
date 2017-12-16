@@ -233,23 +233,30 @@ class eIcon {
 #include "widgets/widgets.h"
 
 class eMenuItem {
-  eIcon icon;
-  bool iconAfter, containsMore;
-  string text;
-  std::vector<eMenuItem> more;
-  void (*callback)();
+  friend class eEngine;
+  friend class eContextMenu;
+  protected:
+    bool iconAfter, containsMore;
+    string text;
+    std::vector<eMenuItem> more;
+    void (*callback)();
+    eIcon* icon;
   public:
     int addItem(eMenuItem item);
     int removeItem(int index);
     int itemCount();
     eMenuItem();
-    eMenuItem(eIcon icon, string text, void (*callback)());
+    eMenuItem(string text, void (*callback)());
+    eMenuItem(string text, string rtext, void (*callback)());
+    eMenuItem(eIcons icon, string text, void (*callback)());
+    eMenuItem(eIcons icon, string text, string rtext, void (*callback)());
     ~eMenuItem();
 };
 
 class eContextMenu {
-  std::vector<eMenuItem> items;
+  friend class eEngine;
   protected:
+    std::vector<eMenuItem> items;
     eEngine* engine;
   public:
     int addItem(eMenuItem item);
@@ -283,6 +290,7 @@ class eEngine {
   void postRender();
   std::stack<eFrame*> frameStack;
   std::vector<eTexture*> regTextures;
+  std::vector<eContextMenu*> openMenus;
   bool visible;
   string title;
   int width, height;
@@ -329,6 +337,8 @@ class eEngine {
     XPT eFrame* newFrame();
     XPT int pushFrame(eFrame* f);
     XPT int popFrame();
+    
+    XPT void popUpMenu(double x, double y, eContextMenu* menu);
     
     XPT void drawColor(eColor color);
     XPT void line(double x1, double y1, double x2, double y2);

@@ -332,6 +332,9 @@ void eMainLoop(eEngine* eng) {
           break;
         case eEventMouseButton:
         case eEventMouseMove:
+          if (!eng->openMenus.empty()) {
+            break;
+          }
           for (size_t i=0; i<curFrame->widgets.size(); i++) {
             curFrame->widgets[i]->_collision=ev.coord.x>curFrame->widgets[i]->x &&
                 ev.coord.x<curFrame->widgets[i]->x+curFrame->widgets[i]->w &&
@@ -374,6 +377,10 @@ void eMainLoop(eEngine* eng) {
     }
     for (size_t i=0; i<curFrame->widgets.size(); i++) {
       curFrame->widgets[i]->draw();
+    }
+    // draw menus if any
+    for (size_t i=0; i<eng->openMenus.size(); i++) {
+      eng->openMenus[i]->draw();
     }
     eng->drawColor({1,1,1,1});
     //eng->line(0,0,eng->width,eng->height);
@@ -455,6 +462,10 @@ int eEngine::pushFrame(eFrame* f) {
 int eEngine::popFrame() {
   frameStack.pop();
   return 1;
+}
+
+void eEngine::popUpMenu(double x, double y, eContextMenu* menu) {
+  openMenus.push_back(menu);
 }
 
 void eEngine::drawColor(eColor color) {

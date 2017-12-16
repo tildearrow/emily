@@ -38,7 +38,12 @@ void oneCallback() {
 }
 
 void twoCallback() {
+  eContextMenu* menu;
+  menu=new eContextMenu;
+  menu->addItem(eMenuItem("test 1",oneCallback));
+  menu->addItem(eMenuItem("test 2",oneCallback));
   printf("two\n");
+  gui->popUpMenu(0,0,menu);
 }
 
 void sineCallback() {
