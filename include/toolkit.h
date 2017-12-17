@@ -36,6 +36,8 @@ typedef std::string string;
 
 #define eBackSFML 0
 
+#define eAuto -1
+
 // for now
 // debug
 #define eLogD printf
@@ -239,8 +241,10 @@ class eMenuItem {
   protected:
     bool iconAfter, containsMore;
     string text;
+    sf::Text* dtext;
     std::vector<eMenuItem> more;
     void (*callback)();
+    int iconIndex;
     eIcon* icon;
   public:
     int addItem(eMenuItem item);
@@ -256,10 +260,14 @@ class eMenuItem {
 
 class eContextMenu {
   friend class eEngine;
+  friend void eMainLoop(eEngine* eng);
   protected:
     std::vector<eMenuItem> items;
     eEngine* engine;
+    double w, h;
+    int event(eEvent& ev);
   public:
+    double x, y;
     int addItem(eMenuItem item);
     int removeItem(int index);
     int itemCount();
@@ -297,6 +305,7 @@ class eEngine {
   int width, height;
   double scale;
   float estWaitTime;
+  double mouseX, mouseY;
   eColor drawCol;
   eFont* defFont;
   FT_Library ftlib;
@@ -312,6 +321,7 @@ class eEngine {
   friend class eSlider;
   friend class eSkin;
   friend class eIcon;
+  friend class eContextMenu;
   int nextEvent(eEvent& ev, bool wait);
   protected:
     sf::RenderWindow* win;
