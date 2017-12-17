@@ -265,6 +265,7 @@ class eContextMenu {
     std::vector<eMenuItem> items;
     eEngine* engine;
     double w, h;
+    bool wannaRetire;
     int event(eEvent& ev);
   public:
     double x, y;

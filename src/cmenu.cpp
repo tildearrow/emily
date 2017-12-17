@@ -18,6 +18,16 @@ int eContextMenu::itemCount() {
 }
 
 int eContextMenu::event(eEvent& ev) {
+  switch (ev.type) {
+    case eEventMouseButton:
+      if (ev.coord.x>x && ev.coord.x<x+h &&
+          ev.coord.y>y && ev.coord.y<y+h) {
+
+      } else {
+        wannaRetire=true;
+      }
+      break;
+  }
   printf("CM event\n");
 }
 

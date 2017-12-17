@@ -338,6 +338,12 @@ void eMainLoop(eEngine* eng) {
             for (size_t i=0; i<eng->openMenus.size(); i++) {
                eng->openMenus[i]->event(ev);
             }
+            for (size_t i=0; i<eng->openMenus.size(); i++) {
+               if (eng->openMenus[i]->wannaRetire) {
+                 eng->openMenus.erase(eng->openMenus.begin()+i);
+                 i--;
+               }
+            }
             break;
           }
           for (size_t i=0; i<curFrame->widgets.size(); i++) {
