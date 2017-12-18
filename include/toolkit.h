@@ -261,6 +261,7 @@ class eMenuItem {
 class eContextMenu {
   friend class eEngine;
   friend void eMainLoop(eEngine* eng);
+  int selected;
   protected:
     std::vector<eMenuItem> items;
     eEngine* engine;

@@ -344,7 +344,9 @@ void eMainLoop(eEngine* eng) {
                  i--;
                }
             }
-            break;
+            if (!eng->openMenus.empty()) {
+              break;
+            }
           }
           for (size_t i=0; i<curFrame->widgets.size(); i++) {
             curFrame->widgets[i]->_collision=ev.coord.x>curFrame->widgets[i]->x &&
@@ -479,6 +481,7 @@ void eEngine::popUpMenu(double x, double y, eContextMenu* menu) {
   openMenus.push_back(menu);
   // settle menu
   menu->engine=this;
+  menu->wannaRetire=false;
   if (x==eAuto) {
     menu->x=mouseX;
   } else {
