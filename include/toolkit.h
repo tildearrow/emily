@@ -196,11 +196,14 @@ class eWidget {
 
 class eFrame {
   eEngine* engine;
+  eWidget* parent;
   std::vector<eWidget*> widgets;
   friend void eMainLoop(eEngine* eng);
   friend class eEngine;
   friend class eFrameView;
   public:
+    XPT int getWidth();
+    XPT int getHeight();
     template<typename t> t* newWidget() {
       t* push=new t;
       push->engine=engine;
@@ -276,6 +279,48 @@ class eContextMenu {
     int draw();
 };
 
+class eAnimator {
+  friend class eEngine;
+  double pos;
+  bool dir;
+  double* varDouble;
+  float* varFloat;
+  int* varInt;
+  /* 0: double
+   * 1: float
+   * 2: int
+   */
+  int varType;
+  /* 0: jump middle
+   * 1: linear
+   * 2: accelerate
+   * 3: brake
+   * 4: accel+brake
+   * 5: sine
+   * by default 4.
+   */
+  int animType;
+  double animLength;
+  double animCurve;
+  /* 0: no
+   * 1: yes
+   * 2: ping pong
+   */
+  int animLoop;
+  protected:
+    eEngine* engine;
+  public:
+    int setTarget(double& target);
+    int setTarget(float& target);
+    int setTarget(int& target);
+    int setTarget();
+    int direction(bool backwards);
+    int play();
+    int stop();
+    int length(double len);
+    int jump(double pos);
+};
+
 XPT long long perfCount();
 
 class eEngine {
@@ -341,6 +386,8 @@ class eEngine {
     XPT int setPostDrawCallback(void ((*callback)()));
     XPT int setTitle(string t);
     XPT int setSize(int w, int h);
+    XPT int getWidth();
+    XPT int getHeight();
     XPT int grabMouse(bool status);
     XPT int show();
     XPT int run();

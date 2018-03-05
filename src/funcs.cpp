@@ -464,6 +464,7 @@ eFrame* eEngine::newFrame() {
   eFrame* ret;
   ret=new eFrame;
   ret->engine=this;
+  ret->parent=NULL;
   return ret;
 }
 
@@ -544,6 +545,29 @@ int eEngine::show() {
     return 1;
   }
   return 0;
+}
+
+int eFrame::getWidth() {
+  if (parent) {
+    return parent->w;
+  }
+  return engine->getWidth();
+}
+
+int eFrame::getHeight() {
+  if (parent) {
+    return parent->h;
+  }
+  return engine->getHeight();
+}
+
+
+int eEngine::getWidth() {
+  return width;
+}
+
+int eEngine::getHeight() {
+  return height;
 }
 
 eTexture* eEngine::getUnmanagedTexture(int width, int height, int type) {
