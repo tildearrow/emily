@@ -2,3 +2,4 @@
 #include "button.h"
 #include "frameview.h"
 #include "slider.h"
+#include "light.h"

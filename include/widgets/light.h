@@ -13,20 +13,22 @@ class eLight: public eWidget {
   double hue, saturation;
   float bright;
   float highlight;
-  void (*leftClickCallback)();
+  void (*clickCallback)();
   double xo, yo;
   int fw, fh;
   int bstyle;
   bool clicked;
+  bool invertLabel;
   int atrList[8];
   char iconPlace;
   public:
     XPT int init();
     XPT int setLabel(string data);
     XPT int setLabelSize(double size);
+    XPT int setLabelStyle(bool inverted);
     XPT int setIcon(eIcons index, double size, eDirection placement);
     XPT int setSize(double w, double h);
-    XPT int setStyle(eButtonStyles style);
+    XPT int setMaterial(eLightMaterials material);
     XPT int setColor(eColor col);
     XPT int event(eEvent& ev);
     XPT int setCallback(void (*callback)());
