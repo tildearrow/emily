@@ -13,6 +13,7 @@ eFrameView* fview;
 eButton* but1;
 eButton* but2;
 eSlider* slider;
+eDisplay* mdisp;
 
 unsigned char sineVal;
 
@@ -58,7 +59,7 @@ void updateLabel() {
 int main(int argc, char** argv) {
   gui=new eEngine(480,320);
   srand(perfCount());
-  gui->show();
+  mdisp=gui->defDisplay();
   frame=gui->newFrame();
   
   hello=frame->newWidget<eLabel>();
@@ -119,6 +120,6 @@ int main(int argc, char** argv) {
   fview->y=32;
   
   gui->setPreDrawCallback(sineCallback);
-  gui->pushFrame(frame);
+  mdisp->pushFrame(frame);
   return gui->run();
 }

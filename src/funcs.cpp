@@ -7,6 +7,8 @@ extern "C" {
 #endif
 #include "../fa/fa.h"
 
+#define ENABLE_WAIT
+
 double getScale() {
   char* env;
   // try with environment variable
@@ -66,14 +68,12 @@ double getScale() {
   return 1;
 }
 
-eEngine::eEngine(double w, double h) {
+eEngine::eEngine(string name) {
   int status;
   scale=getScale();
   visible=false;
-  title="Application";
+  title=name;
   estWaitTime=0;
-  width=w;
-  height=h;
   skin=new eSkin;
   skin->engine=this;
   for (int i=0; i<256; i++) {
@@ -302,6 +302,7 @@ void eMainLoop(eEngine* eng) {
   curFrame=NULL;
   wait=false;
   while (1) {
+    eng->win=eng->displays[0]->win;
     eng->preRender();
     rPrevVBTime=rVBTime;
     rVBTime=perfCount();
@@ -310,15 +311,17 @@ void eMainLoop(eEngine* eng) {
 #endif
     /* event processing */
     rStartTime=perfCount();
-    if (eng->frameStack.size()) {
-      curFrame=eng->frameStack.top();
+    if (eng->displays[0]->frameStack.size()) {
+      curFrame=eng->displays[0]->frameStack.top();
     }
 #ifdef ENABLE_WAIT
     if (--waitStart<=0) {
       wait=true;
+      eng->win->setVerticalSyncEnabled(false);
     }
 #endif
     while (eng->nextEvent(ev,wait)) {
+      eng->win->setVerticalSyncEnabled(true);
       wait=false;
 #ifdef ENABLE_WAIT
       waitStart=32;
@@ -401,6 +404,9 @@ void eMainLoop(eEngine* eng) {
       eng->drawEndCallback();
     }
     rEndTime=perfCount();
+    if (waitStart<=1) {
+      eng->win->setVerticalSyncEnabled(false);
+    }
     eng->postRender();
     if (eng->postDrawCallback!=NULL) {
       eng->postDrawCallback();
@@ -411,7 +417,8 @@ void eMainLoop(eEngine* eng) {
       eng->estWaitTime=fmin(eng->estWaitTime+100,avgVBTime-((rEndTime-rStartTime)/1000)-3000);
     }
     avgVBTime=((avgVBTime*15)+((rVBTime-rPrevVBTime)/1000))/16;
-    //printf("vblank %d wait %f\n",avgVBTime,eng->estWaitTime);
+    printf("VBTime: %d\n",(rVBTime-rPrevVBTime)/1000);
+    printf("vblank %d wait %f\n",avgVBTime,eng->estWaitTime);
     if (eng->estWaitTime<0) {
       eng->estWaitTime=0;
     }
@@ -469,12 +476,12 @@ eFrame* eEngine::newFrame() {
 }
 
 int eEngine::pushFrame(eFrame* f) {
-  frameStack.push(f);
+  displays[0]->frameStack.push(f);
   return 1;
 }
 
 int eEngine::popFrame() {
-  frameStack.pop();
+  displays[0]->frameStack.pop();
   return 1;
 }
 
@@ -534,40 +541,39 @@ void eEngine::frect(double x1, double y1, double x2, double y2) {
   win->draw(temp);
 }
 
-int eEngine::show() {
-  if (!visible) {
-    win=new sf::RenderWindow(sf::VideoMode(width*scale,height*scale),title,sf::Style::Titlebar|sf::Style::Close);
+eDisplay* eEngine::newDisplay(int width, int height) {
+  eDisplay* temp;
 #if defined(__unix__) && !defined(__APPLE__)
+  if (x11conn==NULL) {
     x11conn=XOpenDisplay(NULL);
-#endif
-    win->setVerticalSyncEnabled(true);
-    visible=true;
-    return 1;
   }
-  return 0;
+#endif
+  temp=new eDisplay;
+  temp->win=new sf::RenderWindow(sf::VideoMode(width*scale,height*scale),title,sf::Style::Titlebar|sf::Style::Close);
+  visible=true;
+  displays.push_back(temp);
+  return temp;
 }
 
 int eFrame::getWidth() {
   if (parent) {
     return parent->w;
   }
-  return engine->getWidth();
+  if (parentD) {
+    return parentD->getWidth();
+  }
+  return -1;
 }
 
 int eFrame::getHeight() {
   if (parent) {
     return parent->h;
   }
-  return engine->getHeight();
-}
-
-
-int eEngine::getWidth() {
-  return width;
-}
-
-int eEngine::getHeight() {
-  return height;
+  if (parentD) {
+    return parentD->getHeight();
+  }
+  return -1;
+  //return engine->getHeight();
 }
 
 eTexture* eEngine::getUnmanagedTexture(int width, int height, int type) {

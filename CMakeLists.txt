@@ -36,6 +36,7 @@ set(SOURCES src/funcs.cpp
             src/string.cpp
             src/icon.cpp
             src/cmenu.cpp
+            src/display.cpp
             
             src/skin/default.cpp
             

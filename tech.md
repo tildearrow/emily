@@ -69,3 +69,14 @@ OS X, Windows and non-Mesa are unconfirmed. maybe they don't schedule swaps but 
 1. send event to widgets that want to catch all keyboard events.
 
 2. send event to the currently selected widget.
+
+## tree
+
+```
+                 eEngine
+                    |
+           /-----------------\
+       eDisplay           eDisplay
+
+finish later.
+

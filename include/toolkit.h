@@ -116,6 +116,7 @@ struct eColor {
 string strFormat(const char* format, ...);
 
 class eEngine;
+class eDisplay;
 
 class eBitmap {
   public:
@@ -182,6 +183,7 @@ class eWidget {
   friend void eMainLoop(eEngine* eng);
   protected:
     eEngine* engine;
+    eFrame* parent;
     double w, h;
     XPT virtual int event(eEvent& ev);
     bool _relPending, _highPending, _collision;
@@ -197,6 +199,7 @@ class eWidget {
 class eFrame {
   eEngine* engine;
   eWidget* parent;
+  eDisplay* parentD;
   std::vector<eWidget*> widgets;
   friend void eMainLoop(eEngine* eng);
   friend class eEngine;
@@ -323,6 +326,20 @@ class eAnimator {
 
 XPT long long perfCount();
 
+class eDisplay {
+  friend class eEngine;
+  friend void eMainLoop(eEngine* eng);
+  int width, height;
+  sf::RenderWindow* win;
+  std::stack<eFrame*> frameStack;
+  public:
+    XPT int pushFrame(eFrame* f);
+    XPT int popFrame();
+    XPT int close();
+    XPT int getWidth();
+    XPT int getHeight();
+};
+
 class eEngine {
   /*void* (*createWin)(void**,const char*,int,int,int,int,bool);
   int (*eNextEvent)(void*,eEvent&);*/
@@ -344,12 +361,11 @@ class eEngine {
   */
   void preRender();
   void postRender();
-  std::stack<eFrame*> frameStack;
   std::vector<eTexture*> regTextures;
   std::vector<eContextMenu*> openMenus;
+  std::vector<eDisplay*> displays;
   bool visible;
   string title;
-  int width, height;
   double scale;
   float estWaitTime;
   double mouseX, mouseY;
@@ -374,7 +390,7 @@ class eEngine {
     sf::RenderWindow* win;
     eSkin* skin;
   public:
-    XPT eEngine(double w, double h);
+    XPT eEngine(string name="Application");
     XPT ~eEngine();
     XPT eFont* newFont();
     XPT eIcon* newIcon(eIcons icon, double size);
@@ -389,7 +405,7 @@ class eEngine {
     XPT int getWidth();
     XPT int getHeight();
     XPT int grabMouse(bool status);
-    XPT int show();
+    XPT eDisplay* newDisplay(int width, int height);
     XPT int run();
     XPT int runDetached();
     XPT int pause(double timeAsMicro);
