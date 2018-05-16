@@ -29,8 +29,10 @@
 #include <X11/Xlib.h>
 #endif
 #include "icons.h"
+#ifdef IS_LIBRARY
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#endif
 
 typedef std::string string;
 
@@ -403,8 +405,13 @@ class eEngine {
   double mouseX, mouseY;
   eColor drawCol;
   eFont* defFont;
+#ifdef IS_LIBRARY
   FT_Library ftlib;
   FT_Face iconFont;
+#else
+  void* ftlib;
+  void* iconFont;
+#endif
 #ifdef __unix__
   Display* x11conn;
 #endif
@@ -443,8 +450,6 @@ class eEngine {
     XPT int pause(double timeAsMicro);
 
     XPT eFrame* newFrame();
-    XPT int pushFrame(eFrame* f);
-    XPT int popFrame();
     
     XPT void popUpMenu(double x, double y, eContextMenu* menu);
     

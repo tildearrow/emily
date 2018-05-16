@@ -1,3 +1,4 @@
+#define IS_LIBRARY
 #include "toolkit.h"
 #ifdef __APPLE__
 #include <mach/mach_time.h>
@@ -474,16 +475,6 @@ eFrame* eEngine::newFrame() {
   ret->parent=NULL;
   ret->parentD=NULL;
   return ret;
-}
-
-int eEngine::pushFrame(eFrame* f) {
-  displays[0]->frameStack.push(f);
-  return 1;
-}
-
-int eEngine::popFrame() {
-  displays[0]->frameStack.pop();
-  return 1;
 }
 
 void eEngine::popUpMenu(double x, double y, eContextMenu* menu) {
