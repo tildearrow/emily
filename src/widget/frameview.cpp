@@ -28,6 +28,7 @@ int eFrameView::popFrame() {
 int eFrameView::setSize(double wi, double he) {
   w=wi;
   h=he;
+  calcBounds();
   return 1;
 }
 
@@ -69,7 +70,8 @@ int eFrameView::draw() {
   engine->rect(x,y,x+w,y+h);
   //view=engine->win->getDefaultView();
   view.reset(sf::FloatRect(0,0,(w)*engine->scale,(h)*engine->scale));
-  view.setViewport(sf::FloatRect((x/engine->width),(y/engine->height),(w/engine->width),(h/engine->height)));
+  // TO BE FIXED!
+  view.setViewport(sf::FloatRect((x/parent->parentD->getWidth()),(y/parent->parentD->getHeight()),(w/parent->parentD->getWidth()),(h/parent->parentD->getHeight())));
   engine->win->setView(view);
   for (size_t i=0; i<curFrame->widgets.size(); i++) {
     curFrame->widgets[i]->draw();

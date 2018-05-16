@@ -20,6 +20,7 @@ int eButton::setSize(double wi, double he) {
   w=wi;
   h=he;
   _regenGraphics=true;
+  calcBounds();
   return 1;
 }
 

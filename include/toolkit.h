@@ -99,6 +99,12 @@ enum eDirection {
   eCenter
 };
 
+#define eAlignLeft 0
+#define eAlignTop 0
+#define eAlignRight 1
+#define eAlignBottom 1
+#define eAlignCenter 0.5
+
 struct eEvent {
   unsigned char type;
   struct {
@@ -117,6 +123,7 @@ string strFormat(const char* format, ...);
 
 class eEngine;
 class eDisplay;
+class eFrame;
 
 class eBitmap {
   public:
@@ -179,20 +186,43 @@ class eSkin {
 
 class eWidget {
   friend class eFrame;
+  friend class eDisplay;
   friend class eFrameView;
   friend void eMainLoop(eEngine* eng);
   protected:
     eEngine* engine;
     eFrame* parent;
     double w, h;
+    double dX, dY;
+    double alignX, alignY;
+    double x, y;
+    double bTop, bBottom, bLeft, bRight;
     XPT virtual int event(eEvent& ev);
     bool _relPending, _highPending, _collision;
     bool _wantsAllEvents; // widgets may set this one
     bool _regenGraphics; // this one too
+    bool _recalcBounds;
+    virtual int calcBounds();
   public:
-    double x, y;
     XPT virtual int init();
     XPT virtual int setSize(double w, double h);
+    XPT double getX() {
+      return x;
+    }
+    XPT double getY() {
+      return y;
+    }
+    XPT void setX(double xp) {
+      x=xp; calcBounds();
+    }
+    XPT void setY(double yp) {
+      y=yp; calcBounds();
+    }
+    XPT void setPos(double xp, double yp) {
+      x=xp; y=yp; calcBounds();
+    }
+    XPT virtual int setDispPos(double x, double y);
+    XPT virtual int setAlign(double x, double y);
     XPT virtual int draw();
 };
 
@@ -203,6 +233,7 @@ class eFrame {
   std::vector<eWidget*> widgets;
   friend void eMainLoop(eEngine* eng);
   friend class eEngine;
+  friend class eDisplay;
   friend class eFrameView;
   public:
     XPT int getWidth();
@@ -210,6 +241,7 @@ class eFrame {
     template<typename t> t* newWidget() {
       t* push=new t;
       push->engine=engine;
+      push->parent=this;
       push->x=0;
       push->y=0;
       push->_collision=false;
@@ -329,7 +361,7 @@ XPT long long perfCount();
 class eDisplay {
   friend class eEngine;
   friend void eMainLoop(eEngine* eng);
-  int width, height;
+  int w, h;
   sf::RenderWindow* win;
   std::stack<eFrame*> frameStack;
   public:

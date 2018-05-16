@@ -73,6 +73,7 @@ int eSlider::setSize(double wi, double he) {
   tinstBack=engine->skin->getTexture(eObjectSliderB,atrList,w,engine->scale,&bxo,&byo,&bfw,&bfh);
   sinstBack.setTexture(*tinstBack);
   sinstBack.setOrigin(sf::Vector2f(bxo,byo));
+  calcBounds();
   return 1;
 }
 

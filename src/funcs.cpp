@@ -352,10 +352,10 @@ void eMainLoop(eEngine* eng) {
             }
           }
           for (size_t i=0; i<curFrame->widgets.size(); i++) {
-            curFrame->widgets[i]->_collision=ev.coord.x>curFrame->widgets[i]->x &&
-                ev.coord.x<curFrame->widgets[i]->x+curFrame->widgets[i]->w &&
-                ev.coord.y>curFrame->widgets[i]->y &&
-                ev.coord.y<curFrame->widgets[i]->y+curFrame->widgets[i]->h;
+            curFrame->widgets[i]->_collision=ev.coord.x>curFrame->widgets[i]->bLeft &&
+                ev.coord.x<curFrame->widgets[i]->bRight &&
+                ev.coord.y>curFrame->widgets[i]->bTop &&
+                ev.coord.y<curFrame->widgets[i]->bBottom;
             if ((ev.type==eEventMouseButton && curFrame->widgets[i]->_relPending) ||
                 (ev.type==eEventMouseMove && curFrame->widgets[i]->_highPending) ||
                 curFrame->widgets[i]->_collision ||
@@ -472,6 +472,7 @@ eFrame* eEngine::newFrame() {
   ret=new eFrame;
   ret->engine=this;
   ret->parent=NULL;
+  ret->parentD=NULL;
   return ret;
 }
 
@@ -551,6 +552,8 @@ eDisplay* eEngine::newDisplay(int width, int height) {
   temp=new eDisplay;
   temp->win=new sf::RenderWindow(sf::VideoMode(width*scale,height*scale),title,sf::Style::Titlebar|sf::Style::Close);
   visible=true;
+  temp->w=width;
+  temp->h=height;
   displays.push_back(temp);
   return temp;
 }
