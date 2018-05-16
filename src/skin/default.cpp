@@ -18,6 +18,11 @@ eColor eSkin::getDefaultColor(int objectType) {
       return temp;
       break;
   }
+  temp.r=0;
+  temp.g=0;
+  temp.b=0;
+  temp.a=1;
+  return temp;
 };
 
 sf::Texture* eSkin::getTexture(int objectType, int attrib[8], int w, int h, double* xo, double* yo, int* frameWidth, int* frameHeight) {
