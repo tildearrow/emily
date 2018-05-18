@@ -13,7 +13,7 @@ eFrameView* fview;
 eButton* but1;
 eButton* but2;
 eSlider* slider;
-eDisplay* mdisp;
+eVideoOut* mdisp;
 
 unsigned char sineVal;
 
@@ -59,7 +59,7 @@ void updateLabel() {
 int main(int argc, char** argv) {
   gui=new eEngine();
   srand(perfCount());
-  mdisp=gui->newDisplay(480,320);
+  mdisp=gui->newVideoOut(480,320);
   frame=gui->newFrame();
   
   hello=frame->newWidget<eLabel>();

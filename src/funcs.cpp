@@ -543,14 +543,14 @@ void eEngine::frect(double x1, double y1, double x2, double y2) {
   win->draw(temp);
 }
 
-eDisplay* eEngine::newDisplay(int width, int height) {
-  eDisplay* temp;
+eVideoOut* eEngine::newVideoOut(int width, int height) {
+  eVideoOut* temp;
 #if defined(__unix__) && !defined(__APPLE__)
   if (x11conn==NULL) {
     x11conn=XOpenDisplay(NULL);
   }
 #endif
-  temp=new eDisplay;
+  temp=new eVideoOut;
   temp->win=new sf::RenderWindow(sf::VideoMode(width*scale,height*scale),title,sf::Style::Titlebar|sf::Style::Close|sf::Style::Resize);
   visible=true;
   temp->w=width;

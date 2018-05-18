@@ -1,14 +1,14 @@
 #include "toolkit.h"
 
-int eDisplay::getWidth() {
+int eVideoOut::getWidth() {
   return w;
 }
 
-int eDisplay::getHeight() {
+int eVideoOut::getHeight() {
   return h;
 }
 
-int eDisplay::pushFrame(eFrame* f) {
+int eVideoOut::pushFrame(eFrame* f) {
   frameStack.push(f);
   f->parentD=this;
   printf("frame push\n");
@@ -18,7 +18,7 @@ int eDisplay::pushFrame(eFrame* f) {
   return 1;
 }
 
-int eDisplay::popFrame() {
+int eVideoOut::popFrame() {
   frameStack.top()->parentD=NULL;
   frameStack.pop();
   return 1;

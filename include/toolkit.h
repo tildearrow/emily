@@ -124,7 +124,7 @@ struct eColor {
 string strFormat(const char* format, ...);
 
 class eEngine;
-class eDisplay;
+class eVideoOut;
 class eFrame;
 
 class eBitmap {
@@ -188,7 +188,7 @@ class eSkin {
 
 class eWidget {
   friend class eFrame;
-  friend class eDisplay;
+  friend class eVideoOut;
   friend class eFrameView;
   friend void eMainLoop(eEngine* eng);
   protected:
@@ -231,11 +231,11 @@ class eWidget {
 class eFrame {
   eEngine* engine;
   eWidget* parent;
-  eDisplay* parentD;
+  eVideoOut* parentD;
   std::vector<eWidget*> widgets;
   friend void eMainLoop(eEngine* eng);
   friend class eEngine;
-  friend class eDisplay;
+  friend class eVideoOut;
   friend class eFrameView;
   public:
     XPT int getWidth();
@@ -360,7 +360,7 @@ class eAnimator {
 
 XPT long long perfCount();
 
-class eDisplay {
+class eVideoOut {
   friend class eEngine;
   friend void eMainLoop(eEngine* eng);
   double w, h;
@@ -397,7 +397,7 @@ class eEngine {
   void postRender();
   std::vector<eTexture*> regTextures;
   std::vector<eContextMenu*> openMenus;
-  std::vector<eDisplay*> displays;
+  std::vector<eVideoOut*> displays;
   bool visible;
   string title;
   double scale;
@@ -444,7 +444,7 @@ class eEngine {
     XPT int getWidth();
     XPT int getHeight();
     XPT int grabMouse(bool status);
-    XPT eDisplay* newDisplay(int width, int height);
+    XPT eVideoOut* newVideoOut(int width, int height);
     XPT int run();
     XPT int runDetached();
     XPT int pause(double timeAsMicro);
