@@ -76,6 +76,6 @@ int eFrameView::draw() {
   for (size_t i=0; i<curFrame->widgets.size(); i++) {
     curFrame->widgets[i]->draw();
   }
-  engine->win->setView(engine->win->getDefaultView());
+  engine->win->setView(sf::View(sf::FloatRect(0,0,parent->parentD->getWidth()*engine->scale,parent->parentD->getHeight()*engine->scale)));
   return 1;
 }

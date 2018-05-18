@@ -363,7 +363,7 @@ XPT long long perfCount();
 class eDisplay {
   friend class eEngine;
   friend void eMainLoop(eEngine* eng);
-  int w, h;
+  double w, h;
   sf::RenderWindow* win;
   std::stack<eFrame*> frameStack;
   public:

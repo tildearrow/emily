@@ -378,6 +378,16 @@ void eMainLoop(eEngine* eng) {
             }
           }
           break;
+        case eEventResize:
+          // handle resizing
+          eng->win->setView(sf::View(sf::FloatRect(0,0,ev.coord.x,ev.coord.y)));
+          eng->displays[0]->w=ev.coord.x/eng->scale;
+          eng->displays[0]->h=ev.coord.y/eng->scale;
+          printf("viewport\n");
+          for (int i=0; i<eng->displays[0]->frameStack.top()->widgets.size(); i++) {
+            eng->displays[0]->frameStack.top()->widgets[i]->calcBounds();
+          }
+          break;
         default:
           eLogD("got event %d\n",ev.type);
           break;
@@ -541,7 +551,7 @@ eDisplay* eEngine::newDisplay(int width, int height) {
   }
 #endif
   temp=new eDisplay;
-  temp->win=new sf::RenderWindow(sf::VideoMode(width*scale,height*scale),title,sf::Style::Titlebar|sf::Style::Close);
+  temp->win=new sf::RenderWindow(sf::VideoMode(width*scale,height*scale),title,sf::Style::Titlebar|sf::Style::Close|sf::Style::Resize);
   visible=true;
   temp->w=width;
   temp->h=height;

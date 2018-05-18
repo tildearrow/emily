@@ -80,7 +80,9 @@ int main(int argc, char** argv) {
   butf->setSize(80,32);
   butf->setStyle(eButtonFlat);
   butf->setCallback(myOtherCallbackF);
-  butf->setPos(300,200);
+  butf->setAlign(1,0);
+  butf->setDispPos(1,0);
+  butf->setPos(-10,10);
   
   slider=frame->newWidget<eSlider>();
   slider->setTrack(value);

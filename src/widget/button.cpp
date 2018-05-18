@@ -124,9 +124,9 @@ int eButton::draw() {
   engine->drawColor({1,1,1,1});
   engine->rect(x,y,x+w,y+h);
   */
-  sinst.setPosition(x*engine->scale,y*engine->scale);
-  sinstHigh.setPosition(x*engine->scale,y*engine->scale);
-  sinstClick.setPosition(x*engine->scale,y*engine->scale);
+  sinst.setPosition(bLeft*engine->scale,bTop*engine->scale);
+  sinstHigh.setPosition(bLeft*engine->scale,bTop*engine->scale);
+  sinstClick.setPosition(bLeft*engine->scale,bTop*engine->scale);
   engine->win->draw(sinst);
   sinstHigh.setColor(sf::Color(255,255,255,highlight*255));
   engine->win->draw(sinstHigh);
@@ -137,15 +137,15 @@ int eButton::draw() {
     switch (iconPlace) {
       case eLeft:
         wh=icon->width()+linst->getLocalBounds().width+iconSpacing*engine->scale;
-        icon->setPos((x+w/2)*engine->scale-wh/2,(y+h/2)*engine->scale-icon->height()/2);
-        linst->setPosition((int)(((x+w/2)*engine->scale)-(wh/2)+icon->width()+iconSpacing*engine->scale),
-                           (int)round((y+h/2)*engine->scale-(linst->getCharacterSize()*0.667)));
+        icon->setPos((bLeft+w/2)*engine->scale-wh/2,(bTop+h/2)*engine->scale-icon->height()/2);
+        linst->setPosition((int)(((bLeft+w/2)*engine->scale)-(wh/2)+icon->width()+iconSpacing*engine->scale),
+                           (int)round((bTop+h/2)*engine->scale-(linst->getCharacterSize()*0.667)));
         break;
       case eRight:
         wh=icon->width()+linst->getLocalBounds().width+iconSpacing*engine->scale;
-        icon->setPos((x+w/2)*engine->scale-wh/2+linst->getLocalBounds().width+iconSpacing*engine->scale,(y+h/2)*engine->scale-icon->height()/2);
-        linst->setPosition((int)(((x+w/2)*engine->scale)-(wh/2)),
-                           (int)round((y+h/2)*engine->scale-(linst->getCharacterSize()*0.667)));
+        icon->setPos((bLeft+w/2)*engine->scale-wh/2+linst->getLocalBounds().width+iconSpacing*engine->scale,(bTop+h/2)*engine->scale-icon->height()/2);
+        linst->setPosition((int)(((bLeft+w/2)*engine->scale)-(wh/2)),
+                           (int)round((bTop+h/2)*engine->scale-(linst->getCharacterSize()*0.667)));
         break;
       case eUp:
         // TODO
@@ -154,15 +154,15 @@ int eButton::draw() {
         // TODO
         break;
       case eCenter:
-        icon->setPos((x+w/2)*engine->scale-icon->width()/2,(y+h/2)*engine->scale-icon->height()/2);
-        linst->setPosition((int)(((x+w/2)*engine->scale)-(linst->getLocalBounds().width/2)),
-                           (int)round((y+h/2)*engine->scale-(linst->getCharacterSize()*0.667)));
+        icon->setPos((bLeft+w/2)*engine->scale-icon->width()/2,(bTop+h/2)*engine->scale-icon->height()/2);
+        linst->setPosition((int)(((bLeft+w/2)*engine->scale)-(linst->getLocalBounds().width/2)),
+                           (int)round((bTop+h/2)*engine->scale-(linst->getCharacterSize()*0.667)));
         break;
     }
     icon->draw();
   } else {
-    linst->setPosition((int)(((x+w/2)*engine->scale)-(linst->getLocalBounds().width/2)),
-                       (int)round((y+h/2)*engine->scale-(linst->getCharacterSize()*0.667)));
+    linst->setPosition((int)(((bLeft+w/2)*engine->scale)-(linst->getLocalBounds().width/2)),
+                       (int)round((bTop+h/2)*engine->scale-(linst->getCharacterSize()*0.667)));
   }
   engine->win->draw(*linst);
   return 0;
