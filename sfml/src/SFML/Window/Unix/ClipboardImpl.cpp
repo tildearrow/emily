@@ -65,6 +65,9 @@ void initClipboard()
     is_init = true;
 
     display = XOpenDisplay(NULL);
+    if (!display) {
+      is_init=false; return;
+    }
     int screen = DefaultScreen(display);
     window = XCreateSimpleWindow(display, RootWindow(display, screen),
         0, 0, 1, 1, 0, BlackPixel(display, screen), WhitePixel(display, screen));

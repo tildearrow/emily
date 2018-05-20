@@ -154,6 +154,7 @@ bool InputImpl::isKeyPressed(Keyboard::Key key)
 
     // Open a connection with the X server
     Display* display = OpenDisplay();
+    if (!display) return false;
 
     // Convert to keycode
     KeyCode keycode = XKeysymToKeycode(display, keysym);
@@ -191,6 +192,7 @@ bool InputImpl::isMouseButtonPressed(Mouse::Button button)
 {
     // Open a connection with the X server
     Display* display = OpenDisplay();
+    if (!display) return false;
 
     // we don't care about these but they are required
     ::Window root, child;
@@ -222,6 +224,7 @@ Vector2i InputImpl::getMousePosition()
 {
     // Open a connection with the X server
     Display* display = OpenDisplay();
+    if (!display) return Vector2i(-1,-1);
 
     // we don't care about these but they are required
     ::Window root, child;
@@ -247,6 +250,7 @@ Vector2i InputImpl::getMousePosition(const Window& relativeTo)
     {
         // Open a connection with the X server
         Display* display = OpenDisplay();
+        if (!display) return Vector2i(-1,-1);
 
         // we don't care about these but they are required
         ::Window root, child;
@@ -274,6 +278,7 @@ void InputImpl::setMousePosition(const Vector2i& position)
 {
     // Open a connection with the X server
     Display* display = OpenDisplay();
+    if (!display) return;
 
     XWarpPointer(display, None, DefaultRootWindow(display), 0, 0, 0, 0, position.x, position.y);
     XFlush(display);
@@ -288,6 +293,7 @@ void InputImpl::setMousePosition(const Vector2i& position, const Window& relativ
 {
     // Open a connection with the X server
     Display* display = OpenDisplay();
+    if (!display) return;
 
     WindowHandle handle = relativeTo.getSystemHandle();
     if (handle)

@@ -40,9 +40,13 @@ namespace priv
 
 ////////////////////////////////////////////////////////////
 CursorImpl::CursorImpl() :
-m_display(OpenDisplay()),
 m_cursor(None)
 {
+    m_display=OpenDisplay();
+    if (!m_display) {
+      fprintf(stderr,"and it is needed for this operation. we can't do anything as of now... exiting.\n");
+      exit(1);
+    }
     // That's it.
 }
 

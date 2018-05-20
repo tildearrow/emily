@@ -107,6 +107,10 @@ m_ownsWindow(false)
 
     // Open the connection with the X server
     m_display = OpenDisplay();
+    if (!m_display) {
+      fprintf(stderr,"and it is needed for this operation. we can't do anything as of now... exiting.\n");
+      exit(1);
+    }
 
     // Make sure that extensions are initialized
     ensureExtensionsInit(m_display, DefaultScreen(m_display));
@@ -132,6 +136,10 @@ m_ownsWindow(false)
 
     // Open the connection with the X server
     m_display = OpenDisplay();
+    if (!m_display) {
+      fprintf(stderr,"and it is needed for this operation. we can't do anything as of now... exiting.\n");
+      exit(1);
+    }
 
     // Make sure that extensions are initialized
     ensureExtensionsInit(m_display, DefaultScreen(m_display));
@@ -157,6 +165,10 @@ m_ownsWindow(false)
 
     // Open the connection with the X server
     m_display = OpenDisplay();
+    if (!m_display) {
+      fprintf(stderr,"and it is needed for this operation. we can't do anything as of now... exiting.\n");
+      exit(1);
+    }
 
     // Make sure that extensions are initialized
     ensureExtensionsInit(m_display, DefaultScreen(m_display));

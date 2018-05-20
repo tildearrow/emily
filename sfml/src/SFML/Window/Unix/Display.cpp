@@ -61,10 +61,11 @@ Display* OpenDisplay()
 
         // Opening display failed: The best we can do at the moment is to output a meaningful error message
         // and cause an abnormal program termination
+        // this is a little ugly, however.
         if (!sharedDisplay)
         {
             err() << "Failed to open X11 display; make sure the DISPLAY environment variable is set correctly" << std::endl;
-            std::abort();
+            return 0;
         }
     }
 
@@ -95,6 +96,7 @@ Atom getAtom(const std::string& name, bool onlyIfExists)
         return iter->second;
 
     Display* display = OpenDisplay();
+    if (!display) return None;
 
     Atom atom = XInternAtom(display, name.c_str(), onlyIfExists ? True : False);
 

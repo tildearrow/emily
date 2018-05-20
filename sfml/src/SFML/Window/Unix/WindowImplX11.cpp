@@ -151,6 +151,7 @@ namespace
             return false;
 
         ::Display* display = sf::priv::OpenDisplay();
+        if (!display) return false;
 
         Atom actualType;
         int actualFormat;
@@ -500,6 +501,10 @@ m_lastInputTime  (0)
 {
     // Open a connection with the X server
     m_display = OpenDisplay();
+    if (!m_display) {
+      fprintf(stderr,"and it is needed for this operation. we can't do anything as of now... exiting.\n");
+      exit(1);
+    }
 
     // Make sure to check for EWMH support before we do anything
     ewmhSupported();
@@ -548,6 +553,10 @@ m_lastInputTime  (0)
 {
     // Open a connection with the X server
     m_display = OpenDisplay();
+    if (!m_display) {
+      fprintf(stderr,"and it is needed for this operation. we can't do anything as of now... exiting.\n");
+      exit(1);
+    }
 
     // Make sure to check for EWMH support before we do anything
     ewmhSupported();
