@@ -1,6 +1,6 @@
 # emily
 
-this is tildearrow's own SFML-based UI toolkit, which will be used in taebron and future applications.
+this is tildearrow's own custom-SFML-based UI toolkit, which will be used in taebron and future applications.
 
 this toolkit isn't production ready, but don't worry, it will be soon.
 
