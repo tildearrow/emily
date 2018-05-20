@@ -271,6 +271,11 @@ void Window::setVisible(bool visible)
         m_impl->setVisible(visible);
 }
 
+////////////////////////////////////////////////////////////
+bool Window::waitVBlank()
+{
+  return m_context->waitVBlank();
+}
 
 ////////////////////////////////////////////////////////////
 void Window::setVerticalSyncEnabled(bool enabled)

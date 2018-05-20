@@ -209,6 +209,14 @@ public:
     virtual void display() = 0;
 
     ////////////////////////////////////////////////////////////
+    /// \brief wait for next
+    ///
+    /// yeah
+    ///
+    ////////////////////////////////////////////////////////////
+    virtual bool waitVBlank()=0;
+
+    ////////////////////////////////////////////////////////////
     /// \brief Enable or disable vertical synchronization
     ///
     /// Activating vertical synchronization will limit the number

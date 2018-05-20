@@ -271,6 +271,19 @@ void GlxContext::display()
 #endif
 }
 
+////////////////////////////////////////////////////////////
+bool GlxContext::waitVBlank()
+{
+    int result = 0;
+    int64_t cust, cmsc, csbc;
+
+    if (sfglx_ext_OML_sync_control == sfglx_LOAD_SUCCEEDED) {
+      glXGetSyncValuesOML(m_display,m_pbuffer?m_pbuffer:m_window,&cust,&cmsc,&csbc);
+      result=glXWaitForMscOML(m_display,m_pbuffer?m_pbuffer:m_window,csbc+1,1,0,&cust,&cmsc,&csbc);
+    }
+
+    return result;
+}
 
 ////////////////////////////////////////////////////////////
 void GlxContext::setVerticalSyncEnabled(bool enabled)

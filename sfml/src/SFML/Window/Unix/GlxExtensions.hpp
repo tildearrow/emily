@@ -141,6 +141,7 @@ typedef unsigned __int64 uint64_t;
 extern "C" {
 #endif // __cplusplus
 
+extern int sfglx_ext_OML_sync_control;
 extern int sfglx_ext_EXT_swap_control;
 extern int sfglx_ext_MESA_swap_control;
 extern int sfglx_ext_SGI_swap_control;
@@ -196,6 +197,14 @@ extern int sfglx_ext_ARB_create_context_profile;
 #define GLX_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB 0x00000002
 #define GLX_CONTEXT_CORE_PROFILE_BIT_ARB 0x00000001
 #define GLX_CONTEXT_PROFILE_MASK_ARB 0x9126
+
+#ifndef GLX_OML_sync_control
+#define GLX_OML_sync_control 1
+extern int (CODEGEN_FUNCPTR *sf_ptrc_glXGetSyncValuesOML)(Display*, GLXDrawable, int64_t*, int64_t*, int64_t*);
+extern int (CODEGEN_FUNCPTR *sf_ptrc_glXWaitForMscOML)(Display*, GLXDrawable, int64_t, int64_t, int64_t, int64_t*, int64_t*, int64_t*);
+#define glXGetSyncValuesOML sf_ptrc_glXGetSyncValuesOML
+#define glXWaitForMscOML sf_ptrc_glXWaitForMscOML
+#endif // GLX_OML_sync_control
 
 #ifndef GLX_EXT_swap_control
 #define GLX_EXT_swap_control 1

@@ -338,6 +338,29 @@ public:
     ///
     ////////////////////////////////////////////////////////////
     void setVerticalSyncEnabled(bool enabled);
+    
+////////////////////////////////////////////////////////////
+    /// \brief Check whether we have GLX_OML_sync_control
+    ///
+    /// Check for the presence of GLX_OML_sync_control, for
+    /// waitVBlank()
+    ///
+    /// \return Truth
+    ///
+    ////////////////////////////////////////////////////////////
+    bool canWaitForVBlank();
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Wait for the next vertical blanking interval
+    ///
+    /// This works around a Mesa issue where Adaptive V-Sync is
+    /// the only choice when requesting vertical sync, thereby
+    /// preventing power-saving due to catch-up.
+    ///
+    /// \return False if any error occurred
+    ///
+    ////////////////////////////////////////////////////////////
+    bool waitVBlank();
 
     ////////////////////////////////////////////////////////////
     /// \brief Show or hide the mouse cursor

@@ -298,7 +298,7 @@ void eMainLoop(eEngine* eng) {
   rVBTime=0;
   avgVBTime=0;
 #ifdef ENABLE_WAIT
-  waitStart=32;
+  waitStart=4;
 #endif
   curFrame=NULL;
   wait=false;
@@ -318,14 +318,14 @@ void eMainLoop(eEngine* eng) {
 #ifdef ENABLE_WAIT
     if (--waitStart<=0) {
       wait=true;
-      eng->win->setVerticalSyncEnabled(false);
+      //eng->win->setVerticalSyncEnabled(false);
     }
 #endif
     while (eng->nextEvent(ev,wait)) {
-      eng->win->setVerticalSyncEnabled(true);
+      //eng->win->setVerticalSyncEnabled(true);
       wait=false;
 #ifdef ENABLE_WAIT
-      waitStart=32;
+      waitStart=4;
 #endif
       if (eng->preEvCallback[ev.type]!=NULL) {
         eng->preEvCallback[ev.type](&ev);
@@ -415,9 +415,11 @@ void eMainLoop(eEngine* eng) {
       eng->drawEndCallback();
     }
     rEndTime=perfCount();
+    /*
     if (waitStart<=1) {
       eng->win->setVerticalSyncEnabled(false);
     }
+    */
     eng->postRender();
     if (eng->postDrawCallback!=NULL) {
       eng->postDrawCallback();
@@ -716,5 +718,7 @@ void eEngine::preRender() {
 }
 
 void eEngine::postRender() {
+  // wait then display
+  win->waitVBlank();
   win->display();
 }
