@@ -325,7 +325,7 @@ void eMainLoop(eEngine* eng) {
       //eng->win->setVerticalSyncEnabled(true);
       wait=false;
 #ifdef ENABLE_WAIT
-      waitStart=4;
+      //waitStart=4;
 #endif
       if (eng->preEvCallback[ev.type]!=NULL) {
         eng->preEvCallback[ev.type](&ev);
@@ -374,7 +374,9 @@ void eMainLoop(eEngine* eng) {
                   curFrame->widgets[i]->_highPending=false;
                 }
               }
-              curFrame->widgets[i]->event(ev);
+              if (curFrame->widgets[i]->event(ev)) {
+                waitStart=4;
+              }
             }
           }
           break;
@@ -387,6 +389,7 @@ void eMainLoop(eEngine* eng) {
           for (int i=0; i<eng->displays[0]->frameStack.top()->widgets.size(); i++) {
             eng->displays[0]->frameStack.top()->widgets[i]->calcBounds();
           }
+          waitStart=4;
           break;
         default:
           eLogD("got event %d\n",ev.type);
@@ -396,6 +399,7 @@ void eMainLoop(eEngine* eng) {
         eng->postEvCallback[ev.type](&ev);
       }
     }
+    if (waitStart<=0) continue;
     if (eng->preDrawCallback!=NULL) {
       eng->preDrawCallback();
     }
@@ -403,7 +407,9 @@ void eMainLoop(eEngine* eng) {
       eng->drawStartCallback();
     }
     for (size_t i=0; i<curFrame->widgets.size(); i++) {
-      curFrame->widgets[i]->draw();
+      if (curFrame->widgets[i]->draw()) {
+        waitStart=4;
+      }
     }
     // draw menus if any
     for (size_t i=0; i<eng->openMenus.size(); i++) {

@@ -66,6 +66,8 @@ int eFrameView::event(eEvent& ev) {
 }
 
 int eFrameView::draw() {
+  int accum;
+  accum=0;
   curFrame=frameStack.top();
   engine->rect(x,y,x+w,y+h);
   //view=engine->win->getDefaultView();
@@ -74,8 +76,8 @@ int eFrameView::draw() {
   view.setViewport(sf::FloatRect((x/parent->parentD->getWidth()),(y/parent->parentD->getHeight()),(w/parent->parentD->getWidth()),(h/parent->parentD->getHeight())));
   engine->win->setView(view);
   for (size_t i=0; i<curFrame->widgets.size(); i++) {
-    curFrame->widgets[i]->draw();
+    accum+=curFrame->widgets[i]->draw();
   }
   engine->win->setView(sf::View(sf::FloatRect(0,0,parent->parentD->getWidth()*engine->scale,parent->parentD->getHeight()*engine->scale)));
-  return 1;
+  return accum;
 }

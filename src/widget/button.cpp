@@ -165,5 +165,8 @@ int eButton::draw() {
                        (int)round((bTop+h/2)*engine->scale-(linst->getCharacterSize()*0.667)));
   }
   engine->win->draw(*linst);
+  if (highlight>0 && highlight<1) {
+    return 1;
+  }
   return 0;
 }
