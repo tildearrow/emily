@@ -773,9 +773,14 @@ WindowHandle WindowImplX11::getSystemHandle() const
 
 
 ////////////////////////////////////////////////////////////
-void WindowImplX11::processEvents()
+void WindowImplX11::processEvents(bool wait)
 {
     XEvent event;
+
+    // Wait for an event
+    if (wait) {
+      XPeekEvent(m_display, &event);
+    }
 
     // Pick out the events that are interesting for this window
     while (XCheckIfEvent(m_display, &event, &checkEvent, reinterpret_cast<XPointer>(m_window)))
@@ -1051,7 +1056,7 @@ void WindowImplX11::setVisible(bool visible)
         // Before continuing, make sure the WM has
         // internally marked the window as viewable
         while (!m_windowMapped && !m_isExternal)
-            processEvents();
+            processEvents(false);
     }
     else
     {
@@ -1062,7 +1067,7 @@ void WindowImplX11::setVisible(bool visible)
         // Before continuing, make sure the WM has
         // internally marked the window as unviewable
         while (m_windowMapped && !m_isExternal)
-            processEvents();
+            processEvents(false);
     }
 }
 

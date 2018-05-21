@@ -118,9 +118,9 @@ bool WindowImpl::popEvent(Event& event, bool block)
     if (m_events.empty())
     {
         // Get events from the system
-        processJoystickEvents();
-        processSensorEvents();
-        processEvents();
+        //processJoystickEvents();
+        //processSensorEvents();
+        processEvents(false);
 
         // In blocking mode, we must process events until one is triggered
         if (block)
@@ -128,12 +128,15 @@ bool WindowImpl::popEvent(Event& event, bool block)
             // Here we use a manual wait loop instead of the optimized
             // wait-event provided by the OS, so that we don't skip joystick
             // events (which require polling)
+            //
+            // no, we don't. emily needs optimization!
             while (m_events.empty())
             {
-                sleep(milliseconds(10));
-                processJoystickEvents();
-                processSensorEvents();
-                processEvents();
+printf("In blocking mode\n");
+                //sleep(milliseconds(10));
+                //processJoystickEvents();
+                //processSensorEvents();
+                processEvents(true);
             }
         }
     }
