@@ -28,7 +28,11 @@ find_library(USE_XCB xcb)
 find_library(HAVE_FONTCONFIG fontconfig)
 endif (NOT APPLE)
 
-find_library(HAVE_FT2 freetype2)
+find_library(HAVE_FT2 freetype PATHS sfml/extlibs)
+
+if (NOT HAVE_FT2)
+  message("you don't have freetype2. this is a problem.")
+endif (NOT HAVE_FT2)
 
 set(SOURCES src/funcs.cpp
             src/bitmap.cpp
@@ -70,7 +74,7 @@ if (USE_XCB)
 endif (USE_XCB)
 
 add_custom_command(TARGET emily WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/fa COMMAND xxd -i FontAwesome.otf > fa.h)
-target_link_libraries(emily sfml-graphics sfml-window sfml-system)
+target_link_libraries(emily sfml-graphics sfml-window sfml-system ${HAVE_FT2})
 if (UNIX)
   target_link_libraries(emily pthread)
 endif (UNIX)

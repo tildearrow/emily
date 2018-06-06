@@ -358,7 +358,7 @@ protected:
     /// \brief Process incoming events from the operating system
     ///
     ////////////////////////////////////////////////////////////
-    virtual void processEvents();
+    virtual void processEvents(bool wait);
 
 private:
 

@@ -226,7 +226,7 @@ endif()
 
 # define the sfml-window target
 sfml_add_library(sfml-window
-                 SOURCES ${SRC} ${PLATFORM_SRC})
+                 SOURCES ${PLATFORM_SRC} ${SRC})
 target_link_libraries(sfml-window PUBLIC sfml-system)
 
 # find and setup usage for external libraries

@@ -152,6 +152,9 @@ void SFContext::display()
     [m_context flushBuffer];
 }
 
+bool SFContext::waitVBlank() {
+  return true; // do nothing since macOS behaves correctly
+}
 
 ////////////////////////////////////////////////////////////
 void SFContext::setVerticalSyncEnabled(bool enabled)

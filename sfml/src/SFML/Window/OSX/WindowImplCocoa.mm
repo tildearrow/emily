@@ -392,7 +392,7 @@ void WindowImplCocoa::textEntered(unichar charcode)
 #pragma mark WindowImplCocoa's event-related methods
 
 ////////////////////////////////////////////////////////////
-void WindowImplCocoa::processEvents()
+void WindowImplCocoa::processEvents(bool wait)
 {
     [m_delegate processEvent];
     drainThreadPool(); // Reduce memory footprint
