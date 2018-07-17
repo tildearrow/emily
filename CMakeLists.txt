@@ -8,6 +8,9 @@ set(CMAKE_CXX_STANDARD 11)
 option(BUILD_STATIC "build static library instead" OFF)
 option(BUILD_EXAMPLES "build sample programs" ON)
 
+# legacy. it has always worked well.
+# heck, it is not even legacy. you're just ignoring AMD here.
+set(OpenGL_GL_PREFERENCE "LEGACY")
 set(SFML_BUILD_AUDIO FALSE)
 set(SFML_BUILD_NETWORK FALSE)
 if (BUILD_STATIC)
