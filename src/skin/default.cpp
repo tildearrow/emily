@@ -201,6 +201,16 @@ sf::Texture* eSkin::getTexture(int objectType, int attrib[8], int w, int h, doub
       }
       return ret;
       break;
+    case eObjectLight:
+      retBitmap=new eBitmap(w*engine->scale*2,h*engine->scale);
+      retBitmap->clearToColor({1,1,1,1});
+      *xo=0;
+      *yo=0;
+      *frameWidth=w*engine->scale;
+      *frameHeight=h*engine->scale;
+      ret=retBitmap->toTexture();
+      return ret;
+      break;
     case eObjectSliderH:
       temp1=*(eColor*)attrib;
       temp1.r*=1.5;

@@ -9,8 +9,8 @@ int eLight::init() {
   tinst=NULL;
   icon=NULL;
   _regenGraphics=true;
-  setColor(engine->skin->getDefaultColor(eObjectButton));
-  setSize(12,32);
+  matLight=0.05;
+  setSize(32,32);
   //setStyle(eLightNormal);
   return 1;
 }
@@ -46,21 +46,22 @@ int eLight::setIcon(eIcons index, double size, eDirection placement) {
   return 1;
 }
 
-int eLight::setColor(eColor col) {
-  //color=col;
-  _regenGraphics=true;
-  return 1;
-}
-
 int eLight::event(eEvent& ev) {
   if (ev.type==eEventMouseButton) {
     if (ev.state==1) {
       clicked=true;
+      if (mouseClickCallback!=NULL) {
+        mouseClickCallback(this,ev.input);
+      }
     } else {
       if (clicked) {
         if (_collision) {
-          if (mouseClickCallback!=NULL) {
-            mouseClickCallback(this,ev.input);
+          if (mouseClickAltCallback!=NULL) {
+            mouseClickAltCallback(this,ev.input);
+          }
+        } else {
+          if (mouseClickCancelCallback!=NULL) {
+            mouseClickCancelCallback(this,ev.input);
           }
         }
         clicked=false;
@@ -81,27 +82,23 @@ int eLight::draw() {
   int start, end;
   double wh;
   if (_regenGraphics) {
-    /*
     if (tinst!=NULL) {
       delete tinst;
       tinst=NULL;
     }
-    ((eColor*)atrList)->r=color.r;
-    ((eColor*)atrList)->g=color.g;
-    ((eColor*)atrList)->b=color.b;
-    ((eColor*)atrList)->a=color.a;
-    atrList[4]=bstyle;
+    ((float*)atrList)[0]=matLight;
+    ((int*)atrList)[1]=material;
     start=perfCount();
-    tinst=engine->skin->getTexture(eObjectButton,atrList,w,h,&xo,&yo,&fw,&fh);
+    tinst=engine->skin->getTexture(eObjectLight,atrList,w,h,&xo,&yo,&fw,&fh);
     end=perfCount();
     sinst.setTexture(*tinst);
     sinst.setTextureRect(sf::IntRect(0,0,fw,fh));
-    sinst.setOrigin(sf::Vector2f(xo,yo));*/
+    sinst.setOrigin(sf::Vector2f(xo,yo));
   
+    sinstLight.setTexture(*tinst);
+    sinstLight.setTextureRect(sf::IntRect(fw,0,fw,fh));
+    sinstLight.setOrigin(sf::Vector2f(xo,yo));
     /*
-    sinstHigh.setTexture(*tinst);
-    sinstHigh.setTextureRect(sf::IntRect(fw,0,fw,fh));
-    sinstHigh.setOrigin(sf::Vector2f(xo,yo));
     
     sinstClick.setTexture(*tinst);
     sinstClick.setTextureRect(sf::IntRect(fw*2,0,fw,fh));

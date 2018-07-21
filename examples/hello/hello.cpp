@@ -14,6 +14,7 @@ eButton* but1;
 eButton* but2;
 eSlider* slider;
 eVideoOut* mdisp;
+eLight* light;
 
 unsigned char sineVal;
 
@@ -113,6 +114,13 @@ int main(int argc, char** argv) {
   fview->setSize(256,40);
   fview->pushFrame(frame1);
   fview->setPos(32,32);
+  
+  light=frame->newWidget<eLight>();
+  light->setSize(48,48);
+  light->setClickCallback(myOtherCallback);
+  light->setClickCancelCallback(myOtherCallback);
+  light->setClickAltCallback(myOtherCallbackF);
+  light->setPos(256,256);
   
   gui->setPreDrawCallback(sineCallback);
   mdisp->pushFrame(frame);

@@ -69,7 +69,7 @@ double getScale() {
   return 1;
 }
 
-eEngine::eEngine(string name) {
+eEngine::eEngine(string name): x11conn(NULL) {
   int status;
   scale=getScale();
   visible=false;

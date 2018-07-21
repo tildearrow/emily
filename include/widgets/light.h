@@ -13,9 +13,10 @@ class eLight: public eWidget {
   double hue, saturation;
   float bright;
   float highlight;
+  float matLight;
   double xo, yo;
   int fw, fh;
-  int bstyle;
+  int material;
   bool clicked;
   bool invertLabel;
   int atrList[8];
@@ -28,7 +29,9 @@ class eLight: public eWidget {
     XPT int setIcon(eIcons index, double size, eDirection placement);
     XPT int setSize(double w, double h);
     XPT int setMaterial(eLightMaterials material);
-    XPT int setColor(eColor col);
+    XPT int setMaterialProps(float light);
+    XPT int setLightProps(double hue, double saturation);
+    XPT int setLight(float bright);
     XPT int event(eEvent& ev);
     XPT int update();
     XPT int draw();

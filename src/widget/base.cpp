@@ -9,7 +9,6 @@ int eWidget::calcBounds() {
   bBottom=bTop+h;
   bLeft=dX*parent->getWidth()+x-w*alignX;
   bRight=bLeft+w;
-  printf("%f %f %f %f\n",bTop,bBottom,bLeft,bRight);
   return 1;
 }
 

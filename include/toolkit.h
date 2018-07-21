@@ -274,6 +274,7 @@ class eWidget {
     XPT virtual int setDispPos(double x, double y);
     XPT virtual int setAlign(double x, double y);
     XPT virtual int draw();
+    eWidget(): dX(0), dY(0), w(0), h(0), alignX(0), alignY(0), x(0), y(0) {}
 };
 
 class eFrame {
@@ -314,7 +315,7 @@ class eIcon {
     double charW, charH;
   public:
     ~eIcon();
-    int setPos(double x, double y);
+    void setPos(double x, double y);
     int hasLoaded();
     double width();
     double height();

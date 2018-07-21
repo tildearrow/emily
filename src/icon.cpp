@@ -12,7 +12,7 @@ double eIcon::height() {
   return charH;
 }
 
-int eIcon::setPos(double x, double y) {
+void eIcon::setPos(double x, double y) {
   iconS.setPosition(x,y);
 }
 
