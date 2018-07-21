@@ -7,7 +7,6 @@ class eButton: public eWidget {
   sf::Sprite sinstClick;
   eColor color;
   float highlight;
-  void (*leftClickCallback)();
   double xo, yo;
   int fw, fh;
   bool clicked;
@@ -18,7 +17,6 @@ class eButton: public eWidget {
     XPT int setSize(double w, double h);
     XPT int setColor(eColor col);
     XPT int event(eEvent& ev);
-    XPT int setCallback(void (*callback)());
     XPT int update();
     XPT int draw();
 };

@@ -1,5 +1,17 @@
 #ifndef _TOOLKIT_H
 #define _TOOLKIT_H
+
+#define eMakeVer(x,y,z) \
+  (x<<24|y<<16|z)
+
+/* VERSION INFORMATION!
+ * 
+ * API versions before 1.0 are unstable!
+ * please wait until I finish this toolkit so you can begin
+ * to use it. yes, I aim for API compatibility for once!
+ */
+#define EMILY_API_VER eMakeVer(0,1,0)
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -166,11 +178,14 @@ class eFont {
 enum eObjectTypes {
   /* attrib list for eObjectButton:
    * [0-3]=(eColor)buttonColor,
-   * [4]=buttonType (0: normal, 1: flat)
+   * [4]=buttonType (0: normal, 1: flat, 2: icon-only)
+   * 
+   * attrib list for e
    */
   eObjectButton=0,
   eObjectSliderB,
-  eObjectSliderH
+  eObjectSliderH,
+  eObjectLight
 };
 
 class eSkin {
@@ -205,6 +220,15 @@ class eWidget {
     bool _regenGraphics; // this one too
     bool _recalcBounds;
     virtual int calcBounds();
+    // generic callbacks
+    void (*mouseClickCallback)(eWidget*,int);
+    void (*mouseClickAltCallback)(eWidget*,int);
+    void (*mouseClickCancelCallback)(eWidget*,int);
+    void (*mouseWheelCallback)(eWidget*,int);
+    void (*hoverCallback)(eWidget*,bool);
+    void (*keyCallback)(eWidget*,int,bool);
+    void (*typeCallback)(eWidget*,int);
+    void (*valueCallback)(eWidget*);
   public:
     XPT virtual int init();
     XPT virtual int setSize(double w, double h);
@@ -222,6 +246,30 @@ class eWidget {
     }
     XPT void setPos(double xp, double yp) {
       x=xp; y=yp; calcBounds();
+    }
+    XPT void setClickCallback(void (*callback)(eWidget*,int)) {
+      mouseClickCallback=callback;
+    }
+    XPT void setClickAltCallback(void (*callback)(eWidget*,int)) {
+      mouseClickAltCallback=callback;
+    }
+    XPT void setClickCancelCallback(void (*callback)(eWidget*,int)) {
+      mouseClickCancelCallback=callback;
+    }
+    XPT void setWheelCallback(void (*callback)(eWidget*,int)) {
+      mouseWheelCallback=callback;
+    }
+    XPT void setHoverCallback(void (*callback)(eWidget*,bool)) {
+      hoverCallback=callback;
+    }
+    XPT void setKeyCallback(void (*callback)(eWidget*,int,bool)) {
+      keyCallback=callback;
+    }
+    XPT void setTypeCallback(void (*callback)(eWidget*,int)) {
+      typeCallback=callback;
+    }
+    XPT void setValueCallback(void (*callback)(eWidget*)) {
+      valueCallback=callback;
     }
     XPT virtual int setDispPos(double x, double y);
     XPT virtual int setAlign(double x, double y);
@@ -419,6 +467,7 @@ class eEngine {
   friend class eWidget;
   friend class eLabel;
   friend class eButton;
+  friend class eLight;
   friend class eFrameView;
   friend class eSlider;
   friend class eSkin;

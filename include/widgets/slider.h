@@ -17,9 +17,6 @@ class eSlider: public eWidget {
   int curType;
   double min, max;
   double* val;
-  void (*holdCallback)();
-  void (*releaseCallback)();
-  void (*valueCallback)();
   double bxo, byo, hxo, hyo;
   double hrad;
   int bfw, bfh, hfw, hfh;
@@ -35,9 +32,6 @@ class eSlider: public eWidget {
     XPT int setBackColor(eColor col);
     XPT int setHandleColor(eColor col);
     XPT int event(eEvent& ev);
-    XPT int setHoldCallback(void (*callback)());
-    XPT int setReleaseCallback(void (*callback)());
-    XPT int setValueCallback(void (*callback)());
     XPT int addAttPoint(double val);
     XPT int delAttPoint(int which);
     XPT double getAttPoint(int which);

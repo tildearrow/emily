@@ -7,9 +7,6 @@ int eSlider::init() {
   val=NULL;
   tinstBack=NULL;
   tinstHandle=NULL;
-  holdCallback=NULL;
-  releaseCallback=NULL;
-  valueCallback=NULL;
   setBackColor(engine->skin->getDefaultColor(eObjectSliderB));
   setHandleColor(engine->skin->getDefaultColor(eObjectSliderH));
   setSize(128,24);
@@ -17,18 +14,6 @@ int eSlider::init() {
   setRange(0,1);
   setHighlightArea(eSliderLeft);
   return 1;
-}
-
-int eSlider::setHoldCallback(void (*callback)()) {
-  holdCallback=callback;
-}
-
-int eSlider::setReleaseCallback(void (*callback)()) {
-  releaseCallback=callback;
-}
-
-int eSlider::setValueCallback(void (*callback)()) {
-  valueCallback=callback;
 }
 
 int eSlider::setBackColor(eColor col) {
@@ -99,8 +84,8 @@ int eSlider::event(eEvent& ev) {
         if (ev.coord.x>(x+rpos-hrad) && ev.coord.x<(x+rpos+hrad) &&
             ev.coord.y>(y) && ev.coord.y<(y+h)) {
           active=true;
-          if (holdCallback!=NULL) {
-            holdCallback();
+          if (mouseClickCallback!=NULL) {
+            mouseClickCallback(this,ev.input);
           }
         }
       } else {
@@ -108,8 +93,8 @@ int eSlider::event(eEvent& ev) {
         _wantsAllEvents=false;
         if (active) {
           active=false;
-          if (releaseCallback!=NULL) {
-            releaseCallback();
+          if (mouseClickAltCallback!=NULL) {
+            mouseClickAltCallback(this,ev.input);
           }
         }
       }
@@ -124,7 +109,7 @@ int eSlider::event(eEvent& ev) {
           *val=max;
         }
         if (valueCallback!=NULL) {
-          valueCallback();
+          valueCallback(this);
         }
       }
       break;

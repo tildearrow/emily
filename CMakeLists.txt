@@ -50,6 +50,7 @@ set(SOURCES src/funcs.cpp
             src/widget/base.cpp
             src/widget/label.cpp
             src/widget/button.cpp
+            src/widget/light.cpp
             src/widget/frameview.cpp
             src/widget/slider.cpp)
 if (APPLE)

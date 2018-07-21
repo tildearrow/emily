@@ -3,7 +3,6 @@ class eFrameView: public eWidget {
   sf::View view;
   std::stack<eFrame*> frameStack;
   eFrame* curFrame;
-  void (*leftClickCallback)();
   double xo, yo;
   int fw, fh;
   bool clicked;

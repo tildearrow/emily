@@ -23,13 +23,13 @@ eColor getRandomColor() {
   return {(float)(rand()&0xff)/256,(float)(rand()&0xff)/256,(float)(rand()&0xff)/256,1};
 }
 
-void myOtherCallback() {
+void myOtherCallback(eWidget* elem, int button) {
   printf("hello world!\n");
   but->setColor(getRandomColor());
   but->setSize(80+(rand()%64),32+(rand()%64));
 }
 
-void myOtherCallbackF() {
+void myOtherCallbackF(eWidget* elem, int button) {
   printf("hello world!\n");
   butf->setColor(getRandomColor());
 }
@@ -38,7 +38,7 @@ void oneCallback() {
   printf("one\n");
 }
 
-void twoCallback() {
+void twoCallback(eWidget* elem, int button) {
   eContextMenu* menu;
   menu=new eContextMenu;
   menu->addItem(eMenuItem("test 1",oneCallback));
@@ -52,7 +52,7 @@ void sineCallback() {
   hello->setX(210+sin(2*3.141592653589793238*((float)sineVal/256))*80);
 }
 
-void updateLabel() {
+void updateLabel(eWidget* elm) {
   hello->setString(strFormat("%f",value));
 }
 
@@ -71,7 +71,7 @@ int main(int argc, char** argv) {
   but->setColor(getRandomColor());
   but->setSize(80,32);
   but->setIcon(eIconAdjust,12,eLeft);
-  but->setCallback(myOtherCallback);
+  but->setClickCallback(myOtherCallback);
   but->setPos(100,200);
   
   butf=frame->newWidget<eButton>();
@@ -79,7 +79,7 @@ int main(int argc, char** argv) {
   butf->setColor(getRandomColor());
   butf->setSize(80,32);
   butf->setStyle(eButtonFlat);
-  butf->setCallback(myOtherCallbackF);
+  butf->setClickCallback(myOtherCallbackF);
   butf->setAlign(1,0);
   butf->setDispPos(1,0);
   butf->setPos(-10,10);
@@ -99,14 +99,14 @@ int main(int argc, char** argv) {
   but1->setColor({1,1,0,1});
   but1->setSize(64,32);
   but1->setLabel("one");
-  but1->setCallback(oneCallback);
+  but1->setClickCallback(twoCallback);
   but1->setPos(4,4);
   
   but2=frame1->newWidget<eButton>();
   but2->setColor({1,1,0,1});
   but2->setSize(64,32);
   but2->setLabel("two");
-  but2->setCallback(twoCallback);
+  but2->setClickCallback(twoCallback);
   but2->setPos(72,4);
   
   fview=frame->newWidget<eFrameView>();

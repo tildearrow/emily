@@ -1,6 +1,6 @@
 #include "toolkit.h"
 
-int eButton::init() {
+int eLight::init() {
   highlight=0;
   clicked=false;
   linst=new sf::Text();
@@ -11,11 +11,11 @@ int eButton::init() {
   _regenGraphics=true;
   setColor(engine->skin->getDefaultColor(eObjectButton));
   setSize(12,32);
-  setStyle(eButtonNormal);
+  //setStyle(eLightNormal);
   return 1;
 }
 
-int eButton::setSize(double wi, double he) {
+int eLight::setSize(double wi, double he) {
   w=wi;
   h=he;
   _regenGraphics=true;
@@ -23,19 +23,21 @@ int eButton::setSize(double wi, double he) {
   return 1;
 }
 
-int eButton::setStyle(eButtonStyles style) {
+/*
+int eLight::setStyle(eLightStyles style) {
   bstyle=style;
   _regenGraphics=true;
   return 1;
 }
+*/
 
-int eButton::setLabel(string data) {
+int eLight::setLabel(string data) {
   label=data;
   linst->setString(data);
   return 1;
 }
 
-int eButton::setIcon(eIcons index, double size, eDirection placement) {
+int eLight::setIcon(eIcons index, double size, eDirection placement) {
   if (icon!=NULL) {
     delete icon;
   }
@@ -44,13 +46,13 @@ int eButton::setIcon(eIcons index, double size, eDirection placement) {
   return 1;
 }
 
-int eButton::setColor(eColor col) {
-  color=col;
+int eLight::setColor(eColor col) {
+  //color=col;
   _regenGraphics=true;
   return 1;
 }
 
-int eButton::event(eEvent& ev) {
+int eLight::event(eEvent& ev) {
   if (ev.type==eEventMouseButton) {
     if (ev.state==1) {
       clicked=true;
@@ -68,10 +70,18 @@ int eButton::event(eEvent& ev) {
   return 1;
 }
 
-int eButton::draw() {
+/*
+int eLight::setCallback(void (*callback)()) {
+  leftClickCallback=callback;
+  return 1;
+}
+*/
+
+int eLight::draw() {
   int start, end;
   double wh;
   if (_regenGraphics) {
+    /*
     if (tinst!=NULL) {
       delete tinst;
       tinst=NULL;
@@ -86,8 +96,9 @@ int eButton::draw() {
     end=perfCount();
     sinst.setTexture(*tinst);
     sinst.setTextureRect(sf::IntRect(0,0,fw,fh));
-    sinst.setOrigin(sf::Vector2f(xo,yo));
+    sinst.setOrigin(sf::Vector2f(xo,yo));*/
   
+    /*
     sinstHigh.setTexture(*tinst);
     sinstHigh.setTextureRect(sf::IntRect(fw,0,fw,fh));
     sinstHigh.setOrigin(sf::Vector2f(xo,yo));
@@ -95,6 +106,7 @@ int eButton::draw() {
     sinstClick.setTexture(*tinst);
     sinstClick.setTextureRect(sf::IntRect(fw*2,0,fw,fh));
     sinstClick.setOrigin(sf::Vector2f(xo,yo));
+    */
     _regenGraphics=false;
     
     printf("time: %d\n",end-start);
@@ -119,14 +131,14 @@ int eButton::draw() {
   engine->rect(x,y,x+w,y+h);
   */
   sinst.setPosition(bLeft*engine->scale,bTop*engine->scale);
-  sinstHigh.setPosition(bLeft*engine->scale,bTop*engine->scale);
-  sinstClick.setPosition(bLeft*engine->scale,bTop*engine->scale);
+  /*sinstHigh.setPosition(bLeft*engine->scale,bTop*engine->scale);
+  sinstClick.setPosition(bLeft*engine->scale,bTop*engine->scale);*/
   engine->win->draw(sinst);
-  sinstHigh.setColor(sf::Color(255,255,255,highlight*255));
+  /*sinstHigh.setColor(sf::Color(255,255,255,highlight*255));
   engine->win->draw(sinstHigh);
   if (clicked && _collision) {
     engine->win->draw(sinstClick);
-  }
+  }*/
   if (icon!=NULL) {
     switch (iconPlace) {
       case eLeft:

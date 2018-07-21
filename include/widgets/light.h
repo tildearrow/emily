@@ -13,7 +13,6 @@ class eLight: public eWidget {
   double hue, saturation;
   float bright;
   float highlight;
-  void (*clickCallback)();
   double xo, yo;
   int fw, fh;
   int bstyle;
@@ -31,7 +30,6 @@ class eLight: public eWidget {
     XPT int setMaterial(eLightMaterials material);
     XPT int setColor(eColor col);
     XPT int event(eEvent& ev);
-    XPT int setCallback(void (*callback)());
     XPT int update();
     XPT int draw();
 };
