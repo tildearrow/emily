@@ -132,7 +132,6 @@ bool WindowImpl::popEvent(Event& event, bool block)
             // no, we don't. emily needs optimization!
             while (m_events.empty())
             {
-printf("In blocking mode\n");
                 //sleep(milliseconds(10));
                 //processJoystickEvents();
                 //processSensorEvents();
