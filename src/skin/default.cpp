@@ -220,13 +220,12 @@ sf::Texture* eSkin::getTexture(int objectType, int attrib[8], int w, int h, doub
           bitmap->roundRect(0.5*engine->scale,0.5*engine->scale,(w-1)*engine->scale,(h-1)*engine->scale,4*engine->scale,{0.1f+0.5f*((float*)attrib)[0],0.1f+0.5f*((float*)attrib)[0],0.1f+0.5f*((float*)attrib)[0],0.9});
           bitmap->roundRect(1*engine->scale,1*engine->scale,(w-2)*engine->scale,(h-2)*engine->scale,4*engine->scale,{0.1f+0.5f*((float*)attrib)[0],0.1f+0.5f*((float*)attrib)[0],0.1f+0.5f*((float*)attrib)[0],1});
           // reflections
-          bitmap->shadeVGrad(0,7/(h*engine->scale),{1.0f,1.0f,1.0f,1.0f},{1.2f,1.2f,1.2f,1.0f});
-          bitmap->shadeVGrad(7/(h*engine->scale),11/(h*engine->scale),{1.0f,1.0f,1.0f,1.0f},{0.83333333f,0.83333333f,0.83333333f,1.0f});
-          bitmap->shadeHGrad(0,(7/(w*engine->scale)),{1.0f,1.0f,1.0f,1.0f},{1.1f,1.1f,1.1f,1.0f});
-          bitmap->shadeHGrad((7/(w*engine->scale)),(9/(w*engine->scale)),{1.0f,1.0f,1.0f,1.0f},{0.9090909091f,0.9090909091f,0.9090909091f,1.0f});
-          printf("VAL %f\n",((((w-6)*engine->scale))/(w*engine->scale)));
-          bitmap->shadeHGrad(((((w-5)*engine->scale))/(w*engine->scale)),(((w-2)*engine->scale)/(w*engine->scale)),{1.0f,1.0f,1.0f,1.0f},{0.9f,0.9f,0.9f,1.0f});
-          bitmap->shadeVGrad(((((w-5)*engine->scale))/(w*engine->scale)),(((w-2)*engine->scale)/(w*engine->scale)),{1.0f,1.0f,1.0f,1.0f},{0.9f,0.9f,0.9f,1.0f});
+          bitmap->shadeVGrad(0,3/(float)h,{1.0f,1.0f,1.0f,1.0f},{1.2f,1.2f,1.2f,1.0f});
+          bitmap->shadeVGrad(3/(float)h,6/(float)h,{1.0f,1.0f,1.0f,1.0f},{0.83333333f,0.83333333f,0.83333333f,1.0f});
+          bitmap->shadeHGrad(0,3/(float)w,{1.0f,1.0f,1.0f,1.0f},{1.1f,1.1f,1.1f,1.0f});
+          bitmap->shadeHGrad(3/(float)w,6/(float)w,{1.0f,1.0f,1.0f,1.0f},{0.9090909091f,0.9090909091f,0.9090909091f,1.0f});
+          bitmap->shadeHGrad(((float)w-6)/(float)w,((float)w-2)/(float)w,{1.0f,1.0f,1.0f,1.0f},{0.9f,0.9f,0.9f,1.0f});
+          bitmap->shadeVGrad(((float)h-6)/(float)h,((float)h-2)/(float)h,{1.0f,1.0f,1.0f,1.0f},{0.9f,0.9f,0.9f,1.0f});
           // slight radial gradient
           bitmap->shadeHMGrad({0.8f,0.8f,0.8f,1.0f},{1.0f,1.0f,1.0f,1.0f});
           bitmap->shadeVMGrad({0.8f,0.8f,0.8f,1.0f},{1.0f,1.0f,1.0f,1.0f});
