@@ -116,11 +116,13 @@ int main(int argc, char** argv) {
   fview->setPos(32,32);
   
   light=frame->newWidget<eLight>();
-  light->setSize(48,48);
+  light->setSize(96,96);
+  light->setMaterial(eLightRubber);
+  light->setMaterialProps(1);
   light->setClickCallback(myOtherCallback);
   light->setClickCancelCallback(myOtherCallback);
   light->setClickAltCallback(myOtherCallbackF);
-  light->setPos(256,256);
+  light->setPos(256,192);
   
   gui->setPreDrawCallback(sineCallback);
   mdisp->pushFrame(frame);

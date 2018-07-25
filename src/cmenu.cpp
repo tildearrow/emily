@@ -46,12 +46,14 @@ int eContextMenu::event(eEvent& ev) {
       }
       break;
   }
+  return 1;
 }
 
 int eContextMenu::addItem(eMenuItem item) {
   items.push_back(item);
   w=128;
   h=items.size()*18+4;
+  return 1;
 }
 
 int eContextMenu::draw() {

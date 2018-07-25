@@ -18,4 +18,5 @@ void eIcon::setPos(double x, double y) {
 
 int eIcon::draw() {
   engine->win->draw(iconS);
+  return 0;
 }

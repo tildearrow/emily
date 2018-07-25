@@ -318,11 +318,9 @@ void eMainLoop(eEngine* eng) {
 #ifdef ENABLE_WAIT
     if (--waitStart<=0) {
       wait=true;
-      //eng->win->setVerticalSyncEnabled(false);
     }
 #endif
     while (eng->nextEvent(ev,wait)) {
-      //eng->win->setVerticalSyncEnabled(true);
       wait=false;
 #ifdef ENABLE_WAIT
       //waitStart=4;
@@ -385,7 +383,6 @@ void eMainLoop(eEngine* eng) {
           eng->win->setView(sf::View(sf::FloatRect(0,0,ev.coord.x,ev.coord.y)));
           eng->displays[0]->w=ev.coord.x/eng->scale;
           eng->displays[0]->h=ev.coord.y/eng->scale;
-          printf("viewport\n");
           for (int i=0; i<eng->displays[0]->frameStack.top()->widgets.size(); i++) {
             eng->displays[0]->frameStack.top()->widgets[i]->calcBounds();
           }
@@ -421,11 +418,6 @@ void eMainLoop(eEngine* eng) {
       eng->drawEndCallback();
     }
     rEndTime=perfCount();
-    /*
-    if (waitStart<=1) {
-      eng->win->setVerticalSyncEnabled(false);
-    }
-    */
     eng->postRender();
     if (eng->postDrawCallback!=NULL) {
       eng->postDrawCallback();
@@ -436,8 +428,8 @@ void eMainLoop(eEngine* eng) {
       eng->estWaitTime=fmin(eng->estWaitTime+100,avgVBTime-((rEndTime-rStartTime)/1000)-3000);
     }
     avgVBTime=((avgVBTime*15)+((rVBTime-rPrevVBTime)/1000))/16;
-    printf("VBTime: %d\n",(rVBTime-rPrevVBTime)/1000);
-    printf("vblank %d wait %f\n",avgVBTime,eng->estWaitTime);
+    //printf("VBTime: %d\n",(rVBTime-rPrevVBTime)/1000);
+    //printf("vblank %d wait %f\n",avgVBTime,eng->estWaitTime);
     if (eng->estWaitTime<0) {
       eng->estWaitTime=0;
     }
@@ -712,15 +704,7 @@ long long perfCount() {
 }
 
 void eEngine::preRender() {
-  /*
-  struct timespec start, end;
-  clock_gettime(CLOCK_MONOTONIC,&start);
-  */
   win->clear();
-  /*
-  clock_gettime(CLOCK_MONOTONIC,&end);
-  printf("time: %ld\n",(start.tv_nsec-end.tv_nsec)/1000);
-  */
 }
 
 void eEngine::postRender() {

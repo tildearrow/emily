@@ -203,13 +203,48 @@ sf::Texture* eSkin::getTexture(int objectType, int attrib[8], int w, int h, doub
       break;
     case eObjectLight:
       retBitmap=new eBitmap(w*engine->scale*2,h*engine->scale);
-      retBitmap->clearToColor({1,1,1,1});
-      *xo=0;
-      *yo=0;
-      *frameWidth=w*engine->scale;
-      *frameHeight=h*engine->scale;
-      ret=retBitmap->toTexture();
-      return ret;
+      switch (attrib[1]) {
+        case eLightPlastic:
+          retBitmap->clearToColor({0.2,0.2,0.2,1});
+          *xo=0;
+          *yo=0;
+          *frameWidth=w*engine->scale;
+          *frameHeight=h*engine->scale;
+          ret=retBitmap->toTexture();
+          return ret;
+          break;
+        case eLightRubber:
+          bitmap=new eBitmap(w*engine->scale,h*engine->scale);
+          bitmap->clear();
+          bitmap->roundRect(0,0,w*engine->scale,h*engine->scale,4*engine->scale,{0.1f+0.5f*((float*)attrib)[0],0.1f+0.5f*((float*)attrib)[0],0.1f+0.5f*((float*)attrib)[0],0.8});
+          bitmap->roundRect(0.5*engine->scale,0.5*engine->scale,(w-1)*engine->scale,(h-1)*engine->scale,4*engine->scale,{0.1f+0.5f*((float*)attrib)[0],0.1f+0.5f*((float*)attrib)[0],0.1f+0.5f*((float*)attrib)[0],0.9});
+          bitmap->roundRect(1*engine->scale,1*engine->scale,(w-2)*engine->scale,(h-2)*engine->scale,4*engine->scale,{0.1f+0.5f*((float*)attrib)[0],0.1f+0.5f*((float*)attrib)[0],0.1f+0.5f*((float*)attrib)[0],1});
+          // reflections
+          bitmap->shadeVGrad(0,7/(h*engine->scale),{1.0f,1.0f,1.0f,1.0f},{1.2f,1.2f,1.2f,1.0f});
+          bitmap->shadeVGrad(7/(h*engine->scale),11/(h*engine->scale),{1.0f,1.0f,1.0f,1.0f},{0.83333333f,0.83333333f,0.83333333f,1.0f});
+          bitmap->shadeHGrad(0,(7/(w*engine->scale)),{1.0f,1.0f,1.0f,1.0f},{1.1f,1.1f,1.1f,1.0f});
+          bitmap->shadeHGrad((7/(w*engine->scale)),(9/(w*engine->scale)),{1.0f,1.0f,1.0f,1.0f},{0.9090909091f,0.9090909091f,0.9090909091f,1.0f});
+          printf("VAL %f\n",((((w-6)*engine->scale))/(w*engine->scale)));
+          bitmap->shadeHGrad(((((w-5)*engine->scale))/(w*engine->scale)),(((w-2)*engine->scale)/(w*engine->scale)),{1.0f,1.0f,1.0f,1.0f},{0.9f,0.9f,0.9f,1.0f});
+          bitmap->shadeVGrad(((((w-5)*engine->scale))/(w*engine->scale)),(((w-2)*engine->scale)/(w*engine->scale)),{1.0f,1.0f,1.0f,1.0f},{0.9f,0.9f,0.9f,1.0f});
+          // slight radial gradient
+          bitmap->shadeHMGrad({0.8f,0.8f,0.8f,1.0f},{1.0f,1.0f,1.0f,1.0f});
+          bitmap->shadeVMGrad({0.8f,0.8f,0.8f,1.0f},{1.0f,1.0f,1.0f,1.0f});
+          
+          retBitmap->clear();
+          retBitmap->blitOn(bitmap,0,0);
+          *xo=0;
+          *yo=0;
+          *frameWidth=w*engine->scale;
+          *frameHeight=h*engine->scale;
+          ret=retBitmap->toTexture();
+          return ret;
+          break;
+        default:
+          printf("specify a style!\n");
+          return NULL;
+          break;
+      }
       break;
     case eObjectSliderH:
       temp1=*(eColor*)attrib;
@@ -310,4 +345,5 @@ sf::Texture* eSkin::getTexture(int objectType, int attrib[8], int w, int h, doub
     default:
       return NULL;
   }
+  return NULL;
 }

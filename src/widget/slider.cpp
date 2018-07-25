@@ -119,6 +119,7 @@ int eSlider::event(eEvent& ev) {
 
 int eSlider::setHighlightArea(unsigned char area) {
   harea=area;
+  return 1;
 }
 
 int eSlider::draw() {

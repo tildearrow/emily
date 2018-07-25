@@ -9,6 +9,7 @@ int eLight::init() {
   tinst=NULL;
   icon=NULL;
   _regenGraphics=true;
+  material=eLightPlastic;
   matLight=0.05;
   setSize(32,32);
   //setStyle(eLightNormal);
@@ -78,6 +79,17 @@ int eLight::setCallback(void (*callback)()) {
 }
 */
 
+int eLight::setMaterialProps(float light) {
+  matLight=light;
+  return 1;
+}
+
+int eLight::setMaterial(eLightMaterials mat) {
+  material=mat;
+  _regenGraphics=true;
+  return 1;
+}
+
 int eLight::draw() {
   int start, end;
   double wh;
@@ -90,6 +102,7 @@ int eLight::draw() {
     ((int*)atrList)[1]=material;
     start=perfCount();
     tinst=engine->skin->getTexture(eObjectLight,atrList,w,h,&xo,&yo,&fw,&fh);
+    if (!tinst) abort();
     end=perfCount();
     sinst.setTexture(*tinst);
     sinst.setTextureRect(sf::IntRect(0,0,fw,fh));
@@ -106,7 +119,7 @@ int eLight::draw() {
     */
     _regenGraphics=false;
     
-    printf("time: %d\n",end-start);
+    //printf("time: %d\n",end-start);
   }
   
   if (_collision) {

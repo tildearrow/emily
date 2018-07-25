@@ -163,14 +163,24 @@ void eBitmap::shadeAlpha(float a) { OP_BEGIN
   for (int i=0; i<width*height; i++) {
     data[3+(i<<2)]*=a;
   }
-  OP_END("shadeAlpha"); 
+  OP_END("shadeAlpha");
+}
+
+void eBitmap::shadePower(float val) { OP_BEGIN
+  for (int i=0; i<width*height; i++) {
+    data[i<<2]=pow(data[i<<2],val);
+    data[1+(i<<2)]=pow(data[1+(i<<2)],val);
+    data[2+(i<<2)]=pow(data[2+(i<<2)],val);
+    data[3+(i<<2)]=pow(data[3+(i<<2)],val);
+  }
+  OP_END("shadePower")
 }
 
 void eBitmap::shadeHMGrad(eColor c1, eColor c2) { OP_BEGIN
   double gpos;
   eColor toUse;
   for (int i=0; i<width/2; i++) {
-    gpos=(((double)i*2/width));
+    gpos=sin(M_PI*0.5*((double)i*2/width));
     toUse.r=c1.r+(c2.r-c1.r)*gpos;
     toUse.g=c1.g+(c2.g-c1.g)*gpos;
     toUse.b=c1.b+(c2.b-c1.b)*gpos;
@@ -188,6 +198,30 @@ void eBitmap::shadeHMGrad(eColor c1, eColor c2) { OP_BEGIN
     }
   }
   OP_END("shadeHMGrad")
+}
+
+void eBitmap::shadeVMGrad(eColor c1, eColor c2) { OP_BEGIN
+  double gpos;
+  eColor toUse;
+  for (int i=0; i<height/2; i++) {
+    gpos=sin(M_PI*0.5*((double)i*2/height));
+    toUse.r=c1.r+(c2.r-c1.r)*gpos;
+    toUse.g=c1.g+(c2.g-c1.g)*gpos;
+    toUse.b=c1.b+(c2.b-c1.b)*gpos;
+    toUse.a=c1.a+(c2.a-c1.a)*gpos;
+    for (int j=0; j<width; j++) {
+      data[(i*width+j)<<2]*=toUse.r;
+      data[1+((i*width+j)<<2)]*=toUse.g;
+      data[2+((i*width+j)<<2)]*=toUse.b;
+      data[3+((i*width+j)<<2)]*=toUse.a;
+      
+      data[(j+width*(height-i-1))<<2]*=toUse.r;
+      data[1+((j+width*(height-i-1))<<2)]*=toUse.g;
+      data[2+((j+width*(height-i-1))<<2)]*=toUse.b;
+      data[3+((j+width*(height-i-1))<<2)]*=toUse.a;
+    }
+  }
+  OP_END("shadeVMGrad")
 }
 
 void eBitmap::shadeVGrad(double p1, double p2, eColor c1, eColor c2) { OP_BEGIN
@@ -231,6 +265,49 @@ void eBitmap::shadeVGrad(double p1, double p2, eColor c1, eColor c2) { OP_BEGIN
     }
   }
   OP_END("shadeVGrad")
+}
+
+void eBitmap::shadeHGrad(double p1, double p2, eColor c1, eColor c2) { OP_BEGIN
+  double gpos;
+  eColor delta;
+  eColor toUse;
+  delta.r=c2.r-c1.r;
+  delta.g=c2.g-c1.g;
+  delta.b=c2.b-c1.b;
+  delta.a=c2.a-c1.a;
+  if (p1>p2) {
+    return;
+  }
+  for (int j=0; j<p1*width; j++) {
+    for (int i=0; i<height; i++) {
+      data[(i*width+j)<<2]*=c1.r;
+      data[1+((i*width+j)<<2)]*=c1.g;
+      data[2+((i*width+j)<<2)]*=c1.b;
+      data[3+((i*width+j)<<2)]*=c1.a;
+    }
+  }
+  for (int j=p1*width; j<p2*width; j++) {
+    gpos=(((double)j-(p1*width))/((p2-p1)*width));
+    toUse.r=c1.r+delta.r*gpos;
+    toUse.g=c1.g+delta.g*gpos;
+    toUse.b=c1.b+delta.b*gpos;
+    toUse.a=c1.a+delta.a*gpos;
+    for (int i=0; i<height; i++) {
+      data[(j+i*width)<<2]*=toUse.r;
+      data[1+((j+i*width)<<2)]*=toUse.g;
+      data[2+((j+i*width)<<2)]*=toUse.b;
+      data[3+((j+i*width)<<2)]*=toUse.a;
+    }
+  }
+  for (int j=p2*width; j<width; j++) {
+    for (int i=0; i<height; i++) {
+      data[(j+i*width)<<2]*=c2.r;
+      data[1+((j+i*width)<<2)]*=c2.g;
+      data[2+((j+i*width)<<2)]*=c2.b;
+      data[3+((j+i*width)<<2)]*=c2.a;
+    }
+  }
+  OP_END("shadeHGrad")
 }
 
 void eBitmap::circle(int x, int y, int r, eColor color) { OP_BEGIN
