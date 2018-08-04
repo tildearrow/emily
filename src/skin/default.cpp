@@ -230,13 +230,23 @@ sf::Texture* eSkin::getTexture(int objectType, int attrib[8], int w, int h, doub
           bitmap->shadeHMGrad({0.8f,0.8f,0.8f,1.0f},{1.0f,1.0f,1.0f,1.0f});
           bitmap->shadeVMGrad({0.8f,0.8f,0.8f,1.0f},{1.0f,1.0f,1.0f,1.0f});
           
+          bitmap1=new eBitmap(w*engine->scale,h*engine->scale);
+          bitmap1->clear();
+          bitmap1->roundRect(0.5*engine->scale,0.5*engine->scale,(w-1)*engine->scale,(h-1)*engine->scale,4*engine->scale,{1,1,1,1});
+          bitmap1->shadeHMGrad({1,1,1,0.3},{1,1,1,0.66667f-((float*)attrib)[0]*0.15f});
+          bitmap1->shadeVMGrad({1,1,1,0.3},{1,1,1,0.66667f-((float*)attrib)[0]*0.15f});
+          
           retBitmap->clear();
-          retBitmap->blitOn(bitmap,0,0);
+          
+          retBitmap->copyBlitOn(bitmap,0,0);
+          retBitmap->copyBlitOn(bitmap1,w*engine->scale,0);
           *xo=0;
           *yo=0;
           *frameWidth=w*engine->scale;
           *frameHeight=h*engine->scale;
           ret=retBitmap->toTexture();
+          delete bitmap;
+          delete bitmap1;
           return ret;
           break;
         default:

@@ -90,6 +90,26 @@ int eLight::setMaterial(eLightMaterials mat) {
   return 1;
 }
 
+int eLight::setLightProps(double h, double s) {
+  hue=h;
+  saturation=s;
+  // precalc light color
+  eLightPre.r=fmin(fmax(0,fabs(2.0-hue*6+1.0)-1.0),1);
+  eLightPre.g=1.0-fmin(fmax(0,fabs(1.0-hue*6.0+1.0)-1.0),1);
+  eLightPre.b=1.0-fmin(fmax(0,fabs(1.0-hue*6.0+3.0)-1.0),1);
+  
+  eLightPre.r+=saturation-eLightPre.r*saturation;
+  eLightPre.g+=saturation-eLightPre.g*saturation;
+  eLightPre.b+=saturation-eLightPre.b*saturation;
+  
+  return 1;
+}
+
+int eLight::setLight(float b) {
+  bright=b;
+  return 1;
+}
+
 int eLight::draw() {
   int start, end;
   double wh;
@@ -141,9 +161,13 @@ int eLight::draw() {
   engine->rect(x,y,x+w,y+h);
   */
   sinst.setPosition(bLeft*engine->scale,bTop*engine->scale);
+  sinstLight.setColor(sf::Color(eLightPre.r*255,eLightPre.g*255,eLightPre.b*255,bright*255));
+  sinstLight.setPosition(bLeft*engine->scale,bTop*engine->scale);
   /*sinstHigh.setPosition(bLeft*engine->scale,bTop*engine->scale);
   sinstClick.setPosition(bLeft*engine->scale,bTop*engine->scale);*/
   engine->win->draw(sinst);
+  engine->win->draw(sinstLight);
+  engine->win->draw(sinstLight,sf::BlendAdd);
   /*sinstHigh.setColor(sf::Color(255,255,255,highlight*255));
   engine->win->draw(sinstHigh);
   if (clicked && _collision) {

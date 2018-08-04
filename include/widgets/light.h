@@ -21,6 +21,7 @@ class eLight: public eWidget {
   bool invertLabel;
   int atrList[8];
   char iconPlace;
+  eColor eLightPre;
   public:
     XPT int init();
     XPT int setLabel(string data);

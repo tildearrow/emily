@@ -28,11 +28,15 @@ void myOtherCallback(eWidget* elem, int button) {
   printf("hello world!\n");
   but->setColor(getRandomColor());
   but->setSize(80+(rand()%64),32+(rand()%64));
+  
+  light->setLight(1);
 }
 
 void myOtherCallbackF(eWidget* elem, int button) {
   printf("hello world!\n");
   butf->setColor(getRandomColor());
+  
+  light->setLight(0);
 }
 
 void oneCallback() {
@@ -118,11 +122,12 @@ int main(int argc, char** argv) {
   light=frame->newWidget<eLight>();
   light->setSize(96,96);
   light->setMaterial(eLightRubber);
-  light->setMaterialProps(1);
+  light->setMaterialProps(0.1);
   light->setClickCallback(myOtherCallback);
   light->setClickCancelCallback(myOtherCallback);
   light->setClickAltCallback(myOtherCallbackF);
   light->setPos(256,192);
+  light->setLightProps(0.3333333,0);
   
   gui->setPreDrawCallback(sineCallback);
   mdisp->pushFrame(frame);
