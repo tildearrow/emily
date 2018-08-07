@@ -277,7 +277,16 @@ class eWidget {
     XPT virtual int setDispPos(double x, double y);
     XPT virtual int setAlign(double x, double y);
     XPT virtual int draw();
-    eWidget(): dX(0), dY(0), w(0), h(0), alignX(0), alignY(0), x(0), y(0) {}
+    eWidget(): dX(0), dY(0), w(0), h(0), alignX(0), alignY(0), x(0), y(0),
+               mouseClickCallback(NULL),
+               mouseClickAltCallback(NULL),
+               mouseClickCancelCallback(NULL),
+               mouseWheelCallback(NULL),
+               hoverCallback(NULL),
+               keyCallback(NULL),
+               typeCallback(NULL),
+               valueCallback(NULL)
+               {}
 };
 
 class eFrame {
