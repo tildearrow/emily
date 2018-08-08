@@ -24,7 +24,7 @@ eColor getRandomColor() {
   return {(float)(rand()&0xff)/256,(float)(rand()&0xff)/256,(float)(rand()&0xff)/256,1};
 }
 
-void myOtherCallback(eWidget* elem, int button) {
+void myOtherCallback(eWidget* elem, int button, void* user) {
   printf("hello world!\n");
   but->setColor(getRandomColor());
   but->setSize(80+(rand()%64),32+(rand()%64));
@@ -32,7 +32,7 @@ void myOtherCallback(eWidget* elem, int button) {
   light->setLight(1);
 }
 
-void myOtherCallbackF(eWidget* elem, int button) {
+void myOtherCallbackF(eWidget* elem, int button, void* user) {
   printf("hello world!\n");
   butf->setColor(getRandomColor());
   
@@ -43,7 +43,7 @@ void oneCallback() {
   printf("one\n");
 }
 
-void twoCallback(eWidget* elem, int button) {
+void twoCallback(eWidget* elem, int button, void* user) {
   eContextMenu* menu;
   menu=new eContextMenu;
   menu->addItem(eMenuItem("test 1",oneCallback));
@@ -57,7 +57,7 @@ void sineCallback() {
   hello->setX(210+sin(2*3.141592653589793238*((float)sineVal/256))*80);
 }
 
-void updateLabel(eWidget* elm) {
+void updateLabel(eWidget* elm, void* user) {
   hello->setString(strFormat("%f",value));
 }
 
@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
   but->setColor(getRandomColor());
   but->setSize(80,32);
   but->setIcon(eIconAdjust,12,eLeft);
-  but->setClickCallback(myOtherCallback);
+  but->setClickCallback(myOtherCallback,NULL);
   but->setPos(100,200);
   
   butf=frame->newWidget<eButton>();
@@ -84,7 +84,7 @@ int main(int argc, char** argv) {
   butf->setColor(getRandomColor());
   butf->setSize(80,32);
   butf->setStyle(eButtonFlat);
-  butf->setClickCallback(myOtherCallbackF);
+  butf->setClickCallback(myOtherCallbackF,NULL);
   butf->setAlign(1,0);
   butf->setDispPos(1,0);
   butf->setPos(-10,10);
@@ -95,7 +95,7 @@ int main(int argc, char** argv) {
   slider->setSize(128,16);
   slider->setHandleColor({0,0.75,1,1});
   slider->setHandleSize(4);
-  slider->setValueCallback(updateLabel);
+  slider->setValueCallback(updateLabel,NULL);
   slider->setPos(8,8);
   
   frame1=gui->newFrame();
@@ -104,14 +104,14 @@ int main(int argc, char** argv) {
   but1->setColor({1,1,0,1});
   but1->setSize(64,32);
   but1->setLabel("one");
-  but1->setClickCallback(twoCallback);
+  but1->setClickCallback(twoCallback,NULL);
   but1->setPos(4,4);
   
   but2=frame1->newWidget<eButton>();
   but2->setColor({1,1,0,1});
   but2->setSize(64,32);
   but2->setLabel("two");
-  but2->setClickCallback(twoCallback);
+  but2->setClickCallback(twoCallback,NULL);
   but2->setPos(72,4);
   
   fview=frame->newWidget<eFrameView>();
@@ -123,9 +123,9 @@ int main(int argc, char** argv) {
   light->setSize(96,96);
   light->setMaterial(eLightRubber);
   light->setMaterialProps(0.1);
-  light->setClickCallback(myOtherCallback);
-  light->setClickCancelCallback(myOtherCallback);
-  light->setClickAltCallback(myOtherCallbackF);
+  light->setClickCallback(myOtherCallback,NULL);
+  light->setClickCancelCallback(myOtherCallback,NULL);
+  light->setClickAltCallback(myOtherCallbackF,NULL);
   light->setPos(256,192);
   light->setLightProps(0.3333333,0);
   

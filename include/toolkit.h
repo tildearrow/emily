@@ -10,7 +10,7 @@
  * please wait until I finish this toolkit so you can begin
  * to use it. yes, I aim for API compatibility for once!
  */
-#define EMILY_API_VER eMakeVer(0,1,0)
+#define EMILY_API_VER eMakeVer(0,2,0)
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -224,14 +224,22 @@ class eWidget {
     bool _recalcBounds;
     virtual int calcBounds();
     // generic callbacks
-    void (*mouseClickCallback)(eWidget*,int);
-    void (*mouseClickAltCallback)(eWidget*,int);
-    void (*mouseClickCancelCallback)(eWidget*,int);
-    void (*mouseWheelCallback)(eWidget*,int);
-    void (*hoverCallback)(eWidget*,bool);
-    void (*keyCallback)(eWidget*,int,bool);
-    void (*typeCallback)(eWidget*,int);
-    void (*valueCallback)(eWidget*);
+    void (*mouseClickCallback)(eWidget*,int,void*);
+    void* mouseClickUser;
+    void (*mouseClickAltCallback)(eWidget*,int,void*);
+    void* mouseClickAltUser;
+    void (*mouseClickCancelCallback)(eWidget*,int,void*);
+    void* mouseClickCancelUser;
+    void (*mouseWheelCallback)(eWidget*,int,void*);
+    void* mouseWheelUser;
+    void (*hoverCallback)(eWidget*,bool,void*);
+    void* hoverUser;
+    void (*keyCallback)(eWidget*,int,bool,void*);
+    void* keyUser;
+    void (*typeCallback)(eWidget*,int,void*);
+    void* typeUser;
+    void (*valueCallback)(eWidget*,void*);
+    void* valueUser;
   public:
     XPT virtual int init();
     XPT virtual int setSize(double w, double h);
@@ -250,29 +258,37 @@ class eWidget {
     XPT void setPos(double xp, double yp) {
       x=xp; y=yp; calcBounds();
     }
-    XPT void setClickCallback(void (*callback)(eWidget*,int)) {
+    XPT void setClickCallback(void (*callback)(eWidget*,int,void*), void* user) {
       mouseClickCallback=callback;
+      mouseClickUser=user;
     }
-    XPT void setClickAltCallback(void (*callback)(eWidget*,int)) {
+    XPT void setClickAltCallback(void (*callback)(eWidget*,int,void*), void* user) {
       mouseClickAltCallback=callback;
+      mouseClickAltUser=user;
     }
-    XPT void setClickCancelCallback(void (*callback)(eWidget*,int)) {
+    XPT void setClickCancelCallback(void (*callback)(eWidget*,int,void*), void* user) {
       mouseClickCancelCallback=callback;
+      mouseClickCancelUser=user;
     }
-    XPT void setWheelCallback(void (*callback)(eWidget*,int)) {
+    XPT void setWheelCallback(void (*callback)(eWidget*,int,void*), void* user) {
       mouseWheelCallback=callback;
+      mouseWheelUser=user;
     }
-    XPT void setHoverCallback(void (*callback)(eWidget*,bool)) {
+    XPT void setHoverCallback(void (*callback)(eWidget*,bool,void*), void* user) {
       hoverCallback=callback;
+      hoverUser=user;
     }
-    XPT void setKeyCallback(void (*callback)(eWidget*,int,bool)) {
+    XPT void setKeyCallback(void (*callback)(eWidget*,int,bool,void*), void* user) {
       keyCallback=callback;
+      keyUser=user;
     }
-    XPT void setTypeCallback(void (*callback)(eWidget*,int)) {
+    XPT void setTypeCallback(void (*callback)(eWidget*,int,void*), void* user) {
       typeCallback=callback;
+      typeUser=user;
     }
-    XPT void setValueCallback(void (*callback)(eWidget*)) {
+    XPT void setValueCallback(void (*callback)(eWidget*,void*), void* user) {
       valueCallback=callback;
+      valueUser=user;
     }
     XPT virtual int setDispPos(double x, double y);
     XPT virtual int setAlign(double x, double y);
@@ -285,7 +301,15 @@ class eWidget {
                hoverCallback(NULL),
                keyCallback(NULL),
                typeCallback(NULL),
-               valueCallback(NULL)
+               valueCallback(NULL),
+               mouseClickUser(NULL),
+               mouseClickAltUser(NULL),
+               mouseClickCancelUser(NULL),
+               mouseWheelUser(NULL),
+               hoverUser(NULL),
+               keyUser(NULL),
+               typeUser(NULL),
+               valueUser(NULL)
                {}
 };
 

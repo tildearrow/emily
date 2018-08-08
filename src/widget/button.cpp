@@ -58,7 +58,7 @@ int eButton::event(eEvent& ev) {
       if (clicked) {
         if (_collision) {
           if (mouseClickCallback!=NULL) {
-            mouseClickCallback(this,ev.input);
+            mouseClickCallback(this,ev.input,mouseClickUser);
           }
         }
         clicked=false;

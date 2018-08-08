@@ -52,17 +52,17 @@ int eLight::event(eEvent& ev) {
     if (ev.state==1) {
       clicked=true;
       if (mouseClickCallback!=NULL) {
-        mouseClickCallback(this,ev.input);
+        mouseClickCallback(this,ev.input,mouseClickUser);
       }
     } else {
       if (clicked) {
         if (_collision) {
           if (mouseClickAltCallback!=NULL) {
-            mouseClickAltCallback(this,ev.input);
+            mouseClickAltCallback(this,ev.input,mouseClickAltUser);
           }
         } else {
           if (mouseClickCancelCallback!=NULL) {
-            mouseClickCancelCallback(this,ev.input);
+            mouseClickCancelCallback(this,ev.input,mouseClickCancelUser);
           }
         }
         clicked=false;

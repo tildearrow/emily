@@ -85,7 +85,7 @@ int eSlider::event(eEvent& ev) {
             ev.coord.y>(y) && ev.coord.y<(y+h)) {
           active=true;
           if (mouseClickCallback!=NULL) {
-            mouseClickCallback(this,ev.input);
+            mouseClickCallback(this,ev.input,mouseClickUser);
           }
         }
       } else {
@@ -94,7 +94,7 @@ int eSlider::event(eEvent& ev) {
         if (active) {
           active=false;
           if (mouseClickAltCallback!=NULL) {
-            mouseClickAltCallback(this,ev.input);
+            mouseClickAltCallback(this,ev.input,mouseClickAltUser);
           }
         }
       }
@@ -109,7 +109,7 @@ int eSlider::event(eEvent& ev) {
           *val=max;
         }
         if (valueCallback!=NULL) {
-          valueCallback(this);
+          valueCallback(this,valueUser);
         }
       }
       break;
