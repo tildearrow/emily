@@ -35,8 +35,11 @@ int eFrameView::setSize(double wi, double he) {
 int eFrameView::event(eEvent& ev) {
   eEvent wrapev;
   wrapev=ev;
-  wrapev.coord.x-=x;
-  wrapev.coord.y-=y;
+  wrapev.coord.x-=bLeft;
+  wrapev.coord.y-=bTop;
+  if (frameStack.empty()) {
+    return 0;
+  }
   curFrame=frameStack.top();
   for (size_t i=0; i<curFrame->widgets.size(); i++) {
     curFrame->widgets[i]->_collision=wrapev.coord.x>curFrame->widgets[i]->x &&
@@ -68,12 +71,15 @@ int eFrameView::event(eEvent& ev) {
 int eFrameView::draw() {
   int accum;
   accum=0;
+  if (frameStack.empty()) {
+    return 0;
+  }
   curFrame=frameStack.top();
-  engine->rect(x,y,x+w,y+h);
+  engine->rect(bLeft,bTop,bLeft+w,bTop+h);
   //view=engine->win->getDefaultView();
   view.reset(sf::FloatRect(0,0,(w)*engine->scale,(h)*engine->scale));
   // TO BE FIXED!
-  view.setViewport(sf::FloatRect((x/parent->parentD->getWidth()),(y/parent->parentD->getHeight()),(w/parent->parentD->getWidth()),(h/parent->parentD->getHeight())));
+  view.setViewport(sf::FloatRect((bLeft/parent->parentD->getWidth()),(bTop/parent->parentD->getHeight()),(w/parent->parentD->getWidth()),(h/parent->parentD->getHeight())));
   engine->win->setView(view);
   for (size_t i=0; i<curFrame->widgets.size(); i++) {
     accum+=curFrame->widgets[i]->draw();
