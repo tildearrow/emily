@@ -34,6 +34,19 @@ sf::Texture* eSkin::getTexture(int objectType, int attrib[8], int w, int h, doub
   eColor temp1, temp2;
   switch (objectType) {
     case eObjectButton:
+      if (attrib[4]==eButtonNoFrame) {
+        // widget handles button drawing
+        retBitmap=new eBitmap(w*engine->scale*3,h*engine->scale);
+        retBitmap->clear();
+        ret=retBitmap->toTexture();
+        *xo=0*engine->scale;
+        *yo=0*engine->scale;
+        *frameWidth=(w)*engine->scale;
+        *frameHeight=(h)*engine->scale;
+        delete retBitmap;
+        return ret;
+        break;
+      }
       if (attrib[4]==eButtonFlat) {
         temp1=*(eColor*)attrib;
         temp1.r*=0.75;

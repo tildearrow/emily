@@ -1,6 +1,7 @@
 enum eButtonStyles {
   eButtonNormal=0,
-  eButtonFlat=1
+  eButtonFlat=1,
+  eButtonNoFrame=2
 };
 
 // temporary
