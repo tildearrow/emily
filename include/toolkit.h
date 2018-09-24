@@ -293,22 +293,22 @@ class eWidget {
     XPT virtual int setDispPos(double x, double y);
     XPT virtual int setAlign(double x, double y);
     XPT virtual int draw();
-    eWidget(): dX(0), dY(0), w(0), h(0), alignX(0), alignY(0), x(0), y(0),
+    eWidget(): w(0), h(0), dX(0), dY(0), alignX(0), alignY(0), x(0), y(0),
                mouseClickCallback(NULL),
-               mouseClickAltCallback(NULL),
-               mouseClickCancelCallback(NULL),
-               mouseWheelCallback(NULL),
-               hoverCallback(NULL),
-               keyCallback(NULL),
-               typeCallback(NULL),
-               valueCallback(NULL),
                mouseClickUser(NULL),
+               mouseClickAltCallback(NULL),
                mouseClickAltUser(NULL),
+               mouseClickCancelCallback(NULL),
                mouseClickCancelUser(NULL),
+               mouseWheelCallback(NULL),
                mouseWheelUser(NULL),
+               hoverCallback(NULL),
                hoverUser(NULL),
+               keyCallback(NULL),
                keyUser(NULL),
+               typeCallback(NULL),
                typeUser(NULL),
+               valueCallback(NULL),
                valueUser(NULL)
                {}
 };
@@ -462,8 +462,8 @@ class eVideoOut {
 class eEngine {
   /*void* (*createWin)(void**,const char*,int,int,int,int,bool);
   int (*eNextEvent)(void*,eEvent&);*/
-  void ((*preEvCallback[256])(const eEvent*));
-  void ((*postEvCallback[256])(const eEvent*));
+  void (*preEvCallback[256])(const eEvent*);
+  void (*postEvCallback[256])(const eEvent*);
   void (*preDrawCallback)();
   void (*drawStartCallback)();
   void (*drawEndCallback)();

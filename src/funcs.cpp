@@ -383,7 +383,7 @@ void eMainLoop(eEngine* eng) {
           eng->win->setView(sf::View(sf::FloatRect(0,0,ev.coord.x,ev.coord.y)));
           eng->displays[0]->w=ev.coord.x/eng->scale;
           eng->displays[0]->h=ev.coord.y/eng->scale;
-          for (int i=0; i<eng->displays[0]->frameStack.top()->widgets.size(); i++) {
+          for (size_t i=0; i<eng->displays[0]->frameStack.top()->widgets.size(); i++) {
             eng->displays[0]->frameStack.top()->widgets[i]->calcBounds();
           }
           waitStart=4;

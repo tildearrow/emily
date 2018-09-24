@@ -143,7 +143,7 @@ void* hostSelection(void*)
                             result = XChangeProperty(sel_event.display, sel_event.requestor,
                                 sel_event.property, xa_atom, 32, PropModeReplace,
                                 reinterpret_cast<unsigned char*>(&utf8_text), 1);
-                        else if(sel_event.target == xa_string || sel_event.target == atom_text)
+                        else if(sel_event.target == (long unsigned int)xa_string || sel_event.target == atom_text)
                             result = XChangeProperty(sel_event.display, sel_event.requestor,
                                 sel_event.property, xa_string, 8, PropModeReplace,
                                 reinterpret_cast<unsigned char*>(&str[0]), str.size());

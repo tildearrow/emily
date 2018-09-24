@@ -69,7 +69,6 @@ int eButton::event(eEvent& ev) {
 }
 
 int eButton::draw() {
-  int start, end;
   double wh;
   if (_regenGraphics) {
     if (tinst!=NULL) {
@@ -81,9 +80,7 @@ int eButton::draw() {
     ((eColor*)atrList)->b=color.b;
     ((eColor*)atrList)->a=color.a;
     atrList[4]=bstyle;
-    start=perfCount();
     tinst=engine->skin->getTexture(eObjectButton,atrList,w,h,&xo,&yo,&fw,&fh);
-    end=perfCount();
     sinst.setTexture(*tinst);
     sinst.setTextureRect(sf::IntRect(0,0,fw,fh));
     sinst.setOrigin(sf::Vector2f(xo,yo));
@@ -96,8 +93,6 @@ int eButton::draw() {
     sinstClick.setTextureRect(sf::IntRect(fw*2,0,fw,fh));
     sinstClick.setOrigin(sf::Vector2f(xo,yo));
     _regenGraphics=false;
-    
-    //printf("time: %d\n",end-start);
   }
   
   if (_collision) {

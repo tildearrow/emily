@@ -111,7 +111,6 @@ int eLight::setLight(float b) {
 }
 
 int eLight::draw() {
-  int start, end;
   double wh;
   if (_regenGraphics) {
     if (tinst!=NULL) {
@@ -120,10 +119,8 @@ int eLight::draw() {
     }
     ((float*)atrList)[0]=matLight;
     ((int*)atrList)[1]=material;
-    start=perfCount();
     tinst=engine->skin->getTexture(eObjectLight,atrList,w,h,&xo,&yo,&fw,&fh);
     if (!tinst) abort();
-    end=perfCount();
     sinst.setTexture(*tinst);
     sinst.setTextureRect(sf::IntRect(0,0,fw,fh));
     sinst.setOrigin(sf::Vector2f(xo,yo));

@@ -4833,13 +4833,16 @@ static int stbi__parse_png_file(stbi__png *z, int scan, int req_comp)
             if ((c.type & (1 << 29)) == 0) {
                #ifndef STBI_NO_FAILURE_STRINGS
                // not threadsafe
+                /*
                static char invalid_chunk[] = "XXXX PNG chunk not known";
                invalid_chunk[0] = STBI__BYTECAST(c.type >> 24);
                invalid_chunk[1] = STBI__BYTECAST(c.type >> 16);
                invalid_chunk[2] = STBI__BYTECAST(c.type >>  8);
                invalid_chunk[3] = STBI__BYTECAST(c.type >>  0);
-               #endif
+               */
+               // tildearrow warning fix
                return stbi__err(invalid_chunk, "PNG not supported: unknown PNG chunk type");
+               #endif
             }
             stbi__skip(s, c.length);
             break;

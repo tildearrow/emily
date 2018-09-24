@@ -11,7 +11,7 @@ int eVideoOut::getHeight() {
 int eVideoOut::pushFrame(eFrame* f) {
   frameStack.push(f);
   f->parentD=this;
-  for (int i=0; i<f->widgets.size(); i++) {
+  for (size_t i=0; i<f->widgets.size(); i++) {
     f->widgets[i]->calcBounds();
   }
   return 1;

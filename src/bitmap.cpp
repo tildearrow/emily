@@ -42,8 +42,6 @@ void eBitmap::clearToColor(eColor c) { OP_BEGIN
 
 void eBitmap::copyBlitOn(eBitmap* src, int x, int y) { OP_BEGIN
   int tw, th;
-  eColor* dataPix;
-  eColor* destin;
   tw=src->width;
   th=src->height;
   for (int j=0; j<th; j++) {
@@ -78,7 +76,6 @@ void eBitmap::blitOn(eBitmap* src, int x, int y) { OP_BEGIN
 
 void eBitmap::shadeGlowBack(int radius, int passes, eColor col) { OP_BEGIN
   float accum, ksize, rksize;
-  int bounded;
   float buffer[256];
   int bufpos;
   ksize=1+radius*2;
@@ -311,10 +308,9 @@ void eBitmap::shadeHGrad(double p1, double p2, eColor c1, eColor c2) { OP_BEGIN
 }
 
 void eBitmap::circle(int x, int y, int r, eColor color) { OP_BEGIN
-  int ffd, ax1, ay1, ax2, ay2;
+  int ax1, ay1, ax2, ay2;
   float* alphaMap;
-  float k;
-  ffd=ceil((float)r/1.414213562373095);
+  //ffd=ceil((float)r/1.414213562373095);
   ax1=0;
   if (x<0) {
     ax1=-x;
