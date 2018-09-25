@@ -35,6 +35,7 @@
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/ConvexShape.hpp>
 #include <SFML/Graphics/Drawable.hpp>
+#include <SFML/Graphics/FloatColor.hpp>
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Glyph.hpp>
 #include <SFML/Graphics/Image.hpp>

@@ -82,7 +82,7 @@ public:
     ///
     ////////////////////////////////////////////////////////////
     ~Texture();
-
+    
     ////////////////////////////////////////////////////////////
     /// \brief Create the texture
     ///
@@ -94,6 +94,9 @@ public:
     /// \return True if creation was successful
     ///
     ////////////////////////////////////////////////////////////
+    bool create(unsigned int width, unsigned int height, unsigned int format);
+
+    /// compatibility
     bool create(unsigned int width, unsigned int height);
 
     ////////////////////////////////////////////////////////////
@@ -253,7 +256,7 @@ public:
     /// \param pixels Array of pixels to copy to the texture
     ///
     ////////////////////////////////////////////////////////////
-    void update(const Uint8* pixels);
+    void update(const void* pixels);
 
     ////////////////////////////////////////////////////////////
     /// \brief Update a part of the texture from an array of pixels
@@ -275,7 +278,7 @@ public:
     /// \param y      Y offset in the texture where to copy the source pixels
     ///
     ////////////////////////////////////////////////////////////
-    void update(const Uint8* pixels, unsigned int width, unsigned int height, unsigned int x, unsigned int y);
+    void update(const void* pixels, unsigned int width, unsigned int height, unsigned int x, unsigned int y);
 
     ////////////////////////////////////////////////////////////
     /// \brief Update a part of this texture from another texture
@@ -413,41 +416,6 @@ public:
     ///
     ////////////////////////////////////////////////////////////
     bool isSmooth() const;
-
-    ////////////////////////////////////////////////////////////
-    /// \brief Enable or disable conversion from sRGB
-    ///
-    /// When providing texture data from an image file or memory, it can
-    /// either be stored in a linear color space or an sRGB color space.
-    /// Most digital images account for gamma correction already, so they
-    /// would need to be "uncorrected" back to linear color space before
-    /// being processed by the hardware. The hardware can automatically
-    /// convert it from the sRGB color space to a linear color space when
-    /// it gets sampled. When the rendered image gets output to the final
-    /// framebuffer, it gets converted back to sRGB.
-    ///
-    /// After enabling or disabling sRGB conversion, make sure to reload
-    /// the texture data in order for the setting to take effect.
-    ///
-    /// This option is only useful in conjunction with an sRGB capable
-    /// framebuffer. This can be requested during window creation.
-    ///
-    /// \param sRgb True to enable sRGB conversion, false to disable it
-    ///
-    /// \see isSrgb
-    ///
-    ////////////////////////////////////////////////////////////
-    void setSrgb(bool sRgb);
-
-    ////////////////////////////////////////////////////////////
-    /// \brief Tell whether the texture source is converted from sRGB or not
-    ///
-    /// \return True if the texture source is converted from sRGB, false if not
-    ///
-    /// \see setSrgb
-    ///
-    ////////////////////////////////////////////////////////////
-    bool isSrgb() const;
 
     ////////////////////////////////////////////////////////////
     /// \brief Enable or disable repeating
@@ -620,7 +588,7 @@ private:
     Vector2u     m_actualSize;    ///< Actual texture size (can be greater than public size because of padding)
     unsigned int m_texture;       ///< Internal texture identifier
     bool         m_isSmooth;      ///< Status of the smooth filter
-    bool         m_sRgb;          ///< Should the texture source be converted from sRGB?
+    unsigned int m_format;          ///< Texture format
     bool         m_isRepeated;    ///< Is the texture in repeat mode?
     mutable bool m_pixelsFlipped; ///< To work around the inconsistency in Y orientation
     bool         m_fboAttachment; ///< Is this texture owned by a framebuffer object?
