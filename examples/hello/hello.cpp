@@ -39,15 +39,15 @@ void myOtherCallbackF(eWidget* elem, int button, void* user) {
   light->setLight(0);
 }
 
-void oneCallback() {
+void oneCallback(eMenuItem* mi, void* user) {
   printf("one\n");
 }
 
 void twoCallback(eWidget* elem, int button, void* user) {
   eContextMenu* menu;
   menu=new eContextMenu;
-  menu->addItem(eMenuItem("test 1",oneCallback));
-  menu->addItem(eMenuItem("test 2",oneCallback));
+  menu->addItem(eMenuItem("test 1",oneCallback,NULL));
+  menu->addItem(eMenuItem("test 2",oneCallback,NULL));
   printf("two\n");
   gui->popUpMenu(eAuto,eAuto,menu);
 }

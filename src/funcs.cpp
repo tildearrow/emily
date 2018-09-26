@@ -24,6 +24,9 @@ double getScale() {
   HDC disp;
   int dpi;
   disp=GetDC(NULL);
+  if (disp==NULL) {
+    return 1;
+  }
   dpi=GetDeviceCaps(disp,LOGPIXELSX);
   ReleaseDC(NULL,disp);
   return (double)dpi/96.0;
@@ -53,7 +56,6 @@ double getScale() {
     xcb_disconnect(disp);
     return (double)dpi/96.0;
   }
-  xcb_disconnect(disp);
 #else
   Display* disp;
   int dpi;
@@ -80,11 +82,11 @@ eEngine::eEngine(string name): x11conn(NULL) {
   for (int i=0; i<256; i++) {
     preEvCallback[i]=NULL;
     postEvCallback[i]=NULL;
-    preDrawCallback=NULL;
-    postDrawCallback=NULL;
-    drawStartCallback=NULL;
-    drawEndCallback=NULL;
   }
+  preDrawCallback=NULL;
+  postDrawCallback=NULL;
+  drawStartCallback=NULL;
+  drawEndCallback=NULL;
   defFont=new eFont;
   if (defFont->loaddef(eFontDefault)==0) {
     eLogE("Error while loading default font.\n");
@@ -99,9 +101,8 @@ eEngine::eEngine(string name): x11conn(NULL) {
   }
 }
 
-int eEngine::setTitle(string t) {
+void eEngine::setTitle(string t) {
   title=t;
-  return 1;
 }
 
 int eEngine::nextEvent(eEvent& ev, bool wait) {
@@ -235,8 +236,7 @@ int eEngine::nextEvent(eEvent& ev, bool wait) {
         case sf::Sensor::Orientation:
           ev.type=eEventOrient;
           break;
-        // to satisfy KDevelop and maybe Xcode
-        case sf::Sensor::Count:
+        default:
           ev.type=eEventSensor;
           break;
       }
@@ -258,32 +258,36 @@ int eEngine::grabMouse(bool status) {
   // windows code here
   sf::WindowHandle wh;
   wh=win->getSystemHandle();
+  if (wh==NULL) {
+    return 0;
+  }
   if (status) {
-    SetCapture(wh); // ???
-    return 1;
+    return (SetCapture(wh)==NULL)?0:1; // ???
   } else {
-    return ReleaseCapture();
+    return ReleaseCapture()?1:0;
   }
 #elif defined(__APPLE__)
   // macOS code here
   // seems like there is no way to do this directly :(
-  return 1;
+  return 0;
 #elif defined(__ANDROID__)
   // android code here
-  return 1;
+  return 0;
 #endif
 #if defined(__unix__) && !defined(__APPLE__)
   // X11
   sf::WindowHandle wh;
+  if (x11conn==NULL) { // it can happen
+    return 0;
+  }
   wh=win->getSystemHandle();
   if (status) {
     return XGrabPointer(x11conn,wh,True,None,GrabModeAsync,GrabModeAsync,None,None,CurrentTime);
   } else {
-    XUngrabPointer(x11conn,CurrentTime);
-    return 1;
+    return XUngrabPointer(x11conn,CurrentTime);
   }
 #endif
-  return 1;
+  return 0;
 }
 
 void eMainLoop(eEngine* eng) {
@@ -577,48 +581,16 @@ int eFrame::getHeight() {
     return parentD->getHeight();
   }
   return -1;
-  //return engine->getHeight();
 }
+
+// *TEMPORARILY DEPRECATED FACILITIES BEGIN* //
 
 eTexture* eEngine::getUnmanagedTexture(int width, int height, int type) {
   return NULL;
-  /*
-  eTexture* ret;
-  void* tex;
-  tex=eCreateTexture(backInst,width,height,type);
-  printf("RETURN VAL %x\n",tex);
-  if (tex==NULL) {
-    return NULL;
-  }
-  ret=new eTexture;
-  ret->actual=tex;
-  ret->width=width;
-  ret->height=height;
-  ret->type=type;
-  return ret;
-  */
 }
 
 eTexture* eEngine::getTexture(int width, int height, int type, int prop0, int prop1, int prop2, int prop3) {
   return NULL;
-  /*
-  eTexture* ret;
-  void* tex;
-  tex=eCreateTexture(backInst,width,height,type);
-  if (tex==NULL) {
-    return NULL;
-  }
-  ret=new eTexture;
-  ret->actual=tex;
-  ret->width=width;
-  ret->height=height;
-  ret->type=type;
-  ret->id[0]=prop0;
-  ret->id[1]=prop1;
-  ret->id[2]=prop2;
-  ret->id[3]=prop3;
-  return ret;
-  */
 }
 
 eTexture* eEngine::getTextureFromBitmap(eBitmap* bitmap, int type) {
@@ -648,6 +620,8 @@ int eEngine::drawTexture(eTexture* tex, double x, double y) {
   */
 }
 
+// *TEMPORARILY DEPRECATED FACILITIES END* //
+
 eIcon* eEngine::newIcon(eIcons icon, double size) {
   eIcon* ret;
   int bsize;
@@ -672,7 +646,9 @@ eIcon* eEngine::newIcon(eIcons icon, double size) {
   */
   ret->engine=this;
   ret->iconT=new sf::Texture;
-  ret->iconT->create(iconFont->glyph->bitmap.width,iconFont->glyph->bitmap.rows);
+  if (!ret->iconT->create(iconFont->glyph->bitmap.width,iconFont->glyph->bitmap.rows)) {
+    return NULL;
+  }
   ret->iconT->update(expand);
   ret->charW=iconFont->glyph->bitmap.width;
   ret->charH=iconFont->glyph->bitmap.rows;

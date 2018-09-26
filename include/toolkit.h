@@ -10,7 +10,7 @@
  * please wait until I finish this toolkit so you can begin
  * to use it. yes, I aim for API compatibility for once!
  */
-#define EMILY_API_VER eMakeVer(0,2,0)
+#define EMILY_API_VER eMakeVer(0,3,0)
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -368,18 +368,19 @@ class eMenuItem {
     string text;
     sf::Text* dtext;
     std::vector<eMenuItem> more;
-    void (*callback)();
+    void (*callback)(eMenuItem*,void*);
+    void* callbackUser;
     int iconIndex;
     eIcon* icon;
   public:
     int addItem(eMenuItem item);
     int removeItem(int index);
-    int itemCount();
+    size_t itemCount();
     eMenuItem();
-    eMenuItem(string text, void (*callback)());
-    eMenuItem(string text, string rtext, void (*callback)());
-    eMenuItem(eIcons icon, string text, void (*callback)());
-    eMenuItem(eIcons icon, string text, string rtext, void (*callback)());
+    eMenuItem(string text, void (*callback)(eMenuItem* item, void* user), void* userData);
+    eMenuItem(string text, string rtext, void (*callback)(eMenuItem* item, void* user), void* userData);
+    eMenuItem(eIcons icon, string text, void (*callback)(eMenuItem* item, void* user), void* userData);
+    eMenuItem(eIcons icon, string text, string rtext, void (*callback)(eMenuItem* item, void* user), void* userData);
     ~eMenuItem();
 };
 
@@ -397,7 +398,7 @@ class eContextMenu {
     double x, y;
     int addItem(eMenuItem item);
     int removeItem(int index);
-    int itemCount();
+    size_t itemCount();
     int draw();
 };
 
@@ -525,7 +526,7 @@ class eEngine {
     XPT int setDrawStartCallback(void ((*callback)()));
     XPT int setDrawEndCallback(void ((*callback)()));
     XPT int setPostDrawCallback(void ((*callback)()));
-    XPT int setTitle(string t);
+    XPT void setTitle(string t);
     XPT int setSize(int w, int h);
     XPT int getWidth();
     XPT int getHeight();

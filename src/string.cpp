@@ -5,7 +5,10 @@ string strFormat(const char* format, ...) {
   char* str;
   string ret;
   va_start(va,format);
-  vasprintf(&str,format,va);
+  if (vasprintf(&str,format,va)<0) {
+    va_end(va);
+    return string("");
+  }
   va_end(va);
   ret=str;
   delete[] str;

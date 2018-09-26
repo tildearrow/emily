@@ -1,10 +1,11 @@
 #include "toolkit.h"
 
-eMenuItem::eMenuItem(string tex, void (*call)()) {
+eMenuItem::eMenuItem(string tex, void (*call)(eMenuItem* item, void* user), void* userData) {
   text=tex;
   icon=NULL;
   iconIndex=0;
   callback=call;
+  callbackUser=userData;
   dtext=NULL;
 }
 
@@ -13,7 +14,7 @@ eMenuItem::~eMenuItem() {
   return;
 }
 
-int eContextMenu::itemCount() {
+size_t eContextMenu::itemCount() {
   return items.size();
 }
 
@@ -25,7 +26,7 @@ int eContextMenu::event(eEvent& ev) {
         if (ev.state==0) {
           if (selected!=-1) {
             if (items[selected].callback!=NULL) {
-              items[selected].callback();
+              items[selected].callback(&items[selected],items[selected].callbackUser);
             }
           }
           wannaRetire=true;

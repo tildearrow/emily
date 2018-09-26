@@ -18,6 +18,8 @@ int eVideoOut::pushFrame(eFrame* f) {
 }
 
 int eVideoOut::popFrame() {
+  if (frameStack.empty()) return 0;
+  
   frameStack.top()->parentD=NULL;
   frameStack.pop();
   return 1;
