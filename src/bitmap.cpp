@@ -42,10 +42,12 @@ void eBitmap::clearToColor(eColor c) { OP_BEGIN
 
 void eBitmap::copyBlitOn(eBitmap* src, int x, int y) { OP_BEGIN
   int tw, th;
-  tw=src->width;
-  th=src->height;
-  for (int j=0; j<th; j++) {
-    memcpy(&data[(x+(y+j)*width)<<2],&src->data[(j*src->width)<<2],tw*4*sizeof(float));
+  if (src!=NULL) {
+    tw=src->width;
+    th=src->height;
+    for (int j=0; j<th; j++) {
+      memcpy(&data[(x+(y+j)*width)<<2],&src->data[(j*src->width)<<2],tw*4*sizeof(float));
+    }
   }
   OP_END("copyBlitOn")
 }
@@ -54,20 +56,22 @@ void eBitmap::blitOn(eBitmap* src, int x, int y) { OP_BEGIN
   int tw, th;
   eColor* dataPix;
   eColor* destin;
-  tw=src->width;
-  th=src->height;
-  for (int j=0; j<th; j++) {
-    for (int i=0; i<tw; i++) {
-      dataPix=(eColor*)&src->data[(i+j*src->width)<<2];
-      destin=(eColor*)&data[(x+i+(y+j)*width)<<2];
-      if (dataPix->a==0) continue;
-      if (dataPix->a==1) {
-        *destin=*dataPix;
-      } else {
-        destin->r+=(dataPix->r-destin->r)*dataPix->a;
-        destin->g+=(dataPix->g-destin->g)*dataPix->a;
-        destin->b+=(dataPix->b-destin->b)*dataPix->a;
-        destin->a=dataPix->a+(destin->a*(1-dataPix->a));
+  if (src!=NULL) {
+    tw=src->width;
+    th=src->height;
+    for (int j=0; j<th; j++) {
+      for (int i=0; i<tw; i++) {
+        dataPix=(eColor*)&src->data[(i+j*src->width)<<2];
+        destin=(eColor*)&data[(x+i+(y+j)*width)<<2];
+        if (dataPix->a==0) continue;
+        if (dataPix->a==1) {
+          *destin=*dataPix;
+        } else {
+          destin->r+=(dataPix->r-destin->r)*dataPix->a;
+          destin->g+=(dataPix->g-destin->g)*dataPix->a;
+          destin->b+=(dataPix->b-destin->b)*dataPix->a;
+          destin->a=dataPix->a+(destin->a*(1-dataPix->a));
+        }
       }
     }
   }
@@ -147,6 +151,15 @@ void eBitmap::shadeGlowBack(int radius, int passes, eColor col) { OP_BEGIN
 }
 
 void eBitmap::shadeColor(eColor c) { OP_BEGIN
+  if (c.r==0 && c.g==0 && c.b==0 && c.a==0) {
+    clear();
+    OP_END("shadeColor")
+    return;
+  }
+  if (c.r==1 && c.g==1 && c.b==1 && c.a==1) {
+    OP_END("shadeColor")
+    return;
+  }
   for (int i=0; i<width*height; i++) {
     data[i<<2]*=c.r;
     data[1+(i<<2)]*=c.g;
@@ -157,6 +170,10 @@ void eBitmap::shadeColor(eColor c) { OP_BEGIN
 }
 
 void eBitmap::shadeAlpha(float a) { OP_BEGIN
+  if (a==1) {
+    OP_END("shadeAlpha");
+    return;
+  }
   for (int i=0; i<width*height; i++) {
     data[3+(i<<2)]*=a;
   }
@@ -164,6 +181,15 @@ void eBitmap::shadeAlpha(float a) { OP_BEGIN
 }
 
 void eBitmap::shadePower(float val) { OP_BEGIN
+  if (val==0) {
+    clearToColor({1,1,1,1});
+    OP_END("shadePower");
+    return;
+  }
+  if (val==1) {
+    OP_END("shadePower");
+    return;
+  }
   for (int i=0; i<width*height; i++) {
     data[i<<2]=pow(data[i<<2],val);
     data[1+(i<<2)]=pow(data[1+(i<<2)],val);
@@ -310,6 +336,7 @@ void eBitmap::shadeHGrad(double p1, double p2, eColor c1, eColor c2) { OP_BEGIN
 void eBitmap::circle(int x, int y, int r, eColor color) { OP_BEGIN
   int ax1, ay1, ax2, ay2;
   float* alphaMap;
+  if (r<=0) return;
   //ffd=ceil((float)r/1.414213562373095);
   ax1=0;
   if (x<0) {
