@@ -92,7 +92,7 @@ int eLight::setMaterial(eLightMaterials mat) {
 
 int eLight::setLightProps(double h, double s) {
   hue=h;
-  saturation=s;
+  saturation=1-s;
   // precalc light color
   eLightPre.r=fmin(fmax(0,fabs(2.0-hue*6+1.0)-1.0),1);
   eLightPre.g=1.0-fmin(fmax(0,fabs(1.0-hue*6.0+1.0)-1.0),1);
