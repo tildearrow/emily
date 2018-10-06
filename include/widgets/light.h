@@ -10,6 +10,7 @@ class eLight: public eWidget {
   sf::Texture* tinst;
   sf::Sprite sinst;
   sf::Sprite sinstLight;
+  sf::Sprite sinstMaterial;
   double hue, saturation;
   float bright;
   float highlight;

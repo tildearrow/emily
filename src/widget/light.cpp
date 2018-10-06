@@ -129,12 +129,9 @@ int eLight::draw() {
     sinstLight.setTexture(*tinst);
     sinstLight.setTextureRect(sf::IntRect(fw,0,fw,fh));
     sinstLight.setOrigin(sf::Vector2f(xo,yo));
-    /*
-    
-    sinstClick.setTexture(*tinst);
-    sinstClick.setTextureRect(sf::IntRect(fw*2,0,fw,fh));
-    sinstClick.setOrigin(sf::Vector2f(xo,yo));
-    */
+    sinstMaterial.setTexture(*tinst);
+    sinstMaterial.setTextureRect(sf::IntRect(fw*2,0,fw,fh));
+    sinstMaterial.setOrigin(sf::Vector2f(xo,yo));
     _regenGraphics=false;
     
     //printf("time: %d\n",end-start);
@@ -147,30 +144,13 @@ int eLight::draw() {
   }
   if (highlight>1) highlight=1;
   if (highlight<0) highlight=0;
-  // temporary
-  /*
-  if (clicked && _collision) {
-    engine->drawColor({1,1,1,1});
-  } else {
-    engine->drawColor({0.25f*highlight,0.25f*highlight,0.25f*highlight,1});
-  }
-  engine->frect(x,y,x+w,y+h);
-  engine->drawColor({1,1,1,1});
-  engine->rect(x,y,x+w,y+h);
-  */
   sinst.setPosition(bLeft*engine->scale,bTop*engine->scale);
   sinstLight.setColor(sf::Color(eLightPre.r*255,eLightPre.g*255,eLightPre.b*255,bright*255));
   sinstLight.setPosition(bLeft*engine->scale,bTop*engine->scale);
-  /*sinstHigh.setPosition(bLeft*engine->scale,bTop*engine->scale);
-  sinstClick.setPosition(bLeft*engine->scale,bTop*engine->scale);*/
+  sinstMaterial.setPosition(bLeft*engine->scale,bTop*engine->scale);
   engine->win->draw(sinst);
-  engine->win->draw(sinstLight);
   engine->win->draw(sinstLight,sf::BlendAdd);
-  /*sinstHigh.setColor(sf::Color(255,255,255,highlight*255));
-  engine->win->draw(sinstHigh);
-  if (clicked && _collision) {
-    engine->win->draw(sinstClick);
-  }*/
+  engine->win->draw(sinstMaterial);
   if (icon!=NULL) {
     switch (iconPlace) {
       case eLeft:

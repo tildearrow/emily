@@ -215,7 +215,7 @@ sf::Texture* eSkin::getTexture(int objectType, int attrib[8], int w, int h, doub
       return ret;
       break;
     case eObjectLight:
-      retBitmap=new eBitmap(w*engine->scale*2,h*engine->scale);
+      retBitmap=new eBitmap(w*engine->scale*3,h*engine->scale);
       switch (attrib[1]) {
         case eLightPlastic:
           retBitmap->clearToColor({0.2,0.2,0.2,1});
@@ -232,27 +232,32 @@ sf::Texture* eSkin::getTexture(int objectType, int attrib[8], int w, int h, doub
           bitmap->roundRect(0,0,w*engine->scale,h*engine->scale,4*engine->scale,{0.1f+0.5f*((float*)attrib)[0],0.1f+0.5f*((float*)attrib)[0],0.1f+0.5f*((float*)attrib)[0],0.8});
           bitmap->roundRect(0.5*engine->scale,0.5*engine->scale,(w-1)*engine->scale,(h-1)*engine->scale,4*engine->scale,{0.1f+0.5f*((float*)attrib)[0],0.1f+0.5f*((float*)attrib)[0],0.1f+0.5f*((float*)attrib)[0],0.9});
           bitmap->roundRect(1*engine->scale,1*engine->scale,(w-2)*engine->scale,(h-2)*engine->scale,4*engine->scale,{0.1f+0.5f*((float*)attrib)[0],0.1f+0.5f*((float*)attrib)[0],0.1f+0.5f*((float*)attrib)[0],1});
-          // reflections
-          bitmap->shadeVGrad(0,3/(float)h,{1.0f,1.0f,1.0f,1.0f},{1.2f,1.2f,1.2f,1.0f});
-          bitmap->shadeVGrad(3/(float)h,6/(float)h,{1.0f,1.0f,1.0f,1.0f},{0.83333333f,0.83333333f,0.83333333f,1.0f});
-          bitmap->shadeHGrad(0,3/(float)w,{1.0f,1.0f,1.0f,1.0f},{1.1f,1.1f,1.1f,1.0f});
-          bitmap->shadeHGrad(3/(float)w,6/(float)w,{1.0f,1.0f,1.0f,1.0f},{0.9090909091f,0.9090909091f,0.9090909091f,1.0f});
-          bitmap->shadeHGrad(((float)w-6)/(float)w,((float)w-2)/(float)w,{1.0f,1.0f,1.0f,1.0f},{0.9f,0.9f,0.9f,1.0f});
-          bitmap->shadeVGrad(((float)h-6)/(float)h,((float)h-2)/(float)h,{1.0f,1.0f,1.0f,1.0f},{0.9f,0.9f,0.9f,1.0f});
-          // slight radial gradient
-          bitmap->shadeHMGrad({0.8f,0.8f,0.8f,1.0f},{1.0f,1.0f,1.0f,1.0f});
-          bitmap->shadeVMGrad({0.8f,0.8f,0.8f,1.0f},{1.0f,1.0f,1.0f,1.0f});
           
+          // light
           bitmap1=new eBitmap(w*engine->scale,h*engine->scale);
           bitmap1->clear();
           bitmap1->roundRect(0.5*engine->scale,0.5*engine->scale,(w-1)*engine->scale,(h-1)*engine->scale,4*engine->scale,{1,1,1,1});
           bitmap1->shadeHMGrad({1,1,1,0.3},{1,1,1,0.66667f-((float*)attrib)[0]*0.15f});
           bitmap1->shadeVMGrad({1,1,1,0.3},{1,1,1,0.66667f-((float*)attrib)[0]*0.15f});
           
+          // reflections
+          bitmap2=new eBitmap(w*engine->scale,h*engine->scale);
+          bitmap2->clear();
+          bitmap2->shadeVGrad(0,3/(float)h,{1.0f,1.0f,1.0f,1.0f},{1.2f,1.2f,1.2f,1.0f});
+          bitmap2->shadeVGrad(3/(float)h,6/(float)h,{1.0f,1.0f,1.0f,1.0f},{0.83333333f,0.83333333f,0.83333333f,1.0f});
+          bitmap2->shadeHGrad(0,3/(float)w,{1.0f,1.0f,1.0f,1.0f},{1.1f,1.1f,1.1f,1.0f});
+          bitmap2->shadeHGrad(3/(float)w,6/(float)w,{1.0f,1.0f,1.0f,1.0f},{0.9090909091f,0.9090909091f,0.9090909091f,1.0f});
+          bitmap2->shadeHGrad(((float)w-6)/(float)w,((float)w-2)/(float)w,{1.0f,1.0f,1.0f,1.0f},{0.9f,0.9f,0.9f,1.0f});
+          bitmap2->shadeVGrad(((float)h-6)/(float)h,((float)h-2)/(float)h,{1.0f,1.0f,1.0f,1.0f},{0.9f,0.9f,0.9f,1.0f});
+          // slight radial gradient
+          bitmap2->shadeHMGrad({0.8f,0.8f,0.8f,1.0f},{1.0f,1.0f,1.0f,1.0f});
+          bitmap2->shadeVMGrad({0.8f,0.8f,0.8f,1.0f},{1.0f,1.0f,1.0f,1.0f});
+          
           retBitmap->clear();
           
           retBitmap->copyBlitOn(bitmap,0,0);
           retBitmap->copyBlitOn(bitmap1,w*engine->scale,0);
+          retBitmap->copyBlitOn(bitmap2,w*engine->scale*2,0);
           *xo=0;
           *yo=0;
           *frameWidth=w*engine->scale;
@@ -260,6 +265,7 @@ sf::Texture* eSkin::getTexture(int objectType, int attrib[8], int w, int h, doub
           ret=retBitmap->toTexture();
           delete bitmap;
           delete bitmap1;
+          delete bitmap2;
           return ret;
           break;
         default:
