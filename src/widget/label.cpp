@@ -3,7 +3,16 @@
 int eLabel::init() {
   inst=new sf::Text();
   inst->setFont(engine->defFont->inst);
-  inst->setCharacterSize(12*engine->scale);
+  tsize=12;
+  inst->setCharacterSize(tsize*engine->scale);
+  return 1;
+}
+
+int eLabel::calcBounds() {
+  bTop=dY*parent->getHeight()+y-tsize*alignY;
+  bBottom=bTop+tsize;
+  bLeft=dX*parent->getWidth()+x-(inst->getLocalBounds().width/engine->scale)*alignX;
+  bRight=bLeft+(inst->getLocalBounds().width/engine->scale);
   return 1;
 }
 
@@ -14,13 +23,15 @@ int eLabel::setString(string data) {
 }
 
 int eLabel::setTextSize(double size) {
-  inst->setCharacterSize(size*engine->scale);
+  tsize=size;
+  inst->setCharacterSize(tsize*engine->scale);
   return 0;
 }
 
 int eLabel::draw() {
+  calcBounds();
   engine->drawColor({1,1,1,1});
-  inst->setPosition(x*engine->scale,y*engine->scale);
+  inst->setPosition(bLeft*engine->scale,bTop*engine->scale);
   engine->win->draw(*inst);
   return 0;
 }

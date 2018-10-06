@@ -600,7 +600,7 @@ sf::Texture* eBitmap::toTexture() {
   unsigned char* converted;
   converted=new unsigned char[width*height*4];
   for (int i=0; i<width*height*4; i++) {
-    converted[i]=data[i]*255;
+    converted[i]=(data[i]>1)?255:(data[i]*255);
   }
   temp=new sf::Texture;
   temp->create(width,height);
