@@ -63,6 +63,7 @@ typedef std::string string;
 enum eEventSystem {
   eEventQuit=0x01,
   eEventResize=0x02,
+  eEventRedrawRequest=0xfc,
   eEventFocus=0xfd,
   eEventBackend=0xfe,
 };
@@ -535,6 +536,7 @@ class eEngine {
     XPT int run();
     XPT int runDetached();
     XPT int pause(double timeAsMicro);
+    XPT int unblockWait();
 
     XPT eFrame* newFrame();
     

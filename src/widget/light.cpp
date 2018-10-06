@@ -107,6 +107,7 @@ int eLight::setLightProps(double h, double s) {
 
 int eLight::setLight(float b) {
   bright=b;
+  engine->unblockWait();
   return 1;
 }
 

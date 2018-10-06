@@ -239,6 +239,18 @@ public:
     bool waitEvent(Event& event);
 
     ////////////////////////////////////////////////////////////
+    /// \brief Give up waiting for an event
+    ///
+    /// This cancels waitEvent.
+    ///
+    /// \return False if any error occurred
+    ///
+    /// \see waitEvent
+    ///
+    ////////////////////////////////////////////////////////////
+    bool giveUpWaiting();
+
+    ////////////////////////////////////////////////////////////
     /// \brief Get the position of the window
     ///
     /// \return Position of the window, in pixels
@@ -338,7 +350,7 @@ public:
     ///
     ////////////////////////////////////////////////////////////
     void setVerticalSyncEnabled(bool enabled);
-    
+
 ////////////////////////////////////////////////////////////
     /// \brief Check whether we have GLX_OML_sync_control
     ///

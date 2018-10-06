@@ -186,6 +186,14 @@ public:
     ////////////////////////////////////////////////////////////
     virtual bool hasFocus() const;
 
+    ////////////////////////////////////////////////////////////
+    /// \brief Give up waiting
+    ///
+    /// \return Boolean
+    ///
+    ////////////////////////////////////////////////////////////
+    virtual bool giveUpWait();
+
 protected:
 
     ////////////////////////////////////////////////////////////
@@ -286,6 +294,9 @@ private:
     Pixmap             m_iconPixmap;     ///< The current icon pixmap if in use
     Pixmap             m_iconMaskPixmap; ///< The current icon mask pixmap if in use
     ::Time             m_lastInputTime;  ///< Last time we received user input
+    int                m_massiveHack[2]; ///< Massive Unblock HACK
+    Uint8              m_Discard[128];   ///< Same thing
+    bool               m_weWrote;        ///< we wrote
 };
 
 } // namespace priv

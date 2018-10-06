@@ -115,6 +115,14 @@ public:
     bool popEvent(Event& event, bool block);
 
     ////////////////////////////////////////////////////////////
+    /// \brief Give up waiting
+    ///
+    /// \return Boolean
+    ///
+    ////////////////////////////////////////////////////////////
+    virtual bool giveUpWait()=0;
+
+    ////////////////////////////////////////////////////////////
     /// \brief Get the OS-specific handle of the window
     ///
     /// \return Handle of the window

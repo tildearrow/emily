@@ -243,6 +243,11 @@ int eEngine::nextEvent(eEvent& ev, bool wait) {
       ev.coord.x=temp.sensor.x;
       ev.coord.y=temp.sensor.y;
       ev.coord.z=temp.sensor.z;
+      break;
+    case sf::Event::EmilyThing:
+      // redraw request
+      ev.type=eEventRedrawRequest;
+      break;
     default:
       ev.type=eEventBackend;
       eLogI("got backend event %d\n",temp.type);
@@ -390,6 +395,9 @@ void eMainLoop(eEngine* eng) {
           for (size_t i=0; i<eng->displays[0]->frameStack.top()->widgets.size(); i++) {
             eng->displays[0]->frameStack.top()->widgets[i]->calcBounds();
           }
+          waitStart=4;
+          break;
+        case eEventRedrawRequest:
           waitStart=4;
           break;
         default:
@@ -677,6 +685,11 @@ long long perfCount() {
   return (temp.tv_sec*1000000000)+temp.tv_nsec;
 #endif
 #endif
+}
+
+int eEngine::unblockWait() {
+  if (win==NULL) return 0;
+  return win->giveUpWaiting();
 }
 
 void eEngine::preRender() {

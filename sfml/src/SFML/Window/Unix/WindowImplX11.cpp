@@ -41,6 +41,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <poll.h>
 #include <libgen.h>
 #include <fcntl.h>
 #include <algorithm>
@@ -497,7 +498,8 @@ m_cursorGrabbed  (false),
 m_windowMapped   (false),
 m_iconPixmap     (0),
 m_iconMaskPixmap (0),
-m_lastInputTime  (0)
+m_lastInputTime  (0),
+m_weWrote        (false)
 {
     // Open a connection with the X server
     m_display = OpenDisplay();
@@ -775,11 +777,32 @@ WindowHandle WindowImplX11::getSystemHandle() const
 ////////////////////////////////////////////////////////////
 void WindowImplX11::processEvents(bool wait)
 {
+    struct pollfd wpfd[2];
     XEvent event;
+    Event massHack;
+
+    /////////////////////////////////////////
+    // [ *BEWARE! MASSIVE HACK INCOMING* ] //
+    /////////////////////////////////////////
+
+    wpfd[0].fd=ConnectionNumber(m_display);
+    wpfd[0].events=POLLIN|POLLERR;
+    wpfd[0].revents=0;
+
+    wpfd[1].fd=m_massiveHack[0];
+    wpfd[1].events=POLLIN|POLLERR;
+    wpfd[1].revents=0;
 
     // Wait for an event
     if (wait) {
-      XPeekEvent(m_display, &event);
+      poll(wpfd,2,-1);
+      //XPeekEvent(m_display, &event);
+    }
+    if (wpfd[1].revents) {
+      read(m_massiveHack[0],m_Discard,128);
+      m_weWrote=false;
+      massHack.type = Event::EmilyThing;
+      pushEvent(massHack);
     }
 
     // Pick out the events that are interesting for this window
@@ -1497,6 +1520,12 @@ void WindowImplX11::initialize()
     // Create the hidden cursor
     createHiddenCursor();
 
+    // Here be dragons
+    if (pipe(m_massiveHack)<0) {
+      printf("I could NOT create a pipe\n");
+      abort();
+    }
+
     // Flush the commands queue
     XFlush(m_display);
 
@@ -1981,6 +2010,16 @@ bool WindowImplX11::processEvent(XEvent& windowEvent)
     }
 
     return true;
+}
+
+// HACK HACK HACK
+bool WindowImplX11::giveUpWait() {
+  // tell the input thread we want to redraw.
+  if (!m_weWrote) {
+    m_weWrote=true;
+    write(m_massiveHack[1],"",1);
+  }
+  return true;
 }
 
 } // namespace priv

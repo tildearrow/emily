@@ -210,6 +210,20 @@ bool Window::waitEvent(Event& event)
 
 
 ////////////////////////////////////////////////////////////
+bool Window::giveUpWaiting()
+{
+    if (m_impl && m_impl->giveUpWait())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
+////////////////////////////////////////////////////////////
 Vector2i Window::getPosition() const
 {
     return m_impl ? m_impl->getPosition() : Vector2i();

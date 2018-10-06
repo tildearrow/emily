@@ -209,6 +209,7 @@ public:
         TouchMoved,             ///< A touch moved (data in event.touch)
         TouchEnded,             ///< A touch event ended (data in event.touch)
         SensorChanged,          ///< A sensor value changed (data in event.sensor)
+        EmilyThing,             ///< Part of the "Massive Hack" (no data)
 
         Count                   ///< Keep last -- the total number of event types
     };
