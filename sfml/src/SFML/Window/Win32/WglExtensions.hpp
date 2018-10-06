@@ -92,6 +92,7 @@ typedef struct _GPU_DEVICE *PGPU_DEVICE;
 extern "C" {
 #endif // __cplusplus
 
+extern int sfwgl_ext_OML_sync_control;
 extern int sfwgl_ext_EXT_swap_control;
 extern int sfwgl_ext_EXT_framebuffer_sRGB;
 extern int sfwgl_ext_ARB_framebuffer_sRGB;
@@ -179,6 +180,14 @@ extern int sfwgl_ext_ARB_create_context_profile;
 #define WGL_CONTEXT_CORE_PROFILE_BIT_ARB 0x00000001
 #define WGL_CONTEXT_PROFILE_MASK_ARB 0x9126
 #define WGL_ERROR_INVALID_PROFILE_ARB 0x2096
+
+#ifndef WGL_OML_sync_control
+#define WGL_OML_sync_control 1
+extern int (CODEGEN_FUNCPTR *sf_ptrc_wglGetSyncValuesOML)(HDC, INT64*, INT64*, INT64*);
+extern int (CODEGEN_FUNCPTR *sf_ptrc_wglWaitForMscOML)(HDC, INT64, INT64, INT64, INT64*, INT64*, INT64*);
+#define wglGetSyncValuesOML sf_ptrc_wglGetSyncValuesOML
+#define wglWaitForMscOML sf_ptrc_wglWaitForMscOML
+#endif // WGL_OML_sync_control
 
 #ifndef WGL_EXT_swap_control
 #define WGL_EXT_swap_control 1

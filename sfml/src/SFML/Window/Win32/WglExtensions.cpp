@@ -37,6 +37,7 @@ static sf::GlFunctionPointer IntGetProcAddress(const char* name)
     return sf::Context::getFunction(name);
 }
 
+int sfwgl_ext_OML_sync_control = sfwgl_LOAD_FAILED;
 int sfwgl_ext_EXT_swap_control = sfwgl_LOAD_FAILED;
 int sfwgl_ext_EXT_framebuffer_sRGB = sfwgl_LOAD_FAILED;
 int sfwgl_ext_ARB_framebuffer_sRGB = sfwgl_LOAD_FAILED;
@@ -45,6 +46,21 @@ int sfwgl_ext_ARB_pixel_format = sfwgl_LOAD_FAILED;
 int sfwgl_ext_ARB_pbuffer = sfwgl_LOAD_FAILED;
 int sfwgl_ext_ARB_create_context = sfwgl_LOAD_FAILED;
 int sfwgl_ext_ARB_create_context_profile = sfwgl_LOAD_FAILED;
+
+int (CODEGEN_FUNCPTR *sf_ptrc_wglGetSyncValuesOML)(HDC, INT64*, INT64*, INT64*) = NULL;
+int (CODEGEN_FUNCPTR *sf_ptrc_wglWaitForMscOML)(HDC, INT64, INT64, INT64, INT64*, INT64*, INT64*) = NULL;
+
+static int Load_OML_sync_control(void)
+{
+    int numFailed = 0;
+    sf_ptrc_wglGetSyncValuesOML = reinterpret_cast<int (CODEGEN_FUNCPTR*)(HDC, INT64*, INT64*, INT64*)>(IntGetProcAddress("wglGetSyncValuesOML"));
+    if (!sf_ptrc_wglGetSyncValuesOML)
+        numFailed++;
+    sf_ptrc_wglWaitForMscOML = reinterpret_cast<int (CODEGEN_FUNCPTR*)(HDC, INT64, INT64, INT64, INT64*, INT64*, INT64*)>(IntGetProcAddress("wglWaitForMscOML"));
+    if (!sf_ptrc_wglWaitForMscOML)
+        numFailed++;
+    return numFailed;
+}
 
 int (CODEGEN_FUNCPTR *sf_ptrc_wglGetSwapIntervalEXT)(void) = NULL;
 BOOL (CODEGEN_FUNCPTR *sf_ptrc_wglSwapIntervalEXT)(int) = NULL;
@@ -129,7 +145,8 @@ typedef struct sfwgl_StrToExtMap_s
     PFN_LOADFUNCPOINTERS LoadExtension;
 } sfwgl_StrToExtMap;
 
-static sfwgl_StrToExtMap ExtensionMap[8] = {
+static sfwgl_StrToExtMap ExtensionMap[9] = {
+    {"WGL_OML_sync_control", &sfwgl_ext_OML_sync_control, Load_OML_sync_control},
     {"WGL_EXT_swap_control", &sfwgl_ext_EXT_swap_control, Load_EXT_swap_control},
     {"WGL_EXT_framebuffer_sRGB", &sfwgl_ext_EXT_framebuffer_sRGB, NULL},
     {"WGL_ARB_framebuffer_sRGB", &sfwgl_ext_ARB_framebuffer_sRGB, NULL},
@@ -140,7 +157,7 @@ static sfwgl_StrToExtMap ExtensionMap[8] = {
     {"WGL_ARB_create_context_profile", &sfwgl_ext_ARB_create_context_profile, NULL}
 };
 
-static int g_extensionMapSize = 8;
+static int g_extensionMapSize = 9;
 
 
 static sfwgl_StrToExtMap* FindExtEntry(const char* extensionName)
@@ -158,6 +175,7 @@ static sfwgl_StrToExtMap* FindExtEntry(const char* extensionName)
 
 static void ClearExtensionVars(void)
 {
+    sfwgl_ext_OML_sync_control = sfwgl_LOAD_FAILED;
     sfwgl_ext_EXT_swap_control = sfwgl_LOAD_FAILED;
     sfwgl_ext_EXT_framebuffer_sRGB = sfwgl_LOAD_FAILED;
     sfwgl_ext_ARB_framebuffer_sRGB = sfwgl_LOAD_FAILED;

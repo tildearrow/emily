@@ -290,7 +290,7 @@ WindowHandle WindowImplWin32::getSystemHandle() const
 
 
 ////////////////////////////////////////////////////////////
-void WindowImplWin32::processEvents()
+void WindowImplWin32::processEvents(bool wait)
 {
     // We process the window events only if we own it
     if (!m_callback)
@@ -1158,6 +1158,11 @@ LRESULT CALLBACK WindowImplWin32::globalOnEvent(HWND handle, UINT message, WPARA
         return 0;
 
     return DefWindowProcW(handle, message, wParam, lParam);
+}
+
+bool WindowImplWin32::giveUpWait() {
+  // TODO: do this
+  return false;
 }
 
 } // namespace priv

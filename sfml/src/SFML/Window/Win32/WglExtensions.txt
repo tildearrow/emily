@@ -11,3 +11,4 @@ WGL_ARB_pixel_format
 WGL_ARB_pbuffer
 WGL_ARB_create_context
 WGL_ARB_create_context_profile
+WGL_OML_sync_control

@@ -134,7 +134,6 @@ Font::~Font()
 
 
 ////////////////////////////////////////////////////////////
-#warning "tell me"
 bool Font::loadFromFile(const std::string& filename)
 {
     #ifndef SFML_SYSTEM_ANDROID

@@ -183,6 +183,14 @@ public:
     ///
     ////////////////////////////////////////////////////////////
     virtual bool hasFocus() const;
+    
+    ////////////////////////////////////////////////////////////
+    /// \brief Give up waiting
+    ///
+    /// \return Boolean
+    ///
+    ////////////////////////////////////////////////////////////
+    virtual bool giveUpWait();
 
 protected:
 
@@ -190,7 +198,7 @@ protected:
     /// \brief Process incoming events from the operating system
     ///
     ////////////////////////////////////////////////////////////
-    virtual void processEvents();
+    virtual void processEvents(bool wait);
 
 private:
 

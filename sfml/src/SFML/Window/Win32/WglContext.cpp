@@ -240,6 +240,20 @@ void WglContext::display()
         SwapBuffers(m_deviceContext);
 }
 
+////////////////////////////////////////////////////////////
+bool WglContext::waitVBlank()
+{
+    int result = 0;
+    int64_t cust, cmsc, csbc;
+
+    if (sfwgl_ext_OML_sync_control == sfwgl_LOAD_SUCCEEDED) {
+      wglGetSyncValuesOML(m_deviceContext,&cust,&cmsc,&csbc);
+      result=wglWaitForMscOML(m_deviceContext,csbc+1,1,0,&cust,&cmsc,&csbc);
+    }
+
+    return result;
+}
+
 
 ////////////////////////////////////////////////////////////
 void WglContext::setVerticalSyncEnabled(bool enabled)

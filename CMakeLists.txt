@@ -8,6 +8,10 @@ set(CMAKE_CXX_STANDARD 11)
 option(BUILD_STATIC "build static library instead" OFF)
 option(BUILD_EXAMPLES "build sample programs" ON)
 
+if (WIN32)
+  set(BUILD_STATIC ON)
+endif (WIN32)
+
 # legacy. it has always worked well.
 # heck, it is not even legacy. you're just ignoring AMD here.
 set(OpenGL_GL_PREFERENCE "LEGACY")
@@ -31,7 +35,12 @@ find_library(USE_XCB xcb)
 find_library(HAVE_FONTCONFIG fontconfig)
 endif (NOT APPLE)
 
-find_library(HAVE_FT2 freetype PATHS sfml/extlibs)
+if (WIN32)
+  set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+  find_library(HAVE_FT2 freetype PATHS sfml/extlibs/libs-mingw/x86)
+else (WIN32)
+  find_library(HAVE_FT2 freetype PATHS sfml/extlibs)
+endif (WIN32)
 
 if (NOT HAVE_FT2)
   message("you don't have freetype2. this is a problem.")
@@ -77,7 +86,7 @@ if (USE_XCB)
   target_compile_definitions(emily PUBLIC HAVE_FONTCONFIG)
 endif (USE_XCB)
 
-add_custom_command(TARGET emily WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/fa COMMAND xxd -i FontAwesome.otf > fa.h)
+#add_custom_command(TARGET emily WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/fa COMMAND xxd -i FontAwesome.otf > fa.h)
 target_link_libraries(emily sfml-graphics sfml-window sfml-system ${HAVE_FT2})
 if (UNIX)
   target_link_libraries(emily pthread)
