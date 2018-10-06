@@ -523,6 +523,10 @@ bool WindowImplCocoa::hasFocus() const
     return [m_delegate hasFocus];
 }
 
+bool WindowImplCocoa::giveUpWait() {
+  return 0;
+}
+
 
 } // namespace priv
 

@@ -71,8 +71,11 @@ double getScale() {
   return 1;
 }
 
-eEngine::eEngine(string name): x11conn(NULL) {
+eEngine::eEngine(string name) {
   int status;
+#if defined(__unix__) && !defined(__APPLE__)
+  x11conn=NULL;
+#endif
   scale=getScale();
   visible=false;
   title=name;
