@@ -31,7 +31,8 @@ int eLabel::setTextSize(double size) {
 int eLabel::draw() {
   calcBounds();
   engine->drawColor({1,1,1,1});
-  inst->setPosition(bLeft*engine->scale,bTop*engine->scale);
+  // int'ing prevents text from looking blurry on 1x scale
+  inst->setPosition(int(bLeft*engine->scale),int(bTop*engine->scale));
   engine->win->draw(*inst);
   return 0;
 }
