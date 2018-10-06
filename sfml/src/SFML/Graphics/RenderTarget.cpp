@@ -156,6 +156,23 @@ void RenderTarget::clear(const Color& color)
 
 
 ////////////////////////////////////////////////////////////
+void RenderTarget::setScissor(const IntRect& box) {
+  if (isActive(m_id) || setActive(true)) {
+    glCheck(glEnable(GL_SCISSOR_TEST));
+    glCheck(glScissor(box.left,box.top,box.width,box.height));
+  }
+}
+
+
+////////////////////////////////////////////////////////////
+void RenderTarget::resetScissor() {
+  if (isActive(m_id) || setActive(true)) {
+    glCheck(glDisable(GL_SCISSOR_TEST));
+  }
+}
+
+
+////////////////////////////////////////////////////////////
 void RenderTarget::setView(const View& view)
 {
     m_view = view;
