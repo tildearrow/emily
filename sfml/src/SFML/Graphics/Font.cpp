@@ -88,7 +88,8 @@ m_face     (NULL),
 m_streamRec(NULL),
 m_stroker  (NULL),
 m_refCount (NULL),
-m_info     ()
+m_info     (),
+m_dpi      (96)
 {
     #ifdef SFML_SYSTEM_ANDROID
         m_stream = NULL;
@@ -105,7 +106,8 @@ m_stroker    (copy.m_stroker),
 m_refCount   (copy.m_refCount),
 m_info       (copy.m_info),
 m_pages      (copy.m_pages),
-m_pixelBuffer(copy.m_pixelBuffer)
+m_pixelBuffer(copy.m_pixelBuffer),
+m_dpi        (copy.m_dpi)
 {
     #ifdef SFML_SYSTEM_ANDROID
         m_stream = NULL;
@@ -755,6 +757,18 @@ IntRect Font::findGlyphRect(Page& page, unsigned int width, unsigned int height)
 
 
 ////////////////////////////////////////////////////////////
+void Font::setDPI(unsigned int dpi) {
+  m_dpi=dpi;
+}
+
+
+////////////////////////////////////////////////////////////
+unsigned int Font::getDPI() const {
+  return m_dpi;
+}
+
+
+////////////////////////////////////////////////////////////
 bool Font::setCurrentSize(unsigned int characterSize) const
 {
     // FT_Set_Pixel_Sizes is an expensive function, so we must call it
@@ -763,9 +777,9 @@ bool Font::setCurrentSize(unsigned int characterSize) const
     FT_Face face = static_cast<FT_Face>(m_face);
     FT_UShort currentSize = face->size->metrics.x_ppem;
 
-    if (currentSize != characterSize)
+    if (currentSize != (characterSize*m_dpi)/72)
     {
-        FT_Error result = FT_Set_Pixel_Sizes(face, 0, characterSize);
+        FT_Error result = FT_Set_Char_Size(face, 0, characterSize*64, m_dpi, m_dpi);
 
         if (result == FT_Err_Invalid_Pixel_Size)
         {

@@ -211,6 +211,24 @@ public:
     float getLineSpacing(unsigned int characterSize) const;
 
     ////////////////////////////////////////////////////////////
+    /// \brief Get font DPI
+    ///
+    /// Used for HiDPI and stuff
+    ///
+    ////////////////////////////////////////////////////////////
+    unsigned int getDPI() const;
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Set font DPI
+    ///
+    /// Used for HiDPI and stuff
+    ///
+    /// \param dpi DPI
+    ///
+    ////////////////////////////////////////////////////////////
+    void setDPI(unsigned int dpi);
+
+    ////////////////////////////////////////////////////////////
     /// \brief Get the position of the underline
     ///
     /// Underline position is the vertical offset to apply between the
@@ -354,6 +372,7 @@ private:
     Info                       m_info;        ///< Information about the font
     mutable PageTable          m_pages;       ///< Table containing the glyphs pages by character size
     mutable std::vector<Uint8> m_pixelBuffer; ///< Pixel buffer holding a glyph's pixels before being written to the texture
+    int                        m_dpi;         ///< Font DPI resolution
     #ifdef SFML_SYSTEM_ANDROID
     void*                      m_stream; ///< Asset file streamer (if loaded from file)
     #endif

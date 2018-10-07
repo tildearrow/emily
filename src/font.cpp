@@ -97,3 +97,7 @@ int eFont::loaddef(int variant) {
   }
   return 1;
 }
+
+eFont::eFont(eEngine* e): engine(e) {
+  inst.setDPI(engine->scale*96);
+}

@@ -172,11 +172,13 @@ struct eTexture {
 };
 
 class eFont {
+  eEngine* engine;
   public:
     sf::Font inst;
     int loadfn(const char* filename);
     int loadfam(const char* name);
     int loaddef(int variant);
+    eFont(eEngine* e);
 };
 
 enum eObjectTypes {
@@ -503,6 +505,7 @@ class eEngine {
   Display* x11conn;
 #endif
   friend void eMainLoop(eEngine* eng);
+  friend class eFont;
   friend class eWidget;
   friend class eLabel;
   friend class eButton;

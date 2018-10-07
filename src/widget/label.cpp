@@ -3,8 +3,8 @@
 int eLabel::init() {
   inst=new sf::Text();
   inst->setFont(engine->defFont->inst);
-  tsize=12;
-  inst->setCharacterSize(tsize*engine->scale);
+  tsize=9;
+  inst->setCharacterSize(tsize);
   return 1;
 }
 
@@ -18,13 +18,13 @@ int eLabel::calcBounds() {
 
 int eLabel::setString(string data) {
   text=data;
-  inst->setString(data);
+  inst->setString(sf::String::fromUtf8(data.begin(),data.end()));
   return 0;
 }
 
 int eLabel::setTextSize(double size) {
   tsize=size;
-  inst->setCharacterSize(tsize*engine->scale);
+  inst->setCharacterSize(tsize);
   return 0;
 }
 

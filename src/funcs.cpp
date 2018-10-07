@@ -90,7 +90,7 @@ eEngine::eEngine(string name) {
   postDrawCallback=NULL;
   drawStartCallback=NULL;
   drawEndCallback=NULL;
-  defFont=new eFont;
+  defFont=new eFont(this);
   if (defFont->loaddef(eFontDefault)==0) {
     eLogE("Error while loading default font.\n");
   }

@@ -432,7 +432,7 @@ void Text::ensureGeometryUpdate() const
     whitespaceWidth      += letterSpacing;
     float lineSpacing     = m_font->getLineSpacing(m_characterSize) * m_lineSpacingFactor;
     float x               = 0.f;
-    float y               = static_cast<float>(m_characterSize);
+    float y               = static_cast<float>(m_characterSize)*(((float)m_font->getDPI())/96.0f);
 
     // Create one quad for each character
     float minX = static_cast<float>(m_characterSize);
