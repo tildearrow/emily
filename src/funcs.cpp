@@ -565,6 +565,7 @@ eVideoOut* eEngine::newVideoOut(int width, int height) {
   }
 #endif
   temp=new eVideoOut;
+  temp->engine=this;
   temp->win=new sf::RenderWindow(sf::VideoMode(width*scale,height*scale),title,sf::Style::Titlebar|sf::Style::Close|sf::Style::Resize);
   visible=true;
   temp->w=width;

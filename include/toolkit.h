@@ -146,6 +146,8 @@ class eFrameDispatch {
   public:
     int pushFrame(eFrame* f);
     int popFrame();
+    virtual int setView(float x, float y, float w, float h);
+    virtual int resetView();
     virtual int getWidth();
     virtual int getHeight();
 };
@@ -464,10 +466,17 @@ class eVideoOut: public eFrameDispatch {
   friend class eEngine;
   friend void eMainLoop(eEngine* eng);
   double w, h;
+  struct View {
+    float x, y, w, h;
+  } current;
+  eEngine* engine;
+  std::stack<View> viewStack;
   sf::RenderWindow* win;
   public:
     XPT int getWidth();
     XPT int getHeight();
+    XPT int setView(float x, float y, float w, float h);
+    XPT int resetView();
     XPT int close();
 };
 
@@ -523,6 +532,7 @@ class eEngine {
   friend class eSkin;
   friend class eIcon;
   friend class eContextMenu;
+  friend class eVideoOut;
   int nextEvent(eEvent& ev, bool wait);
   protected:
     sf::RenderWindow* win;

@@ -17,6 +17,14 @@ int eFrameDispatch::popFrame() {
   return 1;
 }
 
+int eFrameDispatch::setView(float x, float y, float w, float h) {
+  return 0;
+}
+
+int eFrameDispatch::resetView() {
+  return 0;
+}
+
 int eFrameDispatch::getWidth() {
   return -1;
 }

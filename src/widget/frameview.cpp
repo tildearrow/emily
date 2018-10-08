@@ -66,6 +66,14 @@ int eFrameView::event(eEvent& ev) {
   return 1;
 }
 
+int eFrameView::setView(float x, float y, float wi, float he) {
+  return parent->parent->setView(bLeft+x,bTop+y,wi,he);
+}
+
+int eFrameView::resetView() {
+  return parent->parent->resetView();
+}
+
 int eFrameView::draw() {
   int accum;
   accum=0;
@@ -76,12 +84,13 @@ int eFrameView::draw() {
   engine->rect(bLeft,bTop,bLeft+w,bTop+h);
   //view=engine->win->getDefaultView();
   view.reset(sf::FloatRect(0,0,(w)*engine->scale,(h)*engine->scale));
-  // TO BE FIXED!
-  view.setViewport(sf::FloatRect((bLeft/parent->parent->getWidth()),(bTop/parent->parent->getHeight()),(w/parent->parent->getWidth()),(h/parent->parent->getHeight())));
-  engine->win->setView(view);
+  //view.setViewport(sf::FloatRect((bLeft/parent->parent->getWidth()),(bTop/parent->parent->getHeight()),(w/parent->parent->getWidth()),(h/parent->parent->getHeight())));
+  parent->parent->setView(bLeft,bTop,w,h);
+  //engine->win->setView(view);
   for (size_t i=0; i<curFrame->widgets.size(); i++) {
     accum+=curFrame->widgets[i]->draw();
   }
-  engine->win->setView(sf::View(sf::FloatRect(0,0,parent->parent->getWidth()*engine->scale,parent->parent->getHeight()*engine->scale)));
+  parent->parent->resetView();
+  //engine->win->setView(sf::View(sf::FloatRect(0,0,parent->parent->getWidth()*engine->scale,parent->parent->getHeight()*engine->scale)));
   return accum;
 }
