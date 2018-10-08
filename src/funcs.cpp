@@ -305,7 +305,7 @@ void eMainLoop(eEngine* eng) {
 #ifdef ENABLE_WAIT
   int waitStart;
 #endif
-  bool wait;
+  bool wait, doNotWait;
   rPrevVBTime=0;
   rVBTime=0;
   avgVBTime=0;
@@ -314,6 +314,7 @@ void eMainLoop(eEngine* eng) {
 #endif
   curFrame=NULL;
   wait=false;
+  doNotWait=false;
   while (1) {
     eng->win=eng->displays[0]->win;
     eng->preRender();
@@ -400,6 +401,7 @@ void eMainLoop(eEngine* eng) {
           for (size_t i=0; i<eng->displays[0]->frameStack.top()->widgets.size(); i++) {
             eng->displays[0]->frameStack.top()->widgets[i]->calcBounds();
           }
+          doNotWait=true;
           waitStart=4;
           break;
         case eEventRedrawRequest:
@@ -435,7 +437,8 @@ void eMainLoop(eEngine* eng) {
       eng->drawEndCallback();
     }
     rEndTime=perfCount();
-    eng->postRender();
+    eng->postRender(doNotWait);
+    doNotWait=false;
     if (eng->postDrawCallback!=NULL) {
       eng->postDrawCallback();
     }
@@ -703,8 +706,8 @@ void eEngine::preRender() {
   win->clear();
 }
 
-void eEngine::postRender() {
+void eEngine::postRender(bool doNotWait) {
   // wait then display
-  win->waitVBlank();
+  if (!doNotWait) win->waitVBlank();
   win->display();
 }

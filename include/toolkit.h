@@ -500,7 +500,7 @@ class eEngine {
   int (*eDrawTexture)(void*,eTexture*,double,double);
   */
   void preRender();
-  void postRender();
+  void postRender(bool doNotWait);
   std::vector<eTexture*> regTextures;
   std::vector<eContextMenu*> openMenus;
   std::vector<eVideoOut*> displays;
