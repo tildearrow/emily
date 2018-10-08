@@ -498,7 +498,6 @@ eFrame* eEngine::newFrame() {
   ret=new eFrame;
   ret->engine=this;
   ret->parent=NULL;
-  ret->parentD=NULL;
   return ret;
 }
 
@@ -576,20 +575,14 @@ eVideoOut* eEngine::newVideoOut(int width, int height) {
 
 int eFrame::getWidth() {
   if (parent) {
-    return parent->w;
-  }
-  if (parentD) {
-    return parentD->getWidth();
+    return parent->getWidth();
   }
   return -1;
 }
 
 int eFrame::getHeight() {
   if (parent) {
-    return parent->h;
-  }
-  if (parentD) {
-    return parentD->getHeight();
+    return parent->getHeight();
   }
   return -1;
 }

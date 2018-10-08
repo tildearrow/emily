@@ -1,7 +1,6 @@
-class eFrameView: public eWidget {
+class eFrameView: public eWidget, public eFrameDispatch {
   sf::RenderTexture* tex;
   sf::View view;
-  std::stack<eFrame*> frameStack;
   eFrame* curFrame;
   double xo, yo;
   int fw, fh;
@@ -9,8 +8,8 @@ class eFrameView: public eWidget {
   bool border;
   public:
     XPT int init();
-    XPT int pushFrame(eFrame* f);
-    XPT int popFrame();
+    XPT int getWidth();
+    XPT int getHeight();
     XPT int setSize(double w, double h);
     XPT int setBorder(bool enable);
     XPT int event(eEvent& ev);

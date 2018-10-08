@@ -15,21 +15,19 @@ int eFrameView::init() {
   return 1;
 }
 
-int eFrameView::pushFrame(eFrame* f) {
-  frameStack.push(f);
-  return 1;
-}
-
-int eFrameView::popFrame() {
-  frameStack.pop();
-  return 1;
-}
-
 int eFrameView::setSize(double wi, double he) {
   w=wi;
   h=he;
   calcBounds();
   return 1;
+}
+
+int eFrameView::getWidth() {
+  return w;
+}
+
+int eFrameView::getHeight() {
+  return w;
 }
 
 int eFrameView::event(eEvent& ev) {
@@ -79,11 +77,11 @@ int eFrameView::draw() {
   //view=engine->win->getDefaultView();
   view.reset(sf::FloatRect(0,0,(w)*engine->scale,(h)*engine->scale));
   // TO BE FIXED!
-  view.setViewport(sf::FloatRect((bLeft/parent->parentD->getWidth()),(bTop/parent->parentD->getHeight()),(w/parent->parentD->getWidth()),(h/parent->parentD->getHeight())));
+  view.setViewport(sf::FloatRect((bLeft/parent->parent->getWidth()),(bTop/parent->parent->getHeight()),(w/parent->parent->getWidth()),(h/parent->parent->getHeight())));
   engine->win->setView(view);
   for (size_t i=0; i<curFrame->widgets.size(); i++) {
     accum+=curFrame->widgets[i]->draw();
   }
-  engine->win->setView(sf::View(sf::FloatRect(0,0,parent->parentD->getWidth()*engine->scale,parent->parentD->getHeight()*engine->scale)));
+  engine->win->setView(sf::View(sf::FloatRect(0,0,parent->parent->getWidth()*engine->scale,parent->parent->getHeight()*engine->scale)));
   return accum;
 }

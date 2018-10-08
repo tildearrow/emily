@@ -140,6 +140,16 @@ class eEngine;
 class eVideoOut;
 class eFrame;
 
+class eFrameDispatch {
+  protected:
+    std::stack<eFrame*> frameStack;
+  public:
+    int pushFrame(eFrame* f);
+    int popFrame();
+    virtual int getWidth();
+    virtual int getHeight();
+};
+
 class eBitmap {
   public:
     int width, height;
@@ -211,6 +221,7 @@ class eWidget {
   friend class eFrame;
   friend class eVideoOut;
   friend class eFrameView;
+  friend class eFrameDispatch;
   friend void eMainLoop(eEngine* eng);
   protected:
     eEngine* engine;
@@ -318,11 +329,11 @@ class eWidget {
 
 class eFrame {
   eEngine* engine;
-  eWidget* parent;
-  eVideoOut* parentD;
+  eFrameDispatch* parent;
   std::vector<eWidget*> widgets;
   friend void eMainLoop(eEngine* eng);
   friend class eEngine;
+  friend class eFrameDispatch;
   friend class eVideoOut;
   friend class eFrameView;
   public:
@@ -449,18 +460,15 @@ class eAnimator {
 
 XPT long long perfCount();
 
-class eVideoOut {
+class eVideoOut: public eFrameDispatch {
   friend class eEngine;
   friend void eMainLoop(eEngine* eng);
   double w, h;
   sf::RenderWindow* win;
-  std::stack<eFrame*> frameStack;
   public:
-    XPT int pushFrame(eFrame* f);
-    XPT int popFrame();
-    XPT int close();
     XPT int getWidth();
     XPT int getHeight();
+    XPT int close();
 };
 
 class eEngine {

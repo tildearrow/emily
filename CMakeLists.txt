@@ -49,6 +49,7 @@ endif (NOT HAVE_FT2)
 set(SOURCES src/funcs.cpp
             src/bitmap.cpp
             src/font.cpp
+            src/frameDispatch.cpp
             src/string.cpp
             src/icon.cpp
             src/cmenu.cpp
@@ -76,6 +77,7 @@ if (APPLE)
 endif (APPLE)
 if (BUILD_EXAMPLES)
   add_executable(hello examples/hello/hello.cpp)
+  add_executable(framenest examples/framenest/framenest.cpp)
 endif (BUILD_EXAMPLES)
 if (USE_XCB)
   target_link_libraries(emily xcb)
@@ -94,4 +96,7 @@ endif (UNIX)
 if (APPLE)
   target_link_libraries(emily ${HAVE_APPKIT})
 endif (APPLE)
-target_link_libraries(hello emily)
+if (BUILD_EXAMPLES)
+  target_link_libraries(hello emily)
+  target_link_libraries(framenest emily)
+endif (BUILD_EXAMPLES)
