@@ -570,6 +570,10 @@ eVideoOut* eEngine::newVideoOut(int width, int height) {
   visible=true;
   temp->w=width;
   temp->h=height;
+  temp->current.x=0;
+  temp->current.y=0;
+  temp->current.w=width;
+  temp->current.h=height;
   displays.push_back(temp);
   return temp;
 }
