@@ -567,6 +567,9 @@ eVideoOut* eEngine::newVideoOut(int width, int height) {
   temp=new eVideoOut;
   temp->engine=this;
   temp->win=new sf::RenderWindow(sf::VideoMode(width*scale,height*scale),title,sf::Style::Titlebar|sf::Style::Close|sf::Style::Resize);
+#if defined(__APPLE__) || defined(_WIN32)
+  temp->win->setVerticalSyncEnabled(true);
+#endif
   visible=true;
   temp->w=width;
   temp->h=height;
