@@ -13,7 +13,11 @@ double eIcon::height() {
 }
 
 void eIcon::setPos(double x, double y) {
-  iconS.setPosition(x,y);
+  if (engine->scale<2) {
+    iconS.setPosition((int)x,(int)y);
+  } else {
+    iconS.setPosition(x,y);
+  }
 }
 
 int eIcon::draw() {

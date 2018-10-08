@@ -659,6 +659,7 @@ eIcon* eEngine::newIcon(eIcons icon, double size) {
     return NULL;
   }
   ret->iconT->update(expand);
+  ret->iconT->setSmooth(true);
   ret->charW=iconFont->glyph->bitmap.width;
   ret->charH=iconFont->glyph->bitmap.rows;
   ret->iconS.setTexture(*ret->iconT);
