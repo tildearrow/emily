@@ -164,5 +164,8 @@ int eSlider::draw() {
     engine->win->draw(sinstHandle);
     //engine->frect(,x+rpos+hrad,y+h/2+hrad);
   }
+  if (highlight<1 && highlight>0) {
+    return 1;
+  }
   return 0;
 }
