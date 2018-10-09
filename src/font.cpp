@@ -3,6 +3,9 @@
 extern "C" {
 #include "nsstub.h"
 }
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #endif
 #include <string.h>
 
@@ -57,12 +60,16 @@ const char* winFontNames[]={
   "MS Shell Dlg",
   "Tahoma",
   // at least this one but we want to show text
-  "System"
+  "System",
+  NULL
 };
 
-const char* macFonts[]={
-  "/System/tobedone.",
-  "/System/Library/Fonts/Helvetica.dfont"
+const char* macFontPaths[]={
+  "/System/Library/Fonts/SFNSText-Regular.otf",
+  "/System/Library/Fonts/Helvetica.dfont",
+  "/System/Library/Fonts/LucidaGrande.ttc",
+  "/System/Library/Fonts/LastResort.ttf",
+  NULL
 };
 
 int eFont::loaddef(int variant) {
@@ -75,6 +82,10 @@ int eFont::loaddef(int variant) {
   FcValue regular;
   FcValue resval;
 #endif
+#ifdef __APPLE__
+  struct stat discard;
+#endif
+  
   switch (variant) {
     case eFontDefault:
     case eFontLarge:
@@ -83,8 +94,13 @@ int eFont::loaddef(int variant) {
       path="C:\\Windows\\Fonts\\segoeui.ttf";
 #elif defined(__APPLE__)
       // apple font code here
-      // San Francisco to be done
-      path="/System/Library/Fonts/Helvetica.dfont";
+      for (int i=0; macFontPaths[i]!=NULL; i++) {
+        if (stat(macFontPaths[i],&discard)<0) {
+          continue;
+        }
+        path=macFontPaths[i];
+        break;
+      }
 #elif defined(__unix__)
       // fontconfig font code here
 #if defined(HAVE_FONTCONFIG)
