@@ -52,6 +52,19 @@ const char* fontNames[]={
   NULL
 };
 
+const char* winFontNames[]={
+  "Segoe UI",
+  "MS Shell Dlg",
+  "Tahoma",
+  // at least this one but we want to show text
+  "System"
+};
+
+const char* macFonts[]={
+  "/System/tobedone.",
+  "/System/Library/Fonts/Helvetica.dfont"
+};
+
 int eFont::loaddef(int variant) {
   string path;
 #if defined(HAVE_FONTCONFIG)
