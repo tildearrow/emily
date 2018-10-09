@@ -83,7 +83,7 @@ int eFont::loaddef(int variant) {
       }
       
       for (int i=0; fontNames[i]!=NULL; i++) {
-        fontName.u.s=(const FcChar8*)"sans-serif";
+        fontName.u.s=(const FcChar8*)fontNames[i];
         fmpattern=FcPatternCreate();
         FcPatternAdd(fmpattern,FC_FAMILY,fontName,FcTrue);
         FcPatternAdd(fmpattern,FC_STYLE,regular,FcTrue);
@@ -92,6 +92,18 @@ int eFont::loaddef(int variant) {
         if (match==NULL) continue;
         FcPatternGet(match,FC_FILE,0,&resval);
         path=(const char*)resval.u.s;
+	if (getenv("DEJAVU_OBESITY")!=NULL) {
+          if (atoi(getenv("DEJAVU_OBESITY"))>9000) {
+            printf("********WARNING!********\n"
+"DejaVu is the worst font in history! it is insanely obese,\n"
+"when compared to the entire rest of fonts in other OS'es,\n"
+"and makes things look ugly and dated.\n"
+"if a widget's label looks out of place, it is NOT my fault!\n");
+            FcPatternDestroy(fmpattern);
+            FcPatternDestroy(match);
+            break;
+          }
+	}
         if (strstr(path.c_str(),"DejaVu")!=NULL && fontNames[i+1]!=NULL) {
           printf("caught you usin' DejaVu!\n");
           FcPatternDestroy(fmpattern);
