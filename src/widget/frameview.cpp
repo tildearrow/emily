@@ -44,14 +44,16 @@ int eFrameView::event(eEvent& ev) {
                 wrapev.coord.x<curFrame->widgets[i]->x+curFrame->widgets[i]->w &&
                 wrapev.coord.y>curFrame->widgets[i]->y &&
                 wrapev.coord.y<curFrame->widgets[i]->y+curFrame->widgets[i]->h;
-    if ((wrapev.type==eEventMouseButton && curFrame->widgets[i]->_relPending) ||
+    if ((wrapev.type==eEventMouseButton && curFrame->widgets[i]->_relPendingAny) ||
         (wrapev.type==eEventMouseMove && curFrame->widgets[i]->_highPending) ||
         curFrame->widgets[i]->_collision) {
       if (wrapev.type==eEventMouseButton) {
         if (curFrame->widgets[i]->_collision && ev.state==1) {
-          curFrame->widgets[i]->_relPending=true;
+          curFrame->widgets[i]->_relPending[ev.input]=true;
+          curFrame->widgets[i]->evalPending();
         } else {
-          curFrame->widgets[i]->_relPending=false;
+          curFrame->widgets[i]->_relPending[ev.input]=false;
+          curFrame->widgets[i]->evalPending();
         }
       } else {
         if (curFrame->widgets[i]->_collision) {

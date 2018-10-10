@@ -18,7 +18,7 @@ class eLight: public eWidget {
   double xo, yo;
   int fw, fh;
   int material;
-  bool clicked;
+  bool clicked[EMILY_MOUSE_MAX];
   bool invertLabel;
   int atrList[8];
   char iconPlace;

@@ -52,6 +52,9 @@ typedef std::string string;
 
 #define eAuto -1
 
+// 32 buttons should cover all recent and future mice
+#define EMILY_MOUSE_MAX 32
+
 // for now
 // debug
 #define eLogD printf
@@ -234,7 +237,7 @@ class eWidget {
     double x, y;
     double bTop, bBottom, bLeft, bRight;
     XPT virtual int event(eEvent& ev);
-    bool _relPending, _highPending, _collision;
+    bool _relPending[EMILY_MOUSE_MAX], _relPendingAny, _highPending, _collision;
     bool _wantsAllEvents; // widgets may set this one
     bool _regenGraphics; // this one too
     bool _recalcBounds;
@@ -306,6 +309,15 @@ class eWidget {
       valueCallback=callback;
       valueUser=user;
     }
+    XPT void evalPending() {
+      _relPendingAny=false;
+      for (int i=0; i<EMILY_MOUSE_MAX; i++) {
+        if (_relPending[i]) {
+          _relPendingAny=true;
+          break;
+        }
+      }
+    }
     XPT virtual int setDispPos(double x, double y);
     XPT virtual int setAlign(double x, double y);
     XPT virtual int draw();
@@ -348,7 +360,8 @@ class eFrame {
       push->x=0;
       push->y=0;
       push->_collision=false;
-      push->_relPending=false;
+      for (int i=0; i<32; i++) push->_relPending[i]=false;
+      push->_relPendingAny=false;
       push->_highPending=false;
       push->_wantsAllEvents=false;
       push->init();

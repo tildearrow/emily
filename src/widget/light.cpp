@@ -2,7 +2,7 @@
 
 int eLight::init() {
   highlight=0;
-  clicked=false;
+  for (int i=0; i<EMILY_MOUSE_MAX; i++) clicked[i]=false;
   linst=new sf::Text();
   linst->setFont(engine->defFont->inst);
   linst->setCharacterSize(12*engine->scale);
@@ -50,12 +50,12 @@ int eLight::setIcon(eIcons index, double size, eDirection placement) {
 int eLight::event(eEvent& ev) {
   if (ev.type==eEventMouseButton) {
     if (ev.state==1) {
-      clicked=true;
+      clicked[ev.input]=true;
       if (mouseClickCallback!=NULL) {
         mouseClickCallback(this,ev.input,mouseClickUser);
       }
     } else {
-      if (clicked) {
+      if (clicked[ev.input]) {
         if (_collision) {
           if (mouseClickAltCallback!=NULL) {
             mouseClickAltCallback(this,ev.input,mouseClickAltUser);
@@ -65,7 +65,7 @@ int eLight::event(eEvent& ev) {
             mouseClickCancelCallback(this,ev.input,mouseClickCancelUser);
           }
         }
-        clicked=false;
+        clicked[ev.input]=false;
       }
     }
   }

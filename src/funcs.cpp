@@ -368,15 +368,17 @@ void eMainLoop(eEngine* eng) {
                 ev.coord.x<curFrame->widgets[i]->bRight &&
                 ev.coord.y>curFrame->widgets[i]->bTop &&
                 ev.coord.y<curFrame->widgets[i]->bBottom;
-            if ((ev.type==eEventMouseButton && curFrame->widgets[i]->_relPending) ||
+            if ((ev.type==eEventMouseButton && curFrame->widgets[i]->_relPendingAny) ||
                 (ev.type==eEventMouseMove && curFrame->widgets[i]->_highPending) ||
                 curFrame->widgets[i]->_collision ||
                 curFrame->widgets[i]->_wantsAllEvents) {
               if (ev.type==eEventMouseButton) {
                 if (curFrame->widgets[i]->_collision && ev.state==1) {
-                  curFrame->widgets[i]->_relPending=true;
+                  curFrame->widgets[i]->_relPending[ev.input]=true;
+                  curFrame->widgets[i]->evalPending();
                 } else {
-                  curFrame->widgets[i]->_relPending=false;
+                  curFrame->widgets[i]->_relPending[ev.input]=false;
+                  curFrame->widgets[i]->evalPending();
                 }
               } else {
                 if (curFrame->widgets[i]->_collision) {
