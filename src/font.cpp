@@ -123,7 +123,7 @@ int eFont::loaddef(int variant) {
         path=(const char*)resval.u.s;
 	if (getenv("DEJAVU_OBESITY")!=NULL) {
           if (atoi(getenv("DEJAVU_OBESITY"))>9000) {
-            printf("********WARNING!********\n"
+            eLogW("********WARNING!********\n"
 "DejaVu is the worst font in history! it is insanely obese,\n"
 "when compared to the entire rest of fonts in other OS'es,\n"
 "and makes things look ugly and dated.\n"
@@ -134,7 +134,7 @@ int eFont::loaddef(int variant) {
           }
 	}
         if (strstr(path.c_str(),"DejaVu")!=NULL && fontNames[i+1]!=NULL) {
-          printf("caught you usin' DejaVu!\n");
+          eLogI("caught you usin' DejaVu!\n");
           FcPatternDestroy(fmpattern);
           FcPatternDestroy(match);
           continue;

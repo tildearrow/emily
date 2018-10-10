@@ -269,7 +269,7 @@ sf::Texture* eSkin::getTexture(int objectType, int attrib[8], int w, int h, doub
           return ret;
           break;
         default:
-          printf("specify a style!\n");
+          eLogE("specify a style!\n");
           return NULL;
           break;
       }

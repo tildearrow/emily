@@ -55,13 +55,15 @@ typedef std::string string;
 // 32 buttons should cover all recent and future mice
 #define EMILY_MOUSE_MAX 32
 
-// for now
-// debug
-#define eLogD printf
-// info
-#define eLogI printf
-// error
-#define eLogE printf
+#define EMILY_LOGLEVEL_ERROR 0
+#define EMILY_LOGLEVEL_WARN 1
+#define EMILY_LOGLEVEL_INFO 2
+#define EMILY_LOGLEVEL_DEBUG 3
+
+int eLogD(const char* format, ...);
+int eLogI(const char* format, ...);
+int eLogW(const char* format, ...);
+int eLogE(const char* format, ...);
 
 enum eEventSystem {
   eEventQuit=0x01,
@@ -551,6 +553,7 @@ class eEngine {
     sf::RenderWindow* win;
     eSkin* skin;
   public:
+    static int logLevel;
     XPT eEngine(string name="Application");
     XPT ~eEngine();
     XPT eFont* newFont();

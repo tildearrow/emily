@@ -134,7 +134,7 @@ int eLight::draw() {
     sinstMaterial.setOrigin(sf::Vector2f(xo,yo));
     _regenGraphics=false;
     
-    //printf("time: %d\n",end-start);
+    //eLogD("time: %d\n",end-start);
   }
   
   if (_collision) {

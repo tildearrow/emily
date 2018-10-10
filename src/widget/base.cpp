@@ -13,7 +13,7 @@ int eWidget::calcBounds() {
 }
 
 int eWidget::event(eEvent& ev) {
-  printf("widget got event %d\n",ev.type);
+  eLogD("widget got event %d\n",ev.type);
   return 1;
 }
 

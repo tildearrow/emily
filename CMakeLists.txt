@@ -50,6 +50,7 @@ set(SOURCES src/funcs.cpp
             src/bitmap.cpp
             src/font.cpp
             src/frameDispatch.cpp
+	    src/log.cpp
             src/string.cpp
             src/icon.cpp
             src/cmenu.cpp

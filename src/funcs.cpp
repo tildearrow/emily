@@ -71,6 +71,8 @@ double getScale() {
   return 1;
 }
 
+int eEngine::logLevel=3;
+
 eEngine::eEngine(string name) {
   int status;
 #if defined(__unix__) && !defined(__APPLE__)
@@ -450,8 +452,8 @@ void eMainLoop(eEngine* eng) {
       eng->estWaitTime=fmin(eng->estWaitTime+100,avgVBTime-((rEndTime-rStartTime)/1000)-3000);
     }
     avgVBTime=((avgVBTime*15)+((rVBTime-rPrevVBTime)/1000))/16;
-    //printf("VBTime: %d\n",(rVBTime-rPrevVBTime)/1000);
-    //printf("vblank %d wait %f\n",avgVBTime,eng->estWaitTime);
+    //eLogD("VBTime: %d\n",(rVBTime-rPrevVBTime)/1000);
+    //eLogD("vblank %d wait %f\n",avgVBTime,eng->estWaitTime);
     if (eng->estWaitTime<0) {
       eng->estWaitTime=0;
     }
@@ -619,7 +621,7 @@ eTexture* eEngine::getTextureFromBitmap(eBitmap* bitmap, int type) {
   void* tex;
   tex=eCreateTexture(backInst,bitmap->width,bitmap->height,type);
   eUpdateTexture(tex,bitmap->data,bitmap->pitch());
-  printf("RETURN VAL %x\n",tex);
+  eLogD("RETURN VAL %x\n",tex);
   if (tex==NULL) {
     return NULL;
   }
