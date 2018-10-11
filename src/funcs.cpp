@@ -354,6 +354,7 @@ void eMainLoop(eEngine* eng) {
           if (!eng->openMenus.empty()) {
             for (size_t i=0; i<eng->openMenus.size(); i++) {
                eng->openMenus[i]->event(ev);
+               waitStart=4;
             }
             for (size_t i=0; i<eng->openMenus.size(); i++) {
                if (eng->openMenus[i]->wannaRetire) {
