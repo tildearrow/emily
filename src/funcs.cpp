@@ -669,6 +669,7 @@ eIcon* eEngine::newIcon(eIcons icon, double size) {
   ret->engine=this;
   ret->iconT=new sf::Texture;
   if (!ret->iconT->create(iconFont->glyph->bitmap.width,iconFont->glyph->bitmap.rows)) {
+    delete[] expand;
     return NULL;
   }
   ret->iconT->update(expand);

@@ -9,6 +9,7 @@ string strFormat(const char* format, ...) {
   str=new char[32768];
   if (vsnprintf(str,32767,format,va)<0) {
     va_end(va);
+    delete[] str;
     return string("");
   }
 #else
