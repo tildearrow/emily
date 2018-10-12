@@ -591,20 +591,6 @@ eVideoOut* eEngine::newVideoOut(int width, int height) {
   return temp;
 }
 
-int eFrame::getWidth() {
-  if (parent) {
-    return parent->getWidth();
-  }
-  return -1;
-}
-
-int eFrame::getHeight() {
-  if (parent) {
-    return parent->getHeight();
-  }
-  return -1;
-}
-
 // *TEMPORARILY DEPRECATED FACILITIES BEGIN* //
 
 eTexture* eEngine::getUnmanagedTexture(int width, int height, int type) {

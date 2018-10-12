@@ -49,6 +49,7 @@ endif (NOT HAVE_FT2)
 set(SOURCES src/funcs.cpp
             src/bitmap.cpp
             src/font.cpp
+            src/frame.cpp
             src/frameDispatch.cpp
 	    src/log.cpp
             src/string.cpp
