@@ -10,7 +10,7 @@
  * please wait until I finish this toolkit so you can begin
  * to use it. yes, I aim for API compatibility for once!
  */
-#define EMILY_API_VER eMakeVer(0,3,0)
+#define EMILY_API_VER eMakeVer(0,4,0)
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -45,6 +45,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #endif
+
+#define EMILY_DEPREC __attribute__((deprecated))
 
 typedef std::string string;
 
@@ -391,6 +393,16 @@ class eIcon {
 
 #include "widgets/widgets.h"
 
+class eMenuItem;
+
+class eContextItems {
+  std::vector<eMenuItem> items;
+  public:
+    eContextItems* add(eMenuItem item);
+    eMenuItem& getItem(size_t index);
+    size_t itemCount();
+};
+
 class eMenuItem {
   friend class eEngine;
   friend class eContextMenu;
@@ -398,15 +410,17 @@ class eMenuItem {
     bool iconAfter, containsMore;
     string text;
     sf::Text* dtext;
-    std::vector<eMenuItem> more;
+    std::vector<eMenuItem> compat_more;
     void (*callback)(eMenuItem*,void*);
     void* callbackUser;
     int iconIndex;
     eIcon* icon;
+    eContextItems more;
   public:
-    int addItem(eMenuItem item);
-    int removeItem(int index);
-    size_t itemCount();
+    EMILY_DEPREC int addItem(eMenuItem item);
+    EMILY_DEPREC int removeItem(int index);
+    EMILY_DEPREC size_t itemCount();
+    void runCallback();
     eMenuItem();
     eMenuItem(string text, void (*callback)(eMenuItem* item, void* user), void* userData);
     eMenuItem(string text, string rtext, void (*callback)(eMenuItem* item, void* user), void* userData);
@@ -420,16 +434,19 @@ class eContextMenu {
   friend void eMainLoop(eEngine* eng);
   int selected;
   protected:
-    std::vector<eMenuItem> items;
+    std::vector<eMenuItem> compat_items;
     eEngine* engine;
     double w, h;
     bool wannaRetire;
     int event(eEvent& ev);
   public:
     double x, y;
-    int addItem(eMenuItem item);
-    int removeItem(int index);
-    size_t itemCount();
+  protected:
+    eContextItems items;
+  public:
+    EMILY_DEPREC int addItem(eMenuItem item);
+    EMILY_DEPREC int removeItem(int index);
+    EMILY_DEPREC size_t itemCount();
     int draw();
 };
 

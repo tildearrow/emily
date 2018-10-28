@@ -1,5 +1,9 @@
 #include "toolkit.h"
 
+void eMenuItem::runCallback() {
+  if (callback!=NULL) callback(this,callbackUser);
+}
+
 eMenuItem::eMenuItem(string tex, void (*call)(eMenuItem* item, void* user), void* userData) {
   text=tex;
   icon=NULL;
@@ -14,8 +18,21 @@ eMenuItem::~eMenuItem() {
   return;
 }
 
-size_t eContextMenu::itemCount() {
+size_t eContextItems::itemCount() {
   return items.size();
+}
+
+eContextItems* eContextItems::add(eMenuItem item) {
+  items.push_back(item);
+  return this;
+}
+
+eMenuItem& eContextItems::getItem(size_t index) {
+  return items[index];
+}
+
+size_t eContextMenu::itemCount() {
+  return items.itemCount();
 }
 
 int eContextMenu::event(eEvent& ev) {
@@ -25,9 +42,7 @@ int eContextMenu::event(eEvent& ev) {
           ev.coord.y>y && ev.coord.y<y+h) {
         if (ev.state==0) {
           if (selected!=-1) {
-            if (items[selected].callback!=NULL) {
-              items[selected].callback(&items[selected],items[selected].callbackUser);
-            }
+            items.getItem(selected).runCallback();
           }
           wannaRetire=true;
         }
@@ -39,7 +54,7 @@ int eContextMenu::event(eEvent& ev) {
       if (ev.coord.x>x && ev.coord.x<x+w &&
           ev.coord.y>y && ev.coord.y<y+h) {
         selected=(ev.coord.y-y-2)/18;
-        if (selected>=(int)items.size()) {
+        if (selected>=(int)items.itemCount()) {
           selected=-1;
         }
       } else {
@@ -51,10 +66,16 @@ int eContextMenu::event(eEvent& ev) {
 }
 
 int eContextMenu::addItem(eMenuItem item) {
+  items.add(item);
+  w=128;
+  h=items.itemCount()*18+4;
+  return 1;
+  /*
   items.push_back(item);
   w=128;
   h=items.size()*18+4;
   return 1;
+  */
 }
 
 int eContextMenu::draw() {
@@ -67,12 +88,12 @@ int eContextMenu::draw() {
     engine->frect(x+1,(1.5+y+(selected*18)),x+w-1.5,(1.5+y+(1+selected)*18));
   }
   engine->drawColor({1,1,1,1});
-  for (size_t i=0; i<items.size(); i++) {
-    if (items[i].dtext==NULL) {
-      items[i].dtext=new sf::Text(items[i].text,engine->defFont->inst,9);
+  for (size_t i=0; i<items.itemCount(); i++) {
+    if (items.getItem(i).dtext==NULL) {
+      items.getItem(i).dtext=new sf::Text(items.getItem(i).text,engine->defFont->inst,9);
     }
-    items[i].dtext->setPosition((4+x)*engine->scale,(6+y+(int)i*18)*engine->scale);
-    engine->win->draw(*items[i].dtext);
+    items.getItem(i).dtext->setPosition((4+x)*engine->scale,(6+y+(int)i*18)*engine->scale);
+    engine->win->draw(*items.getItem(i).dtext);
   }
   return 1;
 }
