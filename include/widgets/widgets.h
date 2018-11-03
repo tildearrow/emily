@@ -3,3 +3,4 @@
 #include "frameview.h"
 #include "slider.h"
 #include "light.h"
+#include "menubar.h"

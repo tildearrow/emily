@@ -391,8 +391,6 @@ class eIcon {
     int draw();
 };
 
-#include "widgets/widgets.h"
-
 class eMenuItem;
 
 class eContextItems {
@@ -441,6 +439,8 @@ class eContextMenu {
     int setItems(eContextItems items);
     int draw();
 };
+
+#include "widgets/widgets.h"
 
 class eAnimator {
   friend class eEngine;
