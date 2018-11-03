@@ -511,7 +511,10 @@ eFrame* eEngine::newFrame() {
   return ret;
 }
 
-void eEngine::popUpMenu(double x, double y, eContextMenu* menu) {
+void eEngine::popUpMenu(double x, double y, eContextItems& items) {
+  eContextMenu* menu;
+  menu=new eContextMenu;
+  menu->setItems(items);
   openMenus.push_back(menu);
   // settle menu
   menu->engine=this;

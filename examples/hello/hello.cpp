@@ -44,12 +44,11 @@ void oneCallback(eMenuItem* mi, void* user) {
 }
 
 void twoCallback(eWidget* elem, int button, void* user) {
-  eContextMenu* menu;
-  menu=new eContextMenu;
-  menu->addItem(eMenuItem("test 1",oneCallback,NULL));
-  menu->addItem(eMenuItem("test 2",oneCallback,NULL));
+  eContextItems i;
+  i.add(eMenuItem("test 1",oneCallback,NULL));
+  i.add(eMenuItem("test 2",oneCallback,NULL));
   printf("two\n");
-  gui->popUpMenu(eAuto,eAuto,menu);
+  gui->popUpMenu(eAuto,eAuto,i);
 }
 
 void sineCallback() {

@@ -28,7 +28,7 @@
 #ifdef _MSC_VER
 #define XPT __declspec(dllexport)
 #else
-#define XPT
+#define XPT __attribute__((visibility("default")))
 #endif
 #ifdef _WIN32
 #include <windows.h>
@@ -410,16 +410,12 @@ class eMenuItem {
     bool iconAfter, containsMore;
     string text;
     sf::Text* dtext;
-    std::vector<eMenuItem> compat_more;
+    eContextItems more;
     void (*callback)(eMenuItem*,void*);
     void* callbackUser;
     int iconIndex;
     eIcon* icon;
-    eContextItems more;
   public:
-    EMILY_DEPREC int addItem(eMenuItem item);
-    EMILY_DEPREC int removeItem(int index);
-    EMILY_DEPREC size_t itemCount();
     void runCallback();
     eMenuItem();
     eMenuItem(string text, void (*callback)(eMenuItem* item, void* user), void* userData);
@@ -434,19 +430,15 @@ class eContextMenu {
   friend void eMainLoop(eEngine* eng);
   int selected;
   protected:
-    std::vector<eMenuItem> compat_items;
+    eContextItems items;
     eEngine* engine;
     double w, h;
     bool wannaRetire;
     int event(eEvent& ev);
   public:
     double x, y;
-  protected:
-    eContextItems items;
   public:
-    EMILY_DEPREC int addItem(eMenuItem item);
-    EMILY_DEPREC int removeItem(int index);
-    EMILY_DEPREC size_t itemCount();
+    int setItems(eContextItems items);
     int draw();
 };
 
@@ -594,7 +586,7 @@ class eEngine {
 
     XPT eFrame* newFrame();
     
-    XPT void popUpMenu(double x, double y, eContextMenu* menu);
+    XPT void popUpMenu(double x, double y, eContextItems& items);
     
     XPT void drawColor(eColor color);
     XPT void line(double x1, double y1, double x2, double y2);

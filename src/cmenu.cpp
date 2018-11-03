@@ -31,8 +31,9 @@ eMenuItem& eContextItems::getItem(size_t index) {
   return items[index];
 }
 
-size_t eContextMenu::itemCount() {
-  return items.itemCount();
+int eContextMenu::setItems(eContextItems i) {
+  items=i;
+  return 1;
 }
 
 int eContextMenu::event(eEvent& ev) {
@@ -65,21 +66,10 @@ int eContextMenu::event(eEvent& ev) {
   return 1;
 }
 
-int eContextMenu::addItem(eMenuItem item) {
-  items.add(item);
-  w=128;
-  h=items.itemCount()*18+4;
-  return 1;
-  /*
-  items.push_back(item);
-  w=128;
-  h=items.size()*18+4;
-  return 1;
-  */
-}
-
 int eContextMenu::draw() {
   engine->drawColor({0,0,0,1});
+  w=128;
+  h=items.itemCount()*18+4;
   engine->frect(x,y,x+w,y+h);
   engine->drawColor({0.5,0.5,0.5,1});
   engine->rect(x,y,x+w,y+h);
